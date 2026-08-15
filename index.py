@@ -5,7 +5,7 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 import firebase_admin
-from firebase_admin import credentials, db
+from firebase_admin import db
 
 app = FastAPI(title="Kiyo AI Secure Backend")
 
@@ -17,11 +17,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Initialize Firebase directly using Environment URL (No JSON file required)
 FIREBASE_URL = os.getenv("FIREBASE_URL")
 if not firebase_admin._apps:
     try:
-        cred = credentials.Certificate("serviceAccountKey.json")
-        firebase_admin.initialize_app(cred, {'databaseURL': FIREBASE_URL})
+        firebase_admin.initialize_app(options={
+            'databaseURL': FIREBASE_URL
+        })
     except Exception as e:
         print("Firebase Init Error:", e)
 
