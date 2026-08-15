@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Educating Bharat</title>
     <style>
-        /* Premium Dark Theme */
+        /* Premium Educational Theme (Deep Slate/Navy) */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #050505; /* Deep rich black */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a; /* Slate 900 - Professional EdTech color */
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: opacity 1s ease-in-out; /* Smooth page exit */
+            transition: opacity 0.8s ease-in-out;
         }
 
         /* Center Main UI Container */
@@ -26,97 +26,106 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            animation: slideUpFade 1.5s ease-out forwards;
+            animation: slideUpFade 1.2s ease-out forwards;
         }
 
         /* Main Kiyo Logo (Brain/Bulb) */
         .kiyo-logo {
-            width: 160px;
+            width: 140px;
             height: auto;
-            filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.1));
-            animation: breath 3s infinite ease-in-out; /* Sublte breathing effect */
+            /* Ek subtle blue glow add kiya hai */
+            filter: drop-shadow(0px 10px 25px rgba(59, 130, 246, 0.4));
+            animation: breath 4s infinite ease-in-out;
         }
 
-        /* Kiyo AI Text */
+        /* Kiyo AI Text - Clean & Academic */
         .kiyo-title {
-            color: #ffffff;
-            font-size: 32px;
+            color: #f8fafc;
+            font-size: 36px;
             font-weight: 800;
-            letter-spacing: 4px;
-            margin-top: 20px;
+            letter-spacing: 5px;
+            margin-top: 25px;
             text-transform: uppercase;
-            background: linear-gradient(90deg, #ffffff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        }
+
+        /* Subtitle to make it look like a real app */
+        .kiyo-subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-top: 8px;
+            font-weight: 500;
         }
 
         /* Bottom Footer Container */
         .footer-brand {
             position: absolute;
-            bottom: 40px;
+            bottom: 35px;
             display: flex;
             flex-direction: column;
             align-items: center;
             opacity: 0;
-            animation: fadeInBrand 2s forwards 1.5s; /* Appears after main UI */
+            animation: fadeInBrand 1.5s forwards 1s; 
         }
 
         .powered-text {
-            color: #71717a;
-            font-size: 11px;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
+            color: #64748b;
+            font-size: 10px;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         /* Small Circle TicBull Logo Layout */
         .ticbull-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03); /* Subtle background for footer */
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         /* Circle Image Styling */
         .ticbull-circle {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             overflow: hidden;
-            border: 1px solid #27272a;
-            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #000;
+            background: #ffffff; /* White background to make logo pop */
         }
 
         .ticbull-circle img {
-            width: 140%; /* Adjusted to crop out black space from the screenshot */
-            height: 140%;
+            width: 100%; 
+            height: auto;
             object-fit: contain;
         }
 
         .ticbull-name {
-            color: #e4e4e7;
-            font-size: 16px;
-            font-weight: 700;
-            letter-spacing: 1px;
+            color: #e2e8f0;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
         }
 
         /* Keyframe Animations */
         @keyframes breath {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.1)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0px 0px 25px rgba(255, 255, 255, 0.3)); }
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0px 10px 25px rgba(59, 130, 246, 0.3)); }
+            50% { transform: translateY(-8px); filter: drop-shadow(0px 15px 35px rgba(59, 130, 246, 0.6)); }
         }
 
         @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(30px); }
+            0% { opacity: 0; transform: translateY(40px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInBrand {
-            0% { opacity: 0; transform: translateY(10px); }
+            0% { opacity: 0; transform: translateY(15px); }
             100% { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -125,37 +134,32 @@
 
     <!-- Main Center Content -->
     <div class="main-ui">
-        <img src="15026_3.png" alt="Kiyo AI Core" class="kiyo-logo">
-        <div class="kiyo-title">Kiyo AI</div>
+        <!-- ⚠️ IMPORTANT: Maine yahan '15026_2.png' kar diya hai kyunki tumhare repo me yahi naam hai -->
+        <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo" onerror="this.style.display='none'">
+        <div class="kiyo-title">KIYO AI</div>
+        <div class="kiyo-subtitle">INTELLIGENT LEARNING GUIDE</div>
     </div>
 
     <!-- Bottom Footer Branding -->
     <div class="footer-brand">
-        <div class="powered-text">Powered By</div>
+        <div class="powered-text">POWERED BY</div>
         <div class="ticbull-container">
             <div class="ticbull-circle">
-                <img src="14882.jpg" alt="TicBull Logo">
+                <!-- ⚠️ IMPORTANT: Yahan '14882.jpg' hai, ensure karo ye exact name GitHub repo me ho -->
+                <img src="14882.jpg" alt="TicBull" onerror="this.style.display='none'">
             </div>
             <div class="ticbull-name">TICBULL</div>
         </div>
     </div>
 
     <script>
-        // 10 Second Redirect Logic
         document.addEventListener("DOMContentLoaded", () => {
-            const displayTime = 10000; // 10 seconds total wait
-            const transitionTime = 800; // time taken for fade out
-
             setTimeout(() => {
-                // 1. Pehle screen ko fade out karo (black smooth exit)
                 document.body.style.opacity = '0';
-                
-                // 2. Fade out complete hone ke baad next page par bhejo
                 setTimeout(() => {
                     window.location.href = "login.html";
-                }, transitionTime);
-                
-            }, displayTime - transitionTime);
+                }, 800);
+            }, 9200); // Trigger fade out slightly before 10s
         });
     </script>
 </body>
