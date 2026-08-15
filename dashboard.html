@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kiyo AI - Student Dashboard</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary-glow: #7c3aed;
+            --primary-btn: #7c3aed;
+            --bg-color: #0b1120;
+            --card-bg: rgba(15, 23, 42, 0.85);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff; overflow-x: hidden;
+        }
+
+        /* Top Header & 3-Dot Menu */
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: rgba(11, 17, 32, 0.95);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky; top: 0; z-index: 50;
+        }
+        .header-logo { font-size: 18px; font-weight: 800; color: #f8fafc; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+        .header-logo img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--primary-glow); }
+        .menu-btn { background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            position: absolute; top: 60px; right: 20px;
+            background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; width: 220px; display: none;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.5); overflow: hidden;
+        }
+        .dropdown-menu.active { display: block; }
+        .dropdown-item {
+            padding: 12px 15px; display: flex; align-items: center; gap: 12px;
+            color: #e2e8f0; text-decoration: none; font-size: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .dropdown-item:hover { background: rgba(124, 58, 237, 0.2); color: #fff; }
+        .dropdown-item i { color: #a78bfa; width: 16px; text-align: center; }
+
+        /* Main Container */
+        .dashboard-container {
+            padding: 20px; display: flex; flex-direction: column; gap: 20px;
+            max-width: 600px; margin: 0 auto;
+        }
+
+        /* Profile Card */
+        .glass-card {
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+            padding: 20px; box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .profile-header { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .dp-wrapper {
+            position: relative; width: 90px; height: 90px; margin-bottom: 15px;
+        }
+        .profile-dp {
+            width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary-glow); box-shadow: 0px 0px 15px rgba(124, 58, 237, 0.5);
+        }
+        .edit-dp-btn {
+            position: absolute; bottom: 0; right: 0; background: var(--primary-btn);
+            color: #fff; border: none; width: 30px; height: 30px; border-radius: 50%;
+            cursor: pointer; display: flex; justify-content: center; align-items: center;
+            font-size: 12px; box-shadow: 0px 2px 10px rgba(0,0,0,0.5);
+        }
+        .student-name { font-size: 22px; font-weight: 700; margin: 0; color: #fff; }
+        .student-dob { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+        /* Academic Settings */
+        .section-title { font-size: 14px; color: #a78bfa; margin-bottom: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .input-group { margin-bottom: 15px; }
+        .input-label { font-size: 12px; color: #94a3b8; margin-bottom: 5px; display: block; }
+        .select-field {
+            width: 100%; padding: 12px 15px; background: rgba(2, 6, 23, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px;
+            color: #fff; font-size: 14px; outline: none; appearance: none;
+        }
+
+        /* Classroom Big Action Button */
+        .classroom-btn {
+            width: 100%; padding: 18px 0; background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white; border: none; border-radius: 15px; font-size: 18px;
+            font-weight: 800; cursor: pointer; letter-spacing: 1px;
+            box-shadow: 0px 8px 25px rgba(124, 58, 237, 0.5); transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; justify-content: center; align-items: center; gap: 10px; text-decoration: none;
+        }
+        .classroom-btn:active { transform: scale(0.97); }
+        .classroom-btn i { font-size: 20px; animation: bounceRight 1.5s infinite; }
+        @keyframes bounceRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+        /* Developer Social Links */
+        .social-card { text-align: center; padding: 15px; }
+        .social-card p { font-size: 12px; color: #64748b; margin-bottom: 12px; margin-top: 0; }
+        .social-icons { display: flex; justify-content: center; gap: 20px; }
+        .social-icons a {
+            color: #94a3b8; font-size: 22px; text-decoration: none; transition: 0.3s;
+        }
+        .social-icons a:hover { color: var(--primary-glow); transform: translateY(-3px); }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-logo">
+            <img src="15026_2.png" alt="Logo">
+            Kiyo AI
+        </div>
+        <button class="menu-btn" onclick="toggleMenu()">
+            <i class="fa-solid fa-ellipsis-vertical"></i>
+        </button>
+
+        <!-- 3-Dot Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#" class="dropdown-item"><i class="fa-solid fa-circle-info"></i> About Kiyo AI</a>
+            <a href="#" class="dropdown-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
+            <a href="#" class="dropdown-item"><i class="fa-solid fa-headset"></i> TicBull Support</a>
+            <a href="settings.html" class="dropdown-item"><i class="fa-solid fa-gear"></i> Settings</a>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <!-- Profile Card -->
+        <div class="glass-card profile-header">
+            <div class="dp-wrapper">
+                <!-- DP Image -->
+                <img src="https://ui-avatars.com/api/?name=Student&background=7c3aed&color=fff" id="profileImage" class="profile-dp" alt="Profile">
+                <!-- Change DP Button (Opens Gallery) -->
+                <button class="edit-dp-btn" onclick="document.getElementById('dpUpload').click()">
+                    <i class="fa-solid fa-camera"></i>
+                </button>
+                <input type="file" id="dpUpload" accept="image/*" style="display: none;" onchange="previewDP(event)">
+            </div>
+            <h2 class="student-name" id="displayFullName">Loading Name...</h2>
+            <div class="student-dob" id="displayDob"><i class="fa-solid fa-cake-candles"></i> DOB: Loading...</div>
+        </div>
+
+        <!-- Educational Material & Academic Info -->
+        <div class="glass-card">
+            <div class="section-title"><i class="fa-solid fa-graduation-cap"></i> Academic Profile</div>
+            
+            <div class="input-group">
+                <label class="input-label">Select School Board</label>
+                <select class="select-field" id="boardSelect">
+                    <option value="" disabled selected>Choose Board...</option>
+                    <option value="cbse">CBSE</option>
+                    <option value="icse">ICSE</option>
+                    <option value="bseb">BSEB (Bihar Board)</option>
+                    <option value="other">Other State Board</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Select Class</label>
+                <select class="select-field" id="classSelect">
+                    <option value="" disabled selected>Choose Class...</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
+                    <option value="dropper">Dropper</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">Competitive Exam Target</label>
+                <select class="select-field" id="examSelect">
+                    <option value="" disabled selected>Choose Target Exam...</option>
+                    <option value="neet">NEET (Medical)</option>
+                    <option value="jee">JEE (Engineering)</option>
+                    <option value="cuet">CUET</option>
+                    <option value="boards">Only Board Exams</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Big Classroom Button (Redirects to classroom.html) -->
+        <a href="classroom.html" class="classroom-btn">
+            ENTER CLASSROOM <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </a>
+
+        <!-- Developer Social Icons (The 5 Icons) -->
+        <div class="social-card">
+            <p>Connect with the Developer</p>
+            <div class="social-icons">
+                <a href="#" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Toggle 3-Dot Menu
+        function toggleMenu() {
+            const menu = document.getElementById('dropdownMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('dropdownMenu');
+            const menuBtn = document.querySelector('.menu-btn');
+            if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Function to change Profile DP from phone gallery
+        function previewDP(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Update the image source to the selected file
+                    document.getElementById('profileImage').src = e.target.result;
+                    // Note: Here we can add backend logic to upload this image to Firebase Storage later
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Dummy data loading for frontend testing
+        // In reality, this will be fetched from Firebase Database
+        window.onload = function() {
+            document.getElementById('displayFullName').innerText = "Student User"; // Will come from backend
+            document.getElementById('displayDob').innerHTML = "<i class='fa-solid fa-cake-candles'></i> DOB: 15 Aug 2026";
+        }
+    </script>
+</body>
+</html>
