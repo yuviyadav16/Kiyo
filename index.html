@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Educating Bharat</title>
     <style>
-        /* Premium Dark Navy Theme (Like TicBull Academy) */
+        /* Premium Dark Navy Theme */
         body, html {
             margin: 0;
             padding: 0;
@@ -29,7 +29,7 @@
             animation: slideUpFade 1.2s ease-out forwards;
         }
 
-        /* 🔴 NEW: TicBull Academy Style Glow Wrapper */
+        /* TicBull Academy Style Glow Wrapper */
         .kiyo-logo-container {
             position: relative;
             display: flex;
@@ -39,27 +39,28 @@
             margin-bottom: 10px;
         }
 
-        /* Premium Deep Blue Glow behind the logo */
+        /* 🔴 NEW: Premium AI Violet/Purple Soft Glow */
         .kiyo-logo-container::before {
             content: '';
             position: absolute;
-            width: 90px;
-            height: 90px;
-            background: #2563eb; /* Strong Royal Blue */
+            width: 100px;
+            height: 100px;
+            background: #7c3aed; /* Premium AI Violet Color */
             border-radius: 50%;
-            filter: blur(35px); /* Makes it a soft aura/glow */
+            filter: blur(40px); /* Super soft aura */
+            opacity: 0.55; /* Subtle and professional, not too bright */
             z-index: 0;
         }
 
-        /* 🔴 NEW: Smaller, cleaner logo */
+        /* Small, clean logo */
         .kiyo-logo {
-            width: 100px; /* Small size just like the reference */
+            width: 100px; 
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
             position: relative;
             z-index: 1;
-            /* Added dark inner shadow to blend perfectly */
+            background-color: #ffffff; /* White base */
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); 
         }
 
@@ -141,7 +142,7 @@
         /* Animations */
         @keyframes breath {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); } /* Floating effect without changing glow */
+            50% { transform: translateY(-8px); } /* Floating effect */
         }
 
         @keyframes slideUpFade {
@@ -158,7 +159,6 @@
 <body>
 
     <div class="main-ui">
-        <!-- New Logo Container with Glow -->
         <div class="kiyo-logo-container">
             <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo">
         </div>
@@ -178,9 +178,8 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // 10 second timeout then redirect to login.html
             setTimeout(() => {
-                document.body.style.opacity = '0'; // smooth fade out
+                document.body.style.opacity = '0'; 
                 setTimeout(() => {
                     window.location.href = "login.html";
                 }, 800);
