@@ -3,72 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kiyo AI - Launching</title>
+    <title>Kiyo AI - Educating Bharat</title>
     <style>
+        /* Premium Dark Theme */
         body, html {
-            margin: 0; padding: 0; background-color: #000000; height: 100%; overflow: hidden;
-            display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;
-        }
-        
-        /* Loading text video ke piche rahega */
-        #loading-text { color: #333; position: absolute; z-index: -1; font-size: 1.2rem; }
-        
-        video {
-            width: 100vw; height: 100vh; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #050505; /* Deep rich black */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: opacity 1s ease-in-out; /* Smooth page exit */
         }
 
-        /* Fallback button agar browser autoplay rok de */
-        #start-btn {
-            position: absolute; z-index: 10; padding: 12px 24px; background: #3b82f6; 
-            color: white; border: none; font-size: 16px; border-radius: 8px; 
-            font-weight: bold; cursor: pointer; display: none; box-shadow: 0px 4px 15px rgba(59, 130, 246, 0.5);
+        /* Center Main UI Container */
+        .main-ui {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: slideUpFade 1.5s ease-out forwards;
+        }
+
+        /* Main Kiyo Logo (Brain/Bulb) */
+        .kiyo-logo {
+            width: 160px;
+            height: auto;
+            filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.1));
+            animation: breath 3s infinite ease-in-out; /* Sublte breathing effect */
+        }
+
+        /* Kiyo AI Text */
+        .kiyo-title {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Bottom Footer Container */
+        .footer-brand {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeInBrand 2s forwards 1.5s; /* Appears after main UI */
+        }
+
+        .powered-text {
+            color: #71717a;
+            font-size: 11px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Small Circle TicBull Logo Layout */
+        .ticbull-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Circle Image Styling */
+        .ticbull-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid #27272a;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .ticbull-circle img {
+            width: 140%; /* Adjusted to crop out black space from the screenshot */
+            height: 140%;
+            object-fit: contain;
+        }
+
+        .ticbull-name {
+            color: #e4e4e7;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Keyframe Animations */
+        @keyframes breath {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.1)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0px 0px 25px rgba(255, 255, 255, 0.3)); }
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInBrand {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <div id="loading-text">Loading Kiyo AI...</div>
-    
-    <button id="start-btn" onclick="forcePlay()">Tap to Launch Kiyo AI</button>
+    <!-- Main Center Content -->
+    <div class="main-ui">
+        <img src="15026_3.png" alt="Kiyo AI Core" class="kiyo-logo">
+        <div class="kiyo-title">Kiyo AI</div>
+    </div>
 
-    <video id="intro-video" muted playsinline autoplay preload="auto">
-        <!-- Path me ./ lagana zaroori hai -->
-        <source src="./15200.mp4" type="video/mp4">
-    </video>
+    <!-- Bottom Footer Branding -->
+    <div class="footer-brand">
+        <div class="powered-text">Powered By</div>
+        <div class="ticbull-container">
+            <div class="ticbull-circle">
+                <img src="14882.jpg" alt="TicBull Logo">
+            </div>
+            <div class="ticbull-name">TICBULL</div>
+        </div>
+    </div>
 
     <script>
+        // 10 Second Redirect Logic
         document.addEventListener("DOMContentLoaded", () => {
-            const video = document.getElementById("intro-video");
-            const btn = document.getElementById("start-btn");
+            const displayTime = 10000; // 10 seconds total wait
+            const transitionTime = 800; // time taken for fade out
 
-            // Try to play automatically
-            let playPromise = video.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Autoplay successful, kuch nahi karna
-                }).catch(error => {
-                    // Agar browser ne autoplay block kiya, toh button dikhao
-                    console.log("Autoplay blocked");
-                    btn.style.display = "block";
-                });
-            }
-
-            // Jab user button dabaye
-            window.forcePlay = function() {
-                video.play();
-                btn.style.display = "none";
-            };
-
-            // Video khatam hone par agle page par bhejna
-            video.addEventListener("ended", () => {
-                window.location.href = "login.html"; 
-            });
-            
-            // Backup timer (agar video fail ho jaye)
             setTimeout(() => {
-                if(!video.ended) { window.location.href = "login.html"; }
-            }, 11500);
+                // 1. Pehle screen ko fade out karo (black smooth exit)
+                document.body.style.opacity = '0';
+                
+                // 2. Fade out complete hone ke baad next page par bhejo
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, transitionTime);
+                
+            }, displayTime - transitionTime);
         });
     </script>
 </body>
