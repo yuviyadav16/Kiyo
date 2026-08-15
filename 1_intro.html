@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kiyo AI - Powered by TicBull</title>
+    <style>
+        /* Reset & Base Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            /* Video ke background color se match karta hua color */
+            background-color: #6da499; 
+            overflow: hidden; /* Scroll hide karne ke liye */
+        }
+
+        /* Splash Screen Container */
+        .splash-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+
+        /* Auto-playing Video Setup */
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Mobile screen par perfect fit ke liye */
+            pointer-events: none; /* Student video pause na kar sake */
+        }
+
+        /* Skip Button (Top Right) */
+        .skip-btn {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .skip-btn:active {
+            transform: scale(0.9);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Action Overlay (Appears after video) */
+        .action-overlay {
+            position: absolute;
+            bottom: 80px;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 20;
+        }
+
+        .btn-start {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); /* TicBull Theme */
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.5);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-start:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="splash-container">
+        <!-- Skip Button -->
+        <button class="skip-btn" id="skipBtn" onclick="goToLogin()">Skip >></button>
+
+        <!-- Main Intro Video (Verbatim filename used) -->
+        <!-- playsinline: iOS par fullscreen hone se rokta hai -->
+        <!-- autoplay & muted: Mobile browsers par auto-play hone ke liye zaroori hai -->
+        <video id="introVideo" playsinline autoplay muted>
+            <source src="15200.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <!-- Get Started Button -->
+        <div class="action-overlay" id="actionOverlay">
+            <button class="btn-start" onclick="goToLogin()">Enter Kiyo AI</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const video = document.getElementById('introVideo');
+        const overlay = document.getElementById('actionOverlay');
+        const skipBtn = document.getElementById('skipBtn');
+
+        // Play video specifically for some strict mobile browsers
+        window.addEventListener('load', () => {
+            video.play().catch(error => {
+                console.log("Auto-play was prevented by the browser. Showing button early.");
+                showNextScreen();
+            });
+        });
+
+        // Jab video end ho jaye, tab kya hoga:
+        video.addEventListener('ended', () => {
+            showNextScreen();
+        });
+
+        function showNextScreen() {
+            skipBtn.style.display = 'none'; // Skip button hata do
+            overlay.style.visibility = 'visible';
+            overlay.style.opacity = '1'; // Fade in effect se button lao
+            
+            // Auto-redirect after 3 seconds of video ending (Professional touch)
+            setTimeout(() => {
+                goToLogin();
+            }, 3000);
+        }
+
+        function goToLogin() {
+            // Smooth Fade-out Page Transition
+            document.body.style.transition = 'opacity 0.6s ease';
+            document.body.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Yahan 2_login.html par redirect karega
+                window.location.href = '2_login.html'; 
+            }, 600);
+        }
+    </script>
+</body>
+</html>
