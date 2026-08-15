@@ -7,31 +7,48 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Mobile ratio fix: overflow aur safe scrolling */
+        :root {
+            --primary-glow: #7c3aed; /* AI Violet Theme */
+            --primary-btn: #7c3aed;
+            --primary-btn-hover: #6d28d9;
+        }
+
         body, html {
-            margin: 0; padding: 0; width: 100%; min-height: 100%;
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: #0b1120;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            overflow-y: auto; color: #fff;
-            box-sizing: border-box;
+            overflow-y: auto; color: #fff; box-sizing: border-box;
         }
 
-        /* Main Login Card with Safe Mobile Padding */
+        /* Floating Alert Notification Toast */
+        #toast-alert {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+            background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.5); border-left: 5px solid #ef4444;
+            font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+        #toast-alert.show {
+            transform: translateX(-50%) translateY(0); opacity: 1;
+        }
+        #toast-alert.success { border-left-color: #22c55e; }
+
+        /* Main Login Card */
         .login-card {
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            width: 88%; max-width: 380px;
+            width: 90%; max-width: 380px;
             padding: 25px 20px;
             box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
             display: flex; flex-direction: column; align-items: center;
             box-sizing: border-box;
-            margin: auto; /* Center align vertically across all phone screens */
+            margin: auto;
         }
 
-        /* Logo Area */
+        /* Logo Area with Violet AI Glow */
         .logo-container {
             position: relative; width: 70px; height: 70px;
             display: flex; justify-content: center; align-items: center;
@@ -39,7 +56,7 @@
         }
         .logo-container::before {
             content: ''; position: absolute; width: 65px; height: 65px;
-            background: #7c3aed; border-radius: 50%; filter: blur(20px); opacity: 0.5;
+            background: var(--primary-glow); border-radius: 50%; filter: blur(20px); opacity: 0.6;
         }
         .logo-img {
             width: 65px; height: 65px; border-radius: 50%; object-fit: cover;
@@ -56,7 +73,7 @@
             margin-bottom: 18px; text-align: center; text-transform: uppercase;
         }
 
-        /* Toggle Switch Tabs (Sign In / Sign Up) */
+        /* Toggle Switch Tabs */
         .tab-switcher {
             display: flex; background: rgba(2, 6, 23, 0.6);
             border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px;
@@ -68,8 +85,8 @@
             transition: all 0.3s ease; border: none; background: transparent;
         }
         .tab-btn.active {
-            background: #2563eb; color: #ffffff;
-            box-shadow: 0px 4px 15px rgba(37, 99, 235, 0.4);
+            background: var(--primary-btn); color: #ffffff;
+            box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4);
         }
 
         /* Form Fields */
@@ -86,9 +103,8 @@
             border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box;
             outline: none; transition: border-color 0.3s;
         }
-        .input-field:focus { border-color: #3b82f6; }
+        .input-field:focus { border-color: #a78bfa; }
         
-        /* Show/Hide Password Icon Position Fix */
         .toggle-password {
             position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
             color: #64748b; cursor: pointer; font-size: 14px; z-index: 5;
@@ -97,15 +113,15 @@
 
         /* Action Button */
         .action-btn {
-            width: 100%; padding: 12px 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9);
             color: white; border: none; border-radius: 10px; font-size: 14px;
             font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px;
-            box-shadow: 0px 6px 20px rgba(37, 99, 235, 0.4); transition: transform 0.2s;
+            box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s;
         }
         .action-btn:active { transform: scale(0.98); }
 
         .forgot-link {
-            font-size: 12px; color: #60a5fa; text-decoration: none; text-align: right;
+            font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right;
             display: block; width: 100%; margin-bottom: 4px; font-weight: 600;
         }
         .forgot-link:hover { text-decoration: underline; }
@@ -120,22 +136,20 @@
         .social-row a { color: #64748b; font-size: 14px; text-decoration: none; transition: color 0.3s; }
         .social-row a:hover { color: #fff; }
 
-        /* Global Footer - Safe for Mobile viewports */
+        /* Global Footer */
         .page-footer {
             width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b;
             text-align: center; border-top: 1px solid rgba(255,255,255,0.03);
-            background: rgba(11, 17, 32, 0.95);
-            margin-top: 20px;
-            box-sizing: border-box;
+            background: rgba(11, 17, 32, 0.95); margin-top: 20px; box-sizing: border-box;
         }
         .page-footer div { margin-bottom: 3px; }
         .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 3px; }
         .page-footer a:hover { color: #fff; }
 
-        /* Modal for Forgot Password */
+        /* Modals (OTP & Forgot Password) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100;
         }
@@ -148,6 +162,9 @@
     </style>
 </head>
 <body>
+
+    <!-- Toast Notification Box -->
+    <div id="toast-alert">Notification message</div>
 
     <div class="login-card">
         <!-- Logo -->
@@ -187,8 +204,7 @@
             <div class="input-group">
                 <i class="fa-solid fa-lock field-icon"></i>
                 <input type="password" id="password" class="input-field" placeholder="Password" required>
-                <!-- Show / Hide Password Eye Icon -->
-                <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass()"></i>
+                <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
             </div>
 
             <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
@@ -204,16 +220,35 @@
         </div>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- OTP Verification Modal -->
+    <div class="modal-overlay" id="otpModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeOtpModal()">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email OTP</h3>
+            <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Enter the 6-digit OTP sent to your email.</p>
+            <div class="input-group">
+                <i class="fa-solid fa-key field-icon"></i>
+                <input type="text" id="otpInput" class="input-field" placeholder="Enter 6-Digit OTP" maxlength="6">
+            </div>
+            <button type="button" class="action-btn" onclick="verifyOtp()">VERIFY & LOGIN</button>
+        </div>
+    </div>
+
+    <!-- Forgot & Reset Password Modal -->
     <div class="modal-overlay" id="forgotModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForgotModal()">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#f59e0b;"></i> Reset Password</h3>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#a78bfa;"></i> Reset Password</h3>
             <div class="input-group" style="margin-top: 15px;">
                 <i class="fa-solid fa-envelope field-icon"></i>
                 <input type="email" id="resetEmail" class="input-field" placeholder="Registered Email ID">
             </div>
-            <button type="button" class="action-btn" onclick="sendResetOtp()">SEND RESET OTP</button>
+            <div class="input-group">
+                <i class="fa-solid fa-lock field-icon"></i>
+                <input type="password" id="newPassword" class="input-field" placeholder="Enter New Password">
+                <i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i>
+            </div>
+            <button type="button" class="action-btn" onclick="sendResetOtp()">UPDATE PASSWORD</button>
         </div>
     </div>
 
@@ -230,6 +265,15 @@
 
     <script>
         let currentMode = 'signin';
+
+        function showToast(message, isSuccess = false) {
+            const toast = document.getElementById('toast-alert');
+            toast.innerText = message;
+            toast.className = isSuccess ? "show success" : "show";
+            setTimeout(() => {
+                toast.className = "";
+            }, 3000);
+        }
 
         function switchTab(mode) {
             currentMode = mode;
@@ -251,10 +295,9 @@
             }
         }
 
-        // Show/Hide Password Toggle Logic
-        function togglePass() {
-            const passInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
+        function togglePass(fieldId, iconId) {
+            const passInput = document.getElementById(fieldId);
+            const eyeIcon = document.getElementById(iconId);
             if (passInput.type === 'password') {
                 passInput.type = 'text';
                 eyeIcon.classList.remove('fa-eye');
@@ -269,7 +312,32 @@
         function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
-            alert(currentMode === 'signin' ? `Sending Sign-In OTP to ${email}` : `Sending Account Verification OTP to ${email}`);
+            const password = document.getElementById('password').value;
+
+            if(!email || password.length < 6) {
+                showToast("Invalid Email or Password (Min 6 chars)");
+                return;
+            }
+
+            // Simulate sending OTP & opening OTP verification popup
+            showToast(`OTP sent successfully to ${email}`, true);
+            document.getElementById('otpModal').classList.add('active');
+        }
+
+        function verifyOtp() {
+            const otp = document.getElementById('otpInput').value;
+            if(otp === "123456" || otp.length === 6) {
+                showToast("Authentication Successful! Redirecting...", true);
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1500);
+            } else {
+                showToast("Invalid OTP! Please check and try again.");
+            }
+        }
+
+        function closeOtpModal() {
+            document.getElementById('otpModal').classList.remove('active');
         }
 
         function openForgotModal(e) {
@@ -283,11 +351,14 @@
 
         function sendResetOtp() {
             const resetEmail = document.getElementById('resetEmail').value;
-            if(!resetEmail) { alert("Please enter your registered email"); return; }
-            alert(`Reset Password OTP sent to ${resetEmail}`);
+            const newPass = document.getElementById('newPassword').value;
+            if(!resetEmail || newPass.length < 6) { 
+                showToast("Enter valid email and new password (min 6 chars)"); 
+                return; 
+            }
+            showToast(`Password updated successfully for ${resetEmail}`, true);
             closeForgotModal();
         }
     </script>
 </body>
 </html>
-
