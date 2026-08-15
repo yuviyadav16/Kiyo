@@ -309,9 +309,9 @@
             }
         }
 
-        function handleSubmit(e) {
+        async function handleSubmit(e) {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
             if(!email || password.length < 6) {
@@ -319,20 +319,68 @@
                 return;
             }
 
-            // Simulate sending OTP & opening OTP verification popup
-            showToast(`OTP sent successfully to ${email}`, true);
-            document.getElementById('otpModal').classList.add('active');
+            try {
+                // 1. Check if email already exists (for Signup mode)
+                if (currentMode === 'signup') {
+                    const checkRes = await fetch('/api/check-email', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    const checkData = await checkRes.json();
+                    if (checkData.exists) {
+                        showToast("Account already exists with this email!");
+                        return;
+                    }
+                }
+
+                // 2. Send Real Email OTP via Backend FastAPI
+                showToast("Sending OTP to your email...", false);
+                const otpRes = await fetch('/api/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                if (otpRes.ok) {
+                    showToast("OTP sent successfully to email!", true);
+                    document.getElementById('otpModal').classList.add('active');
+                } else {
+                    const errData = await otpRes.json();
+                    showToast(errData.detail || "Failed to send OTP");
+                }
+            } catch (err) {
+                showToast("Network error. Please try again.");
+            }
         }
 
-        function verifyOtp() {
-            const otp = document.getElementById('otpInput').value;
-            if(otp === "123456" || otp.length === 6) {
-                showToast("Authentication Successful! Redirecting...", true);
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 1500);
-            } else {
-                showToast("Invalid OTP! Please check and try again.");
+        async function verifyOtp() {
+            const email = document.getElementById('email').value.trim();
+            const otp = document.getElementById('otpInput').value.trim();
+
+            if (otp.length !== 6) {
+                showToast("Please enter a valid 6-digit OTP");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/verify-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                if (res.ok) {
+                    showToast("Authentication Successful! Redirecting...", true);
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1500);
+                } else {
+                    const errData = await res.json();
+                    showToast(errData.detail || "Invalid OTP!");
+                }
+            } catch (err) {
+                showToast("Verification failed. Try again.");
             }
         }
 
@@ -350,7 +398,7 @@
         }
 
         function sendResetOtp() {
-            const resetEmail = document.getElementById('resetEmail').value;
+            const resetEmail = document.getElementById('resetEmail').value.trim();
             const newPass = document.getElementById('newPassword').value;
             if(!resetEmail || newPass.length < 6) { 
                 showToast("Enter valid email and new password (min 6 chars)"); 
