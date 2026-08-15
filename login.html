@@ -45,7 +45,7 @@
             border-radius: 50%; overflow: hidden;
             border: 3px solid var(--primary);
             box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.4);
-            transition: all 0.3s ease; background: #fff;
+            transition: all 0.3s ease; background: #000;
         }
         .avatar-video { width: 100%; height: 100%; object-fit: cover; }
 
@@ -64,7 +64,7 @@
         .input-field:focus { border-color: var(--primary); }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
 
-        /* Custom Dropdown Trigger (Replaces Native <select>) */
+        /* Custom Dropdown Trigger */
         .custom-select-btn {
             width: 100%; padding: 12px 15px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 12px; color: #94a3b8; font-size: 14px; box-sizing: border-box; text-align: left;
@@ -90,7 +90,7 @@
         .social-row a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
         .social-row a:hover { color: #fff; transform: translateY(-2px); }
 
-        /* Professional Bottom Sheet Modals (Replaces cheap dropdowns & OTP) */
+        /* Professional Bottom Sheet Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .bottom-sheet { background: #1e293b; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
@@ -99,7 +99,6 @@
         .sheet-header h3 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
         .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
         
-        /* Custom List Items inside Bottom Sheet */
         .custom-list-container { overflow-y: auto; padding: 10px 20px; }
         .list-item { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
         .list-item:hover { background: rgba(124, 58, 237, 0.1); color: #fff; border-radius: 8px; padding-left: 15px; }
@@ -107,7 +106,6 @@
         .list-item.selected { color: var(--primary); font-weight: 700; }
         .list-item.selected i { display: block; }
 
-        /* Center Modals for OTP & Forgot Pass */
         .center-modal { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); transform: scale(0.9); transition: 0.3s; }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
@@ -119,9 +117,9 @@
 
     <div class="main-wrapper">
         <div class="login-card" id="loginCard">
-            <!-- 3D Video Avatar -->
+            <!-- 3D Video Avatar (Fixed White Screen with playsinline & preload) -->
             <div class="avatar-container" id="avatarBox">
-                <video id="avatarVideo" autoplay loop muted playsinline class="avatar-video">
+                <video id="avatarVideo" autoplay loop muted playsinline preload="auto" class="avatar-video">
                     <source src="15468.mp4" type="video/mp4">
                 </video>
             </div>
@@ -134,7 +132,6 @@
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <!-- Sign In / Sign Up Form -->
             <form id="authForm" onsubmit="handleSubmit(event)">
                 
                 <!-- STEP 1: Basic Info -->
@@ -149,7 +146,6 @@
                     </div>
                 </div>
 
-                <!-- Common Email & Pass -->
                 <div id="commonFields">
                     <div class="input-group">
                         <i class="fa-solid fa-envelope field-icon"></i>
@@ -171,13 +167,11 @@
                         <div class="path-btn" onclick="setPath('skill', this)">Skills</div>
                     </div>
 
-                    <!-- Hidden Inputs to store actual data -->
                     <input type="hidden" id="selectedClass" value="">
                     <input type="hidden" id="selectedBoard" value="">
                     <input type="hidden" id="selectedExam" value="">
                     <input type="hidden" id="selectedSkill" value="">
 
-                    <!-- Dynamic Custom Triggers (Replacing <select>) -->
                     <div id="pathBoardUI">
                         <div class="input-group">
                             <div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')">
@@ -233,16 +227,14 @@
         </div>
     </div>
 
-    <!-- PROFESSIONAL CUSTOM SELECTION LISTS (Bottom Sheets) -->
+    <!-- Professional Custom Selection List Modal -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
             <div class="sheet-header">
                 <h3 id="listTitle">Select Option</h3>
                 <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
             </div>
-            <div class="custom-list-container" id="listContent">
-                <!-- Data injected via JS -->
-            </div>
+            <div class="custom-list-container" id="listContent"></div>
         </div>
     </div>
 
@@ -274,7 +266,6 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
-        // Custom Data Arrays for Professional Lists
         const dataLists = {
             class: [
                 {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'}
@@ -305,32 +296,38 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // Live Video Avatar Reaction
+        // Safe Video Reaction Handler (Fixes white screen)
         function avatarReact(state) {
             const video = document.getElementById('avatarVideo');
             const welcomeText = document.getElementById('welcomeText');
             const avatarBox = document.getElementById('avatarBox');
 
+            let videoFile = '15468.mp4';
             if (state === 'sad') {
-                video.src = '15475.mp4';
+                videoFile = '15475.mp4';
                 welcomeText.innerText = "Oops! Check your details.";
                 welcomeText.style.color = "#ef4444";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(239, 68, 68, 0.8)";
                 avatarBox.style.borderColor = "#ef4444";
             } else if (state === 'happy') {
-                video.src = '15474.mp4';
+                videoFile = '15474.mp4';
                 welcomeText.innerText = "Perfect! Proceeding...";
                 welcomeText.style.color = "#22c55e";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(34, 197, 94, 0.8)";
                 avatarBox.style.borderColor = "#22c55e";
             } else {
-                video.src = '15468.mp4';
+                videoFile = '15468.mp4';
                 welcomeText.innerText = currentMode === 'signup' ? "Let's build your AI Profile!" : "Welcome back! Ready to learn?";
                 welcomeText.style.color = "#a78bfa";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(124, 58, 237, 0.4)";
                 avatarBox.style.borderColor = "#7c3aed";
             }
-            video.play();
+
+            if (video.getAttribute('src') !== videoFile) {
+                video.src = videoFile;
+                video.load();
+                video.play().catch(error => console.log("Video play error:", error));
+            }
         }
 
         function switchTab(mode) {
@@ -369,7 +366,6 @@
             icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
         }
 
-        // Advance Sign Up Flow
         function goToStep2() {
             const name = document.getElementById('fullName').value.trim();
             const dob = document.getElementById('dob').value;
@@ -400,10 +396,7 @@
             document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
         }
 
-        // CUSTOM PROFESSIONAL LIST LOGIC
-        let activeListType = '';
         function openSelectionList(type) {
-            activeListType = type;
             const contentBox = document.getElementById('listContent');
             const titles = { class: "Select Class", board: "Select Indian Board", exam: "Select Target Exam", skill: "Select Skill" };
             
@@ -424,11 +417,9 @@
         }
 
         function selectListItem(type, id, name) {
-            // Save value in hidden input
             const hiddenId = 'selected' + type.charAt(0).toUpperCase() + type.slice(1);
             document.getElementById(hiddenId).value = id;
             
-            // Update Button UI
             const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
             btn.classList.add('selected');
             btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-check" style="color:var(--primary)"></i>`;
@@ -438,14 +429,12 @@
 
         function closeListModal() { document.getElementById('listModal').classList.remove('active'); }
 
-        // Backend API Logic
         async function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
             if(currentMode === 'signup') {
-                // Final Check before OTP
                 if(currentPath === 'board') {
                     if(!document.getElementById('selectedClass').value || !document.getElementById('selectedBoard').value) {
                         avatarReact('sad'); return showToast("Please select Class and Board.");
@@ -510,7 +499,6 @@
 
             if (res.ok) {
                 avatarReact('happy');
-                // Saving ALL Student Data to LocalStorage permanently
                 localStorage.setItem('kiyo_user_email', email);
                 localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
                 localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
