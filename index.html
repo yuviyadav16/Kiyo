@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Educating Bharat</title>
-    <!-- FontAwesome for Professional Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Latest FontAwesome CDN for X (Twitter) Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Premium Dark Navy Theme */
+        :root {
+            --play-state: running; /* Controls pause/play of animations */
+        }
+
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: #0b1120;
@@ -19,41 +23,92 @@
         /* Center Main UI */
         .main-ui {
             display: flex; flex-direction: column; align-items: center;
-            animation: slideUpFade 1.2s ease-out forwards;
+            transform: translateY(-20px); /* Slightly raised to balance footer */
         }
 
-        /* TicBull Academy Style Glow Wrapper */
+        /* Logo & Progress Ring Container */
         .kiyo-logo-container {
-            position: relative; display: flex; justify-content: center; align-items: center;
-            animation: breath 4s infinite ease-in-out; margin-bottom: 10px;
+            position: relative; 
+            width: 120px; height: 120px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 20px;
         }
 
         /* Soft Violet AI Glow */
         .kiyo-logo-container::before {
-            content: ''; position: absolute; width: 100px; height: 100px;
+            content: ''; position: absolute; width: 90px; height: 90px;
             background: #7c3aed; border-radius: 50%; filter: blur(40px); opacity: 0.55; z-index: 0;
         }
 
+        /* Main Circular Logo */
         .kiyo-logo {
             width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
             position: relative; z-index: 1; background-color: #ffffff;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); 
         }
 
+        /* SVG Circular Progress Ring */
+        .progress-ring-svg {
+            position: absolute; top: 0; left: 0;
+            width: 120px; height: 120px;
+            transform: rotate(-90deg); /* Starts animation from top (12 o'clock) */
+            z-index: 2; pointer-events: none;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: url(#ringGrad); /* Premium Gradient Stroke */
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 352; /* Circumference of the circle */
+            stroke-dashoffset: 352; /* Hide initially */
+            animation: fillRing 10s linear forwards;
+            animation-play-state: var(--play-state);
+        }
+
+        @keyframes fillRing {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Smooth Typewriter Effect for KIYO AI */
+        .kiyo-title-wrapper {
+            display: inline-flex; align-items: center; height: 45px;
+        }
+
         .kiyo-title {
-            color: #f8fafc; font-size: 34px; font-weight: 800; letter-spacing: 5px;
-            margin-top: 20px; text-transform: uppercase;
+            color: #f8fafc; font-size: 36px; font-weight: 800; letter-spacing: 5px;
+            margin: 0; text-transform: uppercase;
+            overflow: hidden; white-space: nowrap;
+            border-right: 3px solid #3b82f6; /* Blinking Cursor */
+            padding-right: 5px;
+            /* Smooth width transition */
+            animation: typing 1.5s ease-out forwards, blinkCursor 0.8s step-end infinite;
+            max-width: 0;
         }
 
         .kiyo-subtitle {
-            color: #94a3b8; font-size: 13px; letter-spacing: 1px; margin-top: 8px;
-            font-weight: 500; text-transform: uppercase;
+            color: #94a3b8; font-size: 13px; letter-spacing: 1px; margin-top: 5px;
+            font-weight: 500; text-transform: uppercase; opacity: 0;
+            animation: fadeInSub 1s forwards 1.5s; /* Appears after typing finishes */
+        }
+
+        @keyframes typing {
+            from { max-width: 0; }
+            to { max-width: 250px; } /* Adjust if text cuts off */
+        }
+
+        @keyframes blinkCursor {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes fadeInSub {
+            to { opacity: 1; }
         }
 
         /* Footer Branding & Socials */
         .footer-wrapper {
             position: absolute; bottom: 30px; display: flex; flex-direction: column; align-items: center;
-            opacity: 0; animation: fadeInBrand 1.5s forwards 1s; 
+            opacity: 0; animation: fadeInBrand 1.5s forwards 2s; 
         }
 
         .powered-text {
@@ -119,9 +174,7 @@
         }
         .close-btn:hover { color: #fff; }
 
-        .modal-box h3 {
-            color: #fff; margin-top: 0; font-size: 20px; margin-bottom: 20px;
-        }
+        .modal-box h3 { color: #fff; margin-top: 0; font-size: 20px; margin-bottom: 20px; }
 
         .support-link {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -136,19 +189,31 @@
         .bg-email { background: #ea4335; }
         .bg-email:hover { background: #d33828; }
 
-        /* Animations */
-        @keyframes breath { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInBrand { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInBrand { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="main-ui">
         <div class="kiyo-logo-container">
+            <!-- Loading Ring SVG -->
+            <svg class="progress-ring-svg">
+                <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#3b82f6" />
+                        <stop offset="100%" stop-color="#8b5cf6" />
+                    </linearGradient>
+                </defs>
+                <circle class="progress-circle" cx="60" cy="60" r="56" />
+            </svg>
+            <!-- Logo -->
             <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo">
         </div>
-        <div class="kiyo-title">KIYO AI</div>
+        
+        <!-- Smooth Typing Title -->
+        <div class="kiyo-title-wrapper">
+            <h1 class="kiyo-title">KIYO AI</h1>
+        </div>
         <div class="kiyo-subtitle">Intelligent Learning Guide</div>
     </div>
 
@@ -156,7 +221,6 @@
     <div class="footer-wrapper">
         <div class="powered-text">POWERED BY</div>
         
-        <!-- TicBull Clickable Pill -->
         <div class="ticbull-container" onclick="openSupport()">
             <div class="ticbull-circle">
                 <img src="14882.jpg" alt="TicBull">
@@ -164,10 +228,11 @@
             <div class="ticbull-name">TICBULL</div>
         </div>
 
-        <!-- Personal Social Icons Below TicBull -->
+        <!-- Personal Social Icons -->
         <div class="social-icons">
             <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <!-- New X (Twitter) Icon -->
             <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
             <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
             <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
@@ -192,16 +257,33 @@
     </div>
 
     <script>
-        let redirectTimer;
+        let remainingTime = 10000; // 10 seconds total
+        let timerId;
+        let lastStartTime;
 
         // Function to handle the 10 sec redirect
         function startTimer() {
-            redirectTimer = setTimeout(() => {
-                document.body.style.opacity = '0'; 
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 800);
-            }, 9200);
+            document.documentElement.style.setProperty('--play-state', 'running');
+            lastStartTime = Date.now();
+            
+            timerId = setTimeout(() => {
+                triggerRedirect();
+            }, remainingTime);
+        }
+
+        // Pause timer when popup opens
+        function pauseTimer() {
+            document.documentElement.style.setProperty('--play-state', 'paused');
+            clearTimeout(timerId);
+            // Calculate how much time is left
+            remainingTime -= (Date.now() - lastStartTime);
+        }
+
+        function triggerRedirect() {
+            document.body.style.opacity = '0'; 
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 800);
         }
 
         // Run timer on load
@@ -209,19 +291,17 @@
             startTimer();
         });
 
-        // Open Popup & Stop Timer
+        // Open Popup & Pause
         function openSupport() {
             document.getElementById('supportModal').classList.add('active');
-            clearTimeout(redirectTimer); // Timer rok diya taaki redirect na ho
+            pauseTimer(); 
         }
 
-        // Close Popup
+        // Close Popup & Resume
         function closeSupport() {
             document.getElementById('supportModal').classList.remove('active');
-            // User wapas screen par aa gaya, aap chaho toh timer wapas start kar sakte ho
-            // startTimer(); 
+            startTimer(); 
         }
     </script>
 </body>
 </html>
-
