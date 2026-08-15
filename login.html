@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root { --primary-glow: #7c3aed; --primary-btn: #7c3aed; }
+        
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: #0b1120; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            color: #fff; box-sizing: border-box; overflow-y: auto;
+            display: flex; flex-direction: column;
+            color: #fff; box-sizing: border-box; overflow-x: hidden;
         }
+
         #toast-alert {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
@@ -22,33 +24,46 @@
         }
         #toast-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         #toast-alert.success { border-left-color: #22c55e; }
+        
+        /* App Optimized Container Wrapper */
+        .main-wrapper {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            width: 100%; padding: 20px 0;
+        }
+
         .login-card {
             background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
             width: 90%; max-width: 380px; padding: 25px 20px;
             box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
-            display: flex; flex-direction: column; align-items: center; margin: auto;
+            display: flex; flex-direction: column; align-items: center;
         }
+
         .logo-container { position: relative; width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
         .logo-container::before { content: ''; position: absolute; width: 65px; height: 65px; background: var(--primary-glow); border-radius: 50%; filter: blur(20px); opacity: 0.6; }
         .logo-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; background: #fff; }
         .brand-title { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 0; text-align: center; }
         .brand-sub { font-size: 11px; color: #94a3b8; margin: 4px 0 18px 0; text-transform: uppercase; text-align: center; }
+        
         .tab-switcher { display: flex; background: rgba(2, 6, 23, 0.6); border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px; }
         .tab-btn { flex: 1; padding: 9px 0; text-align: center; font-size: 13px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: var(--primary-btn); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); }
+        
         .input-group { position: relative; width: 100%; margin-bottom: 12px; }
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
         .input-field { width: 100%; padding: 11px 40px 11px 42px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
         .input-field:focus { border-color: #a78bfa; }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
+        
         .action-btn { width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); }
         .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 4px; font-weight: 600; }
         .support-text { font-size: 11px; color: #64748b; margin-top: 12px; text-align: center; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 6px; }
         .social-row a { color: #64748b; font-size: 14px; text-decoration: none; }
-        .page-footer { width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b; text-align: center; background: rgba(11, 17, 32, 0.95); margin-top: 20px; box-sizing: border-box; }
+        
+        .page-footer { width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b; text-align: center; background: rgba(11, 17, 32, 0.95); margin-top: auto; box-sizing: border-box; }
         .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 3px; }
+        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
@@ -59,52 +74,55 @@
 
     <div id="toast-alert">Notification message</div>
 
-    <div class="login-card">
-        <div class="logo-container">
-            <img src="15026_2.png" alt="Kiyo AI Logo" class="logo-img">
-        </div>
-        <div class="brand-title">Kiyo AI</div>
-        <div class="brand-sub">Intelligent Learning Guide</div>
+    <!-- Main Wrapper added to perfectly center the card in WebViews/App -->
+    <div class="main-wrapper">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="15026_2.png" alt="Kiyo AI Logo" class="logo-img">
+            </div>
+            <div class="brand-title">Kiyo AI</div>
+            <div class="brand-sub">Intelligent Learning Guide</div>
 
-        <div class="tab-switcher">
-            <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
-            <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
-        </div>
+            <div class="tab-switcher">
+                <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
+                <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
+            </div>
 
-        <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
-            <!-- Extra Fields for Sign Up -->
-            <div id="signupFields" style="display: none;">
-                <div class="input-group">
-                    <i class="fa-solid fa-user field-icon"></i>
-                    <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
+            <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
+                <!-- Extra Fields for Sign Up -->
+                <div id="signupFields" style="display: none;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-calendar field-icon"></i>
+                        <input type="date" id="dob" class="input-field">
+                    </div>
                 </div>
+
                 <div class="input-group">
-                    <i class="fa-solid fa-calendar field-icon"></i>
-                    <input type="date" id="dob" class="input-field">
+                    <i class="fa-solid fa-envelope field-icon"></i>
+                    <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
                 </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-lock field-icon"></i>
+                    <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
+                    <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
+                </div>
+
+                <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
+
+                <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
+            </form>
+
+            <div class="support-text">Need Help? Contact TicBull Support</div>
+            <div class="social-row">
+                <a href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+                <a href="https://t.me/ticbullteam" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                <a href="https://www.instagram.com/ticbull" target="_blank"><i class="fa-brands fa-instagram"></i></a>
             </div>
-
-            <div class="input-group">
-                <i class="fa-solid fa-envelope field-icon"></i>
-                <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
-            </div>
-
-            <div class="input-group">
-                <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
-                <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
-            </div>
-
-            <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
-
-            <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
-        </form>
-
-        <div class="support-text">Need Help? Contact TicBull Support</div>
-        <div class="social-row">
-            <a href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-            <a href="https://t.me/ticbullteam" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-            <a href="https://www.instagram.com/ticbull" target="_blank"><i class="fa-brands fa-instagram"></i></a>
         </div>
     </div>
 
@@ -237,7 +255,7 @@
                     }
                 }
             } catch (err) {
-                showToast("Server connection error.");
+                showToast("Server connection error. Please try again.");
             }
         }
 
@@ -309,4 +327,3 @@
     </script>
 </body>
 </html>
-
