@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Educating Bharat</title>
     <style>
-        /* Premium Educational Theme */
+        /* Premium Dark Navy Theme (Like TicBull Academy) */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #0f172a; /* Professional dark slate */
+            background-color: #0b1120; /* Deep dark navy */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
@@ -29,31 +29,54 @@
             animation: slideUpFade 1.2s ease-out forwards;
         }
 
-        /* 🔴 NEW: Main Kiyo Logo Circular Style */
-        .kiyo-logo {
-            width: 150px;
-            height: 150px; /* Fixed height for perfect circle */
-            border-radius: 50%; /* Makes the white square a perfect circle */
-            object-fit: cover;
-            background-color: #ffffff; /* Fills the circle */
-            border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle premium ring */
+        /* 🔴 NEW: TicBull Academy Style Glow Wrapper */
+        .kiyo-logo-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             animation: breath 4s infinite ease-in-out;
+            margin-bottom: 10px;
+        }
+
+        /* Premium Deep Blue Glow behind the logo */
+        .kiyo-logo-container::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: #2563eb; /* Strong Royal Blue */
+            border-radius: 50%;
+            filter: blur(35px); /* Makes it a soft aura/glow */
+            z-index: 0;
+        }
+
+        /* 🔴 NEW: Smaller, cleaner logo */
+        .kiyo-logo {
+            width: 100px; /* Small size just like the reference */
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+            /* Added dark inner shadow to blend perfectly */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); 
         }
 
         /* KIYO AI Text */
         .kiyo-title {
             color: #f8fafc;
-            font-size: 36px;
+            font-size: 34px;
             font-weight: 800;
             letter-spacing: 5px;
-            margin-top: 30px;
+            margin-top: 20px;
             text-transform: uppercase;
         }
 
         /* Subtitle */
         .kiyo-subtitle {
             color: #94a3b8;
-            font-size: 14px;
+            font-size: 13px;
             letter-spacing: 1px;
             margin-top: 8px;
             font-weight: 500;
@@ -117,8 +140,8 @@
 
         /* Animations */
         @keyframes breath {
-            0%, 100% { transform: translateY(0); box-shadow: 0px 10px 25px rgba(59, 130, 246, 0.2); }
-            50% { transform: translateY(-8px); box-shadow: 0px 15px 35px rgba(59, 130, 246, 0.5); }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); } /* Floating effect without changing glow */
         }
 
         @keyframes slideUpFade {
@@ -135,8 +158,10 @@
 <body>
 
     <div class="main-ui">
-        <!-- Exact image file name from your repo -->
-        <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo">
+        <!-- New Logo Container with Glow -->
+        <div class="kiyo-logo-container">
+            <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo">
+        </div>
         <div class="kiyo-title">KIYO AI</div>
         <div class="kiyo-subtitle">Intelligent Learning Guide</div>
     </div>
@@ -145,7 +170,6 @@
         <div class="powered-text">POWERED BY</div>
         <div class="ticbull-container">
             <div class="ticbull-circle">
-                <!-- Exact image file name from your repo -->
                 <img src="14882.jpg" alt="TicBull">
             </div>
             <div class="ticbull-name">TICBULL</div>
