@@ -8,6 +8,7 @@
     <style>
         :root {
             --primary: #7c3aed;
+            --primary-light: rgba(124, 58, 237, 0.15);
             --bg-dark: #0b1120;
             --card-bg: rgba(15, 23, 42, 0.85);
             --danger: #ef4444;
@@ -39,7 +40,7 @@
             position: relative;
         }
 
-        /* 3D Video Avatar */
+        /* 3D Video Avatar (Fixed) */
         .avatar-container {
             width: 110px; height: 110px; margin: 0 auto 15px auto;
             border-radius: 50%; overflow: hidden;
@@ -58,7 +59,7 @@
         .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); }
 
         /* Inputs */
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
         .input-field { width: 100%; padding: 12px 40px 12px 42px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
         .input-field:focus { border-color: var(--primary); }
@@ -67,18 +68,18 @@
         /* Custom Dropdown Trigger */
         .custom-select-btn {
             width: 100%; padding: 12px 15px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; color: #94a3b8; font-size: 14px; box-sizing: border-box; text-align: left;
+            border-radius: 12px; color: #94a3b8; font-size: 13px; box-sizing: border-box; text-align: left;
             cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
         }
         .custom-select-btn:hover { border-color: var(--primary); }
-        .custom-select-btn.selected { color: #fff; font-weight: 600; }
+        .custom-select-btn.selected { color: #fff; font-weight: 600; border-color: var(--primary); background: var(--primary-light); }
 
         /* Path Buttons */
         .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
         .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 2px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; box-shadow: 0px 4px 10px rgba(79, 70, 229, 0.4);}
 
-        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; }
+        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; margin-top:5px; }
         .action-btn:active { transform: scale(0.97); }
 
         .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 15px; font-weight: 600; }
@@ -90,22 +91,43 @@
         .social-row a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
         .social-row a:hover { color: #fff; transform: translateY(-2px); }
 
-        /* Professional Bottom Sheet Modals */
+        /* ---------------------------------------------------
+           PROFESSIONAL BOTTOM SHEET & LIST UI (UPDATED)
+           --------------------------------------------------- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .bottom-sheet { background: #1e293b; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
-        .modal-overlay.active .bottom-sheet { transform: translateY(0); }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sheet-header h3 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
-        .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
         
-        .custom-list-container { overflow-y: auto; padding: 10px 20px; }
-        .list-item { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
-        .list-item:hover { background: rgba(124, 58, 237, 0.1); color: #fff; border-radius: 8px; padding-left: 15px; }
-        .list-item i { color: var(--primary); display: none; }
-        .list-item.selected { color: var(--primary); font-weight: 700; }
-        .list-item.selected i { display: block; }
+        .bottom-sheet { background: #0f172a; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 85vh; box-shadow: 0px -10px 40px rgba(0,0,0,0.8); }
+        .modal-overlay.active .bottom-sheet { transform: translateY(0); }
+        
+        .sheet-header { display: flex; flex-direction: column; padding: 20px 20px 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sheet-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .brand-badge { font-size: 12px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; }
+        .brand-badge span { color: var(--primary); }
+        .sheet-header h3 { margin: 0; font-size: 18px; color: #fff; font-weight: 700; }
+        .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; transition: 0.2s; }
+        .close-sheet:hover { color: var(--danger); }
+        
+        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
+        
+        /* New Premium List Item Design */
+        .list-item { 
+            padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 14px; color: #e2e8f0; font-size: 14px; font-weight: 500; cursor: pointer; 
+            transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; 
+        }
+        .list-item:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
+        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
+        
+        /* Selected State */
+        .list-item.selected { 
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(79, 70, 229, 0.15)); 
+            border: 1px solid var(--primary); color: #fff; font-weight: 700; 
+            box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.2); 
+        }
+        .list-item.selected i { opacity: 1; transform: scale(1); }
 
+        /* Center Modals */
         .center-modal { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); transform: scale(0.9); transition: 0.3s; }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
@@ -117,7 +139,7 @@
 
     <div class="main-wrapper">
         <div class="login-card" id="loginCard">
-            <!-- 3D Video Avatar (Fixed White Screen with playsinline & preload) -->
+            <!-- 3D Video Avatar -->
             <div class="avatar-container" id="avatarBox">
                 <video id="avatarVideo" autoplay loop muted playsinline preload="auto" class="avatar-video">
                     <source src="15468.mp4" type="video/mp4">
@@ -171,13 +193,31 @@
                     <input type="hidden" id="selectedBoard" value="">
                     <input type="hidden" id="selectedExam" value="">
                     <input type="hidden" id="selectedSkill" value="">
+                    
+                    <!-- New Inputs for 11th/12th Specific Logic -->
+                    <input type="hidden" id="selectedStream" value="">
+                    <input type="hidden" id="selectedDream" value="">
 
+                    <!-- BOARD PATH -->
                     <div id="pathBoardUI">
                         <div class="input-group">
                             <div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')">
                                 <span>Select Class...</span> <i class="fa-solid fa-chevron-down"></i>
                             </div>
                         </div>
+                        
+                        <!-- These two will dynamically show only if Class 11, 12 or Dropper is selected -->
+                        <div class="input-group" id="streamGroup" style="display:none;">
+                            <div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')">
+                                <span>Select Subjects (Stream)...</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="input-group" id="dreamGroup" style="display:none;">
+                            <div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')">
+                                <span>What is your Dream/Goal?</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+
                         <div class="input-group">
                             <div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')">
                                 <span>Select Indian Board...</span> <i class="fa-solid fa-chevron-down"></i>
@@ -185,6 +225,7 @@
                         </div>
                     </div>
 
+                    <!-- EXAM PATH -->
                     <div id="pathExamUI" style="display:none;">
                         <div class="input-group">
                             <div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')">
@@ -193,6 +234,7 @@
                         </div>
                     </div>
 
+                    <!-- SKILL PATH -->
                     <div id="pathSkillUI" style="display:none;">
                         <div class="input-group">
                             <div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')">
@@ -227,12 +269,15 @@
         </div>
     </div>
 
-    <!-- Professional Custom Selection List Modal -->
+    <!-- Professional Custom Selection List Modal (UPGRADED) -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
             <div class="sheet-header">
+                <div class="sheet-header-top">
+                    <div class="brand-badge"><span>Kiyo</span> | TicBull</div>
+                    <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
+                </div>
                 <h3 id="listTitle">Select Option</h3>
-                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
             </div>
             <div class="custom-list-container" id="listContent"></div>
         </div>
@@ -266,18 +311,49 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
+        // MASSIVE EXPANDED DATABASE FOR INDIA
         const dataLists = {
             class: [
-                {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'}
+                {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, 
+                {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'}
+            ],
+            stream: [
+                {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'},
+                {id: 'pcmb', name: 'PCMB (Math & Bio both)'}, {id: 'commerce', name: 'Commerce (Accounts, Business)'},
+                {id: 'arts', name: 'Arts / Humanities'}, {id: 'agriculture', name: 'Agriculture'}
+            ],
+            dream: [
+                {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE/IIT)'},
+                {id: 'upsc', name: 'IAS / IPS (Crack UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'},
+                {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'},
+                {id: 'board_topper', name: 'Only Board Topper 95%+'}
             ],
             board: [
-                {id: 'cbse', name: 'CBSE'}, {id: 'icse', name: 'ICSE / ISC'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, {id: 'upmsp', name: 'UP Board (UPMSP)'}, {id: 'mah', name: 'Maharashtra Board'}, {id: 'raj', name: 'Rajasthan Board'}, {id: 'other', name: 'Other State Board'}
+                {id: 'cbse', name: 'CBSE Board'}, {id: 'icse', name: 'ICSE / ISC Board'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, 
+                {id: 'upmsp', name: 'UP Board (UPMSP)'}, {id: 'mah', name: 'Maharashtra Board (HSC/SSC)'}, 
+                {id: 'raj', name: 'Rajasthan Board (RBSE)'}, {id: 'mp', name: 'MP Board (MPBSE)'}, 
+                {id: 'guj', name: 'Gujarat Board (GSEB)'}, {id: 'wb', name: 'West Bengal Board (WBBSE)'}, 
+                {id: 'kar', name: 'Karnataka Board (KSEEB)'}, {id: 'ap', name: 'Andhra Pradesh (BIEAP)'},
+                {id: 'tel', name: 'Telangana Board (TSBIE)'}, {id: 'kerala', name: 'Kerala Board (KBPE)'},
+                {id: 'tn', name: 'Tamil Nadu Board (TNBSE)'}, {id: 'punjab', name: 'Punjab Board (PSEB)'},
+                {id: 'haryana', name: 'Haryana Board (BSEH)'}, {id: 'jac', name: 'Jharkhand Board (JAC)'},
+                {id: 'cgbse', name: 'Chhattisgarh Board (CGBSE)'}, {id: 'odisha', name: 'Odisha Board (CHSE)'},
+                {id: 'assam', name: 'Assam Board (SEBA/AHSEC)'}, {id: 'uk', name: 'Uttarakhand Board (UBSE)'},
+                {id: 'hp', name: 'Himachal Board (HPBOSE)'}, {id: 'jk', name: 'J&K Board (JKBOSE)'},
+                {id: 'nios', name: 'NIOS (Open Schooling)'}, {id: 'other', name: 'Other State Board'}
             ],
             exam: [
-                {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Advanced'}, {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET (UG/PG)'}, {id: 'nda', name: 'NDA & NA'}, {id: 'ssc', name: 'SSC CGL/CHSL'}, {id: 'banking', name: 'Banking (IBPS/SBI)'}
+                {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Advanced'}, 
+                {id: 'bitsat', name: 'BITSAT'}, {id: 'mhtcet', name: 'MHT-CET'}, {id: 'wbjee', name: 'WBJEE'},
+                {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET (UG/PG)'}, 
+                {id: 'nda', name: 'NDA & NA'}, {id: 'ssc', name: 'SSC CGL/CHSL'}, 
+                {id: 'banking', name: 'Banking (IBPS/SBI)'}, {id: 'ca', name: 'CA Foundation'},
+                {id: 'clat', name: 'CLAT (Law)'}, {id: 'cat', name: 'CAT (MBA)'}, {id: 'icar', name: 'ICAR AIEEA'}
             ],
             skill: [
-                {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing & Animation'}, {id: 'business', name: 'Startup & Business'}, {id: 'marketing', name: 'Digital Marketing'}, {id: 'hacking', name: 'Ethical Hacking'}
+                {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, 
+                {id: 'video', name: 'Video Editing & Animation'}, {id: 'business', name: 'Startup & Business'}, 
+                {id: 'marketing', name: 'Digital Marketing'}, {id: 'hacking', name: 'Ethical Hacking'}
             ]
         };
 
@@ -296,7 +372,6 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // Safe Video Reaction Handler (Fixes white screen)
         function avatarReact(state) {
             const video = document.getElementById('avatarVideo');
             const welcomeText = document.getElementById('welcomeText');
@@ -398,19 +473,20 @@
 
         function openSelectionList(type) {
             const contentBox = document.getElementById('listContent');
-            const titles = { class: "Select Class", board: "Select Indian Board", exam: "Select Target Exam", skill: "Select Skill" };
+            const titles = { class: "Select Your Class", board: "Select Educational Board", exam: "Select Target Exam", skill: "Select Skill", stream: "Select Your Subjects (Stream)", dream: "What is your Ultimate Goal?" };
             
             document.getElementById('listTitle').innerText = titles[type];
             contentBox.innerHTML = '';
 
-            const currentVal = document.getElementById('selected' + type.charAt(0).toUpperCase() + type.slice(1)).value;
+            const hiddenId = 'selected' + type.charAt(0).toUpperCase() + type.slice(1);
+            const currentVal = document.getElementById(hiddenId).value;
 
             dataLists[type].forEach(item => {
                 const isSelected = currentVal === item.id;
                 contentBox.innerHTML += `
                     <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.id}', '${item.name}')">
                         <span>${item.name}</span>
-                        <i class="fa-solid fa-check"></i>
+                        <i class="fa-solid fa-circle-check"></i>
                     </div>`;
             });
             document.getElementById('listModal').classList.add('active');
@@ -422,8 +498,25 @@
             
             const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
             btn.classList.add('selected');
-            btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-check" style="color:var(--primary)"></i>`;
+            btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-circle-check" style="color:var(--primary)"></i>`;
             
+            // SMART LOGIC: If Class 11, 12, or Dropper is selected, show Stream and Dream Options
+            if (type === 'class') {
+                if (id === '11' || id === '12' || id === 'dropper') {
+                    document.getElementById('streamGroup').style.display = 'block';
+                    document.getElementById('dreamGroup').style.display = 'block';
+                } else {
+                    document.getElementById('streamGroup').style.display = 'none';
+                    document.getElementById('dreamGroup').style.display = 'none';
+                    document.getElementById('selectedStream').value = '';
+                    document.getElementById('selectedDream').value = '';
+                    document.getElementById('btnStream').classList.remove('selected');
+                    document.getElementById('btnStream').innerHTML = `<span>Select Subjects (Stream)...</span> <i class="fa-solid fa-chevron-down"></i>`;
+                    document.getElementById('btnDream').classList.remove('selected');
+                    document.getElementById('btnDream').innerHTML = `<span>What is your Dream/Goal?</span> <i class="fa-solid fa-chevron-down"></i>`;
+                }
+            }
+
             closeListModal();
         }
 
@@ -436,8 +529,15 @@
 
             if(currentMode === 'signup') {
                 if(currentPath === 'board') {
-                    if(!document.getElementById('selectedClass').value || !document.getElementById('selectedBoard').value) {
+                    const selClass = document.getElementById('selectedClass').value;
+                    const selBoard = document.getElementById('selectedBoard').value;
+                    if(!selClass || !selBoard) {
                         avatarReact('sad'); return showToast("Please select Class and Board.");
+                    }
+                    if (selClass === '11' || selClass === '12' || selClass === 'dropper') {
+                        if(!document.getElementById('selectedStream').value || !document.getElementById('selectedDream').value) {
+                            avatarReact('sad'); return showToast("Please select your Stream and Goal.");
+                        }
                     }
                 } else if (currentPath === 'exam') {
                     if(!document.getElementById('selectedExam').value) { avatarReact('sad'); return showToast("Please select an Exam."); }
@@ -499,14 +599,21 @@
 
             if (res.ok) {
                 avatarReact('happy');
+                
+                // Saving ALL Advanced Profiling Data securely
                 localStorage.setItem('kiyo_user_email', email);
                 localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
                 localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
                 localStorage.setItem('kiyo_user_path', currentPath);
                 
                 if(currentPath === 'board') {
-                    localStorage.setItem('kiyo_class', document.getElementById('selectedClass').value);
+                    const c = document.getElementById('selectedClass').value;
+                    localStorage.setItem('kiyo_class', c);
                     localStorage.setItem('kiyo_board', document.getElementById('selectedBoard').value);
+                    if(c === '11' || c === '12' || c === 'dropper') {
+                        localStorage.setItem('kiyo_stream', document.getElementById('selectedStream').value);
+                        localStorage.setItem('kiyo_dream', document.getElementById('selectedDream').value);
+                    }
                 } else if(currentPath === 'exam') {
                     localStorage.setItem('kiyo_exam', document.getElementById('selectedExam').value);
                 } else {
