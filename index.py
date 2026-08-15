@@ -17,14 +17,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Firebase Admin securely using service account key and environment URL
+# Initialize Firebase
 FIREBASE_URL = os.getenv("FIREBASE_URL")
 if not firebase_admin._apps:
     try:
         cred = credentials.Certificate("serviceAccountKey.json")
-        firebase_admin.initialize_app(cred, {
-            'databaseURL': FIREBASE_URL
-        })
+        firebase_admin.initialize_app(cred, {'databaseURL': FIREBASE_URL})
     except Exception as e:
         print("Firebase Init Error:", e)
 
@@ -33,31 +31,44 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 
 otp_storage = {}
 
-@app.post("/api/check-email")
-async def check_email(request: Request):
+@app.post("/api/check-user")
+async def check_user(request: Request):
     data = await request.json()
     email = data.get("email")
+    password = data.get("password")
+    mode = data.get("mode") # 'signin' or 'signup'
+    
     if not email:
         raise HTTPException(status_code=400, detail="Email required")
-    
+        
     formatted_email = email.replace(".", "_")
     ref = db.reference(f'users/{formatted_email}')
     user_data = ref.get()
     
-    if user_data:
-        return {"exists": True, "message": "Email already registered"}
-    return {"exists": False, "message": "Email available"}
+    if mode == "signup":
+        if user_data:
+            return {"status": "exists", "message": "Account already exists! Please Sign In."}
+        return {"status": "available", "message": "Email available"}
+        
+    elif mode == "signin":
+        if not user_data:
+            return {"status": "not_found", "message": "Account not found! Please Sign Up first."}
+        # Check password
+        if user_data.get("password") != password:
+            return {"status": "wrong_password", "message": "Incorrect password! Please try again."}
+        return {"status": "success", "message": "Login successful"}
 
 @app.post("/api/send-otp")
 async def send_otp(request: Request):
     data = await request.json()
     email = data.get("email")
+    password = data.get("password")
     
-    if not email:
-        raise HTTPException(status_code=400, detail="Email is required")
-    
+    if not email or not password:
+        raise HTTPException(status_code=400, detail="Email and password required")
+        
     otp = str(random.randint(100000, 999900))
-    otp_storage[email] = otp
+    otp_storage[email] = {"otp": otp, "password": password}
     
     try:
         html_content = f"""
@@ -71,7 +82,6 @@ async def send_otp(request: Request):
             <p style="font-size: 12px; color: #64748b; text-align: center;">Valid for 5 minutes. Do not share.</p>
         </div>
         """
-        
         msg = MIMEText(html_content, "html")
         msg["Subject"] = "Kiyo AI - Secure Verification OTP"
         msg["From"] = SMTP_EMAIL
@@ -81,7 +91,7 @@ async def send_otp(request: Request):
             server.login(SMTP_EMAIL, SMTP_PASSWORD)
             server.sendmail(SMTP_EMAIL, email, msg.as_string())
             
-        return {"status": "success", "message": f"OTP sent to {email}"}
+        return {"status": "success", "message": "OTP sent successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to send email: {str(e)}")
 
@@ -91,14 +101,36 @@ async def verify_otp(request: Request):
     email = data.get("email")
     user_otp = data.get("otp")
     
-    if otp_storage.get(email) == user_otp:
+    stored = otp_storage.get(email)
+    if stored and stored["otp"] == user_otp:
         try:
             formatted_email = email.replace(".", "_")
             ref = db.reference(f'users/{formatted_email}')
-            ref.set({"email": email, "verified": True})
+            ref.set({
+                "email": email,
+                "password": stored["password"],
+                "verified": True
+            })
         except Exception as db_err:
-            print("Database Write Error:", db_err)
+            print("DB Error:", db_err)
             
-        return {"status": "success", "message": "OTP Verified & Saved Successfully"}
+        return {"status": "success", "message": "Verified successfully"}
     
     raise HTTPException(status_code=400, detail="Invalid OTP")
+
+@app.post("/api/reset-password")
+async def reset_password(request: Request):
+    data = await request.json()
+    email = data.get("email")
+    new_password = data.get("newPassword")
+    
+    formatted_email = email.replace(".", "_")
+    ref = db.reference(f'users/{formatted_email}')
+    user_data = ref.get()
+    
+    if not user_data:
+        raise HTTPException(status_code=404, detail="Email not registered!")
+        
+    ref.update({"password": new_password})
+    return {"status": "success", "message": "Password updated successfully"}
+
