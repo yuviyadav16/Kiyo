@@ -11,7 +11,7 @@
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: #0b1120; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            color: #fff; box-sizing: border-box;
+            color: #fff; box-sizing: border-box; overflow-y: auto;
         }
         #toast-alert {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
@@ -72,6 +72,18 @@
         </div>
 
         <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
+            <!-- Extra Fields for Sign Up -->
+            <div id="signupFields" style="display: none;">
+                <div class="input-group">
+                    <i class="fa-solid fa-user field-icon"></i>
+                    <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-calendar field-icon"></i>
+                    <input type="date" id="dob" class="input-field">
+                </div>
+            </div>
+
             <div class="input-group">
                 <i class="fa-solid fa-envelope field-icon"></i>
                 <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
@@ -96,7 +108,7 @@
         </div>
     </div>
 
-    <!-- OTP Verification Modal -->
+    <!-- OTP Modal -->
     <div class="modal-overlay" id="otpModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeOtpModal()">&times;</span>
@@ -147,15 +159,18 @@
             currentMode = mode;
             const signinBtn = document.getElementById('signinTabBtn');
             const signupBtn = document.getElementById('signupTabBtn');
+            const signupFields = document.getElementById('signupFields');
             const submitBtn = document.getElementById('submitBtn');
 
             if (mode === 'signin') {
                 signinBtn.classList.add('active');
                 signupBtn.classList.remove('active');
+                signupFields.style.display = 'none';
                 submitBtn.innerText = "SIGN IN";
             } else {
                 signupBtn.classList.add('active');
                 signinBtn.classList.remove('active');
+                signupFields.style.display = 'block';
                 submitBtn.innerText = "SIGN UP WITH OTP";
             }
         }
@@ -178,6 +193,8 @@
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
+            const fullName = document.getElementById('fullName') ? document.getElementById('fullName').value.trim() : "";
+            const dob = document.getElementById('dob') ? document.getElementById('dob').value : "";
 
             if(!email || password.length < 6) {
                 showToast("Enter valid email & password (min 6 chars)");
@@ -185,7 +202,6 @@
             }
 
             try {
-                // Backend check user status
                 const res = await fetch('/api/check-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -199,11 +215,13 @@
                         switchTab('signin');
                         return;
                     }
-                    // If available, send OTP for registration
+                    if(!fullName || !dob) {
+                        showToast("Please fill Name and Date of Birth");
+                        return;
+                    }
                     showToast("Sending verification OTP...", false);
-                    await sendOtpRequest(email, password);
+                    await sendOtpRequest(email, password, fullName, dob);
                 } else {
-                    // Sign In mode checks
                     if (data.status === 'not_found') {
                         showToast(data.message);
                         switchTab('signup');
@@ -223,11 +241,11 @@
             }
         }
 
-        async function sendOtpRequest(email, password) {
+        async function sendOtpRequest(email, password, fullName, dob) {
             const res = await fetch('/api/send-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ email, password, fullName, dob })
             });
             if (res.ok) {
                 showToast("OTP sent to your email!", true);
