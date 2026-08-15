@@ -203,7 +203,7 @@
 
             <div class="input-group">
                 <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="password" class="input-field" placeholder="Password" required>
+                <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
                 <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
             </div>
 
@@ -320,21 +320,29 @@
             }
 
             try {
-                // 1. Check if email already exists (for Signup mode)
-                if (currentMode === 'signup') {
-                    const checkRes = await fetch('/api/check-email', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email })
-                    });
-                    const checkData = await checkRes.json();
-                    if (checkData.exists) {
-                        showToast("Account already exists with this email!");
-                        return;
-                    }
+                // Check if email exists in database
+                const checkRes = await fetch('/api/check-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const checkData = await checkRes.json();
+
+                // If user is trying to Sign Up, but account already exists
+                if (currentMode === 'signup' && checkData.exists) {
+                    showToast("Account already exists! Please Sign In.");
+                    switchTab('signin');
+                    return;
                 }
 
-                // 2. Send Real Email OTP via Backend FastAPI
+                // If user is trying to Sign In, but account does not exist
+                if (currentMode === 'signin' && !checkData.exists) {
+                    showToast("Account not found! Please Sign Up first.");
+                    switchTab('signup');
+                    return;
+                }
+
+                // Proceed to send OTP
                 showToast("Sending OTP to your email...", false);
                 const otpRes = await fetch('/api/send-otp', {
                     method: 'POST',
