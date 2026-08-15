@@ -5,69 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Launching</title>
     <style>
-        /* Base Professional Dark Theme */
+        /* Pure black premium background for video */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #0b0f19; /* Premium dark background */
+            background-color: #000000; 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
         }
 
-        /* Center Content Container */
-        #main-animation {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            height: 60vh;
-            justify-content: center;
-        }
-
-        /* Image 1: The Brain/Bulb Logo */
-        #logo-bulb {
-            width: 150px;
-            transition: all 0.8s ease-in-out;
-            opacity: 1;
-        }
-
-        /* Image 2: AI Teacher Girl */
-        #logo-girl {
-            width: 250px;
-            border-radius: 15px;
-            opacity: 0;
-            transform: scale(0.8) translateY(20px);
-            transition: all 1s ease-out;
-            position: absolute;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Typewriter Animation Text for "Kiyo AI" */
-        #kiyo-text {
-            color: #ffffff;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-            margin-top: 150px; /* Space below the images */
-            opacity: 0;
-            font-weight: bold;
-            border-right: 3px solid #3b82f6; /* Cursor effect */
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: #3b82f6; }
+        /* Video styling for mobile optimization */
+        #intro-video {
+            width: 100%;
+            max-width: 450px; /* Mobile width maintain rakhne ke liye */
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px; /* Thoda smooth edge dene ke liye (optional) */
         }
 
         /* Bottom TicBull Brand */
@@ -78,7 +37,7 @@
             align-items: center;
             gap: 10px;
             opacity: 0;
-            transition: opacity 1.5s ease-in;
+            animation: fadeIn 1.5s forwards 0.5s; /* Video start hone ke thodi der baad fade in hoga */
         }
         
         #brand-footer span {
@@ -89,37 +48,25 @@
         }
 
         #ticbull-logo {
-            width: 40px; /* Small logo */
+            width: 40px; /* Small brand logo */
             filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
         }
 
-        /* Utility classes for JS manipulation */
-        .fade-out-up {
-            opacity: 0 !important;
-            transform: translateY(-50px) scale(0.5);
-        }
-        
-        .fade-in-scale {
-            opacity: 1 !important;
-            transform: scale(1) translateY(0) !important;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Center Animation -->
-    <div id="main-animation">
-        <!-- 1st Image -->
-        <img id="logo-bulb" src="15026_2.png" alt="Kiyo AI Initial Logo">
-        
-        <!-- 2nd Image (Appears later) -->
-        <img id="logo-girl" src="15031_2.png" alt="Kiyo AI Character">
-        
-        <!-- Animated Text -->
-        <h1 id="kiyo-text"></h1>
-    </div>
+    <!-- Kiyo AI Motion Graphics Video -->
+    <!-- 'muted' zaroori hai mobile browsers me autoplay allow karne ke liye -->
+    <video id="intro-video" autoplay muted playsinline>
+        <source src="15200.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 
-    <!-- Bottom Brand Logo -->
+    <!-- Bottom Brand Logo (TicBull) -->
     <div id="brand-footer">
         <span>Powered by</span>
         <img id="ticbull-logo" src="15022_2.png" alt="TicBull">
@@ -127,41 +74,26 @@
     </div>
 
     <script>
-        // Animation Timeline Logic
         document.addEventListener("DOMContentLoaded", () => {
-            const logoBulb = document.getElementById("logo-bulb");
-            const logoGirl = document.getElementById("logo-girl");
-            const kiyoText = document.getElementById("kiyo-text");
-            const brandFooter = document.getElementById("brand-footer");
+            const video = document.getElementById("intro-video");
 
-            // Step 1: Wait 1 second, then animate the transition
-            setTimeout(() => {
-                // Fade out bulb upwards
-                logoBulb.classList.add("fade-out-up");
-                
-                // Fade in AI Girl
-                setTimeout(() => {
-                    logoGirl.classList.add("fade-in-scale");
-                }, 300); // Slight delay for smooth overlap
+            // Ensure video plays smoothly
+            video.play().catch(error => {
+                console.log("Autoplay blocked by browser. User interaction might be needed.", error);
+            });
 
-                // Show Brand Logo at bottom
-                brandFooter.style.opacity = "1";
-
-            }, 1000); // 1 Second delay as requested
-
-            // Step 2: Typewriter effect for "Kiyo AI"
-            setTimeout(() => {
-                kiyoText.style.opacity = "1";
-                kiyoText.innerHTML = "Kiyo AI";
-                kiyoText.style.animation = "typing 1.5s steps(30, end), blink-caret .75s step-end infinite";
-            }, 2000); // Starts right after image transition
-
-            // Step 3: Redirect to Z+ Security Login Page
-            setTimeout(() => {
-                // Yahan next page ka naam change kar sakte ho
+            // 1. Primary Logic: Jaise hi video puri chal jayegi, automatically login page par bhej dega
+            video.addEventListener("ended", () => {
                 window.location.href = "login.html"; 
-            }, 5000); // Total 5 seconds splash screen
+            });
+
+            // 2. Fallback Logic: In case internet/browser issue ki wajah se video nahi chalti,
+            // toh 7 seconds baad backup ke taur par aage badha dega (Apni video length ke hisaab se adjust kar lena)
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 7000); 
         });
     </script>
 </body>
 </html>
+
