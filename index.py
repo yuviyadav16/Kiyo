@@ -17,7 +17,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Firebase
 FIREBASE_URL = os.getenv("FIREBASE_URL")
 if not firebase_admin._apps:
     try:
@@ -36,7 +35,7 @@ async def check_user(request: Request):
     data = await request.json()
     email = data.get("email")
     password = data.get("password")
-    mode = data.get("mode") # 'signin' or 'signup'
+    mode = data.get("mode")
     
     if not email:
         raise HTTPException(status_code=400, detail="Email required")
@@ -53,7 +52,6 @@ async def check_user(request: Request):
     elif mode == "signin":
         if not user_data:
             return {"status": "not_found", "message": "Account not found! Please Sign Up first."}
-        # Check password
         if user_data.get("password") != password:
             return {"status": "wrong_password", "message": "Incorrect password! Please try again."}
         return {"status": "success", "message": "Login successful"}
@@ -63,12 +61,14 @@ async def send_otp(request: Request):
     data = await request.json()
     email = data.get("email")
     password = data.get("password")
+    fullName = data.get("fullName", "")
+    dob = data.get("dob", "")
     
     if not email or not password:
         raise HTTPException(status_code=400, detail="Email and password required")
         
     otp = str(random.randint(100000, 999900))
-    otp_storage[email] = {"otp": otp, "password": password}
+    otp_storage[email] = {"otp": otp, "password": password, "fullName": fullName, "dob": dob}
     
     try:
         html_content = f"""
@@ -109,6 +109,8 @@ async def verify_otp(request: Request):
             ref.set({
                 "email": email,
                 "password": stored["password"],
+                "fullName": stored["fullName"],
+                "dob": stored["dob"],
                 "verified": True
             })
         except Exception as db_err:
@@ -133,4 +135,3 @@ async def reset_password(request: Request):
         
     ref.update({"password": new_password})
     return {"status": "success", "message": "Password updated successfully"}
-
