@@ -2,63 +2,165 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiyo AI - Powered by TicBull</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiyo AI - Launching</title>
     <style>
-        * {
+        /* Base Professional Dark Theme */
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
             width: 100%;
             height: 100%;
-            background-color: #6da499; /* Green background fallback */
+            background-color: #0b0f19; /* Premium dark background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
         }
 
-        .splash-container {
-            width: 100%;
-            height: 100vh;
+        /* Center Content Container */
+        #main-animation {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            position: relative;
+            height: 60vh;
+            justify-content: center;
         }
 
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
+        /* Image 1: The Brain/Bulb Logo */
+        #logo-bulb {
+            width: 150px;
+            transition: all 0.8s ease-in-out;
+            opacity: 1;
+        }
+
+        /* Image 2: AI Teacher Girl */
+        #logo-girl {
+            width: 250px;
+            border-radius: 15px;
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: all 1s ease-out;
+            position: absolute;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Typewriter Animation Text for "Kiyo AI" */
+        #kiyo-text {
+            color: #ffffff;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            margin-top: 150px; /* Space below the images */
+            opacity: 0;
+            font-weight: bold;
+            border-right: 3px solid #3b82f6; /* Cursor effect */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #3b82f6; }
+        }
+
+        /* Bottom TicBull Brand */
+        #brand-footer {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 1.5s ease-in;
+        }
+        
+        #brand-footer span {
+            color: #64748b;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        #ticbull-logo {
+            width: 40px; /* Small logo */
+            filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
+        }
+
+        /* Utility classes for JS manipulation */
+        .fade-out-up {
+            opacity: 0 !important;
+            transform: translateY(-50px) scale(0.5);
+        }
+        
+        .fade-in-scale {
+            opacity: 1 !important;
+            transform: scale(1) translateY(0) !important;
         }
     </style>
 </head>
 <body>
 
-    <div class="splash-container">
-        <!-- Main Intro Video - Autoplay -->
-        <video id="introVideo" playsinline autoplay muted>
-            <source src="15200.mp4" type="video/mp4">
-        </video>
+    <!-- Main Center Animation -->
+    <div id="main-animation">
+        <!-- 1st Image -->
+        <img id="logo-bulb" src="15026_2.png" alt="Kiyo AI Initial Logo">
+        
+        <!-- 2nd Image (Appears later) -->
+        <img id="logo-girl" src="15031_2.png" alt="Kiyo AI Character">
+        
+        <!-- Animated Text -->
+        <h1 id="kiyo-text"></h1>
+    </div>
+
+    <!-- Bottom Brand Logo -->
+    <div id="brand-footer">
+        <span>Powered by</span>
+        <img id="ticbull-logo" src="15022_2.png" alt="TicBull">
+        <span style="color: white; font-weight: bold;">TicBull</span>
     </div>
 
     <script>
-        const video = document.getElementById('introVideo');
+        // Animation Timeline Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoBulb = document.getElementById("logo-bulb");
+            const logoGirl = document.getElementById("logo-girl");
+            const kiyoText = document.getElementById("kiyo-text");
+            const brandFooter = document.getElementById("brand-footer");
 
-        // Force play for mobile
-        window.addEventListener('load', () => {
-            video.play().catch(e => console.log("Autoplay blocked by browser"));
-        });
-
-        // Auto redirect to login page after 15 seconds (when video ends)
-        video.addEventListener('ended', () => {
-            document.body.style.transition = 'opacity 0.6s ease';
-            document.body.style.opacity = '0';
-            
+            // Step 1: Wait 1 second, then animate the transition
             setTimeout(() => {
-                window.location.href = '2_login.html'; 
-            }, 600);
+                // Fade out bulb upwards
+                logoBulb.classList.add("fade-out-up");
+                
+                // Fade in AI Girl
+                setTimeout(() => {
+                    logoGirl.classList.add("fade-in-scale");
+                }, 300); // Slight delay for smooth overlap
+
+                // Show Brand Logo at bottom
+                brandFooter.style.opacity = "1";
+
+            }, 1000); // 1 Second delay as requested
+
+            // Step 2: Typewriter effect for "Kiyo AI"
+            setTimeout(() => {
+                kiyoText.style.opacity = "1";
+                kiyoText.innerHTML = "Kiyo AI";
+                kiyoText.style.animation = "typing 1.5s steps(30, end), blink-caret .75s step-end infinite";
+            }, 2000); // Starts right after image transition
+
+            // Step 3: Redirect to Z+ Security Login Page
+            setTimeout(() => {
+                // Yahan next page ka naam change kar sakte ho
+                window.location.href = "login.html"; 
+            }, 5000); // Total 5 seconds splash screen
         });
     </script>
 </body>
