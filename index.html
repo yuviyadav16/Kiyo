@@ -5,69 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Launching</title>
     <style>
-        /* Ekdum clean background aur scroll lock */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #000000; /* Video load hone se pehle seamless dark rahega */
-            overflow: hidden;
+            margin: 0; padding: 0; background-color: #000000; height: 100%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; font-family: Arial, sans-serif;
+        }
+        
+        /* Loading text video ke piche rahega */
+        #loading-text { color: #333; position: absolute; z-index: -1; font-size: 1.2rem; }
+        
+        video {
+            width: 100vw; height: 100vh; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;
         }
 
-        /* Video screen ko puri tarah se bina strech kiye cover karegi */
-        #intro-video {
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover; /* Mobile aur Desktop dono me perfect ratio */
-            position: absolute;
-            top: 0;
-            left: 0;
-            transition: opacity 0.6s ease-in-out; /* Fade out effect ke liye transition */
-        }
-
-        /* Class jo video khatam hone par usko smooth gayab karegi */
-        .fade-out {
-            opacity: 0 !important;
+        /* Fallback button agar browser autoplay rok de */
+        #start-btn {
+            position: absolute; z-index: 10; padding: 12px 24px; background: #3b82f6; 
+            color: white; border: none; font-size: 16px; border-radius: 8px; 
+            font-weight: bold; cursor: pointer; display: none; box-shadow: 0px 4px 15px rgba(59, 130, 246, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- Preload auto taaki bina buffering jaldi start ho -->
-    <video id="intro-video" autoplay muted playsinline preload="auto">
-        <source src="15200.mp4" type="video/mp4">
+    <div id="loading-text">Loading Kiyo AI...</div>
+    
+    <button id="start-btn" onclick="forcePlay()">Tap to Launch Kiyo AI</button>
+
+    <video id="intro-video" muted playsinline autoplay preload="auto">
+        <!-- Path me ./ lagana zaroori hai -->
+        <source src="./15200.mp4" type="video/mp4">
     </video>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const video = document.getElementById("intro-video");
+            const btn = document.getElementById("start-btn");
 
-            // Video play command
-            video.play().catch(error => {
-                console.log("Browser autoplay restriction, waiting for interaction", error);
-            });
+            // Try to play automatically
+            let playPromise = video.play();
 
-            // Ye function smooth fade-out aur redirect ko handle karega
-            function transitionToLogin() {
-                video.classList.add("fade-out"); // Fade-out animation start
-                
-                // 600 milliseconds (fade-out khatam hone ka wait) ke baad naye page par bhejega
-                setTimeout(() => {
-                    window.location.href = "login.html"; 
-                }, 600); 
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Autoplay successful, kuch nahi karna
+                }).catch(error => {
+                    // Agar browser ne autoplay block kiya, toh button dikhao
+                    console.log("Autoplay blocked");
+                    btn.style.display = "block";
+                });
             }
 
-            // 1. Primary trigger: Jaise hi 10 sec ki video officially complete ho
-            video.addEventListener("ended", transitionToLogin);
+            // Jab user button dabaye
+            window.forcePlay = function() {
+                video.play();
+                btn.style.display = "none";
+            };
 
-            // 2. Failsafe trigger: Agar device slow hai, toh 11.5 seconds par forcefully aage bhej dega
+            // Video khatam hone par agle page par bhejna
+            video.addEventListener("ended", () => {
+                window.location.href = "login.html"; 
+            });
+            
+            // Backup timer (agar video fail ho jaye)
             setTimeout(() => {
-                // Agar video khud khatam nahi hui hai, tabhi failsafe chalega
-                if (!video.ended) {
-                    transitionToLogin();
-                }
-            }, 11500); 
+                if(!video.ended) { window.location.href = "login.html"; }
+            }, 11500);
         });
     </script>
 </body>
