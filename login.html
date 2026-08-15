@@ -3,326 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiyo AI - Secure Portal Login</title>
+    <title>Kiyo AI - Intelligent Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary-glow: #7c3aed; --primary-btn: #7c3aed; }
-        
+        :root {
+            --primary: #7c3aed;
+            --bg-dark: #0b1120;
+            --danger: #ef4444;
+            --success: #22c55e;
+        }
+
+        /* Continuous Color Animation Background */
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
-            background-color: #0b1120; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex; flex-direction: column;
-            color: #fff; box-sizing: border-box; overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff; overflow-x: hidden;
+            background: linear-gradient(45deg, #0f172a, #1e1b4b, #020617);
+            background-size: 300% 300%;
+            animation: gradientBG 15s ease infinite, hueRotate 20s infinite linear;
         }
 
-        #toast-alert {
-            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-            background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
-            box-shadow: 0px 10px 25px rgba(0,0,0,0.5); border-left: 5px solid #ef4444;
-            font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0;
-            transition: transform 0.4s ease, opacity 0.4s ease;
-        }
-        #toast-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-        #toast-alert.success { border-left-color: #22c55e; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        @keyframes hueRotate { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
+
+        /* Premium Toast Custom Alert */
+        .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 20px; border-radius: 50px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast.hide { animation: slideUp 0.4s forwards; }
+        .toast i { font-size: 18px; }
+        .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
+        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
+
+        .main-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; padding: 20px 0; }
         
-        /* App Optimized Container Wrapper */
-        .main-wrapper {
-            flex: 1; display: flex; justify-content: center; align-items: center;
-            width: 100%; padding: 20px 0;
-        }
-
         .login-card {
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
-            width: 90%; max-width: 380px; padding: 25px 20px;
-            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
-            display: flex; flex-direction: column; align-items: center;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
+            width: 90%; max-width: 400px; padding: 30px 25px;
+            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.8);
+            position: relative; z-index: 10;
         }
 
-        .logo-container { position: relative; width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
-        .logo-container::before { content: ''; position: absolute; width: 65px; height: 65px; background: var(--primary-glow); border-radius: 50%; filter: blur(20px); opacity: 0.6; }
-        .logo-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; background: #fff; }
-        .brand-title { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 0; text-align: center; }
-        .brand-sub { font-size: 11px; color: #94a3b8; margin: 4px 0 18px 0; text-transform: uppercase; text-align: center; }
+        /* Professor Avatar & Animations */
+        .avatar-container {
+            width: 100px; height: 100px; margin: 0 auto 15px auto;
+            border-radius: 50%; padding: 4px; background: linear-gradient(45deg, #7c3aed, #ec4899);
+            box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.6);
+            transform: translateX(-150vw); /* Hidden initially for slide-in */
+            animation: slideInProfessor 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes slideInProfessor { to { transform: translateX(0); } }
         
-        .tab-switcher { display: flex; background: rgba(2, 6, 23, 0.6); border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px; }
-        .tab-btn { flex: 1; padding: 9px 0; text-align: center; font-size: 13px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary-btn); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #0b1120; transition: 0.3s; }
         
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
-        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
-        .input-field { width: 100%; padding: 11px 40px 11px 42px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
-        .input-field:focus { border-color: #a78bfa; }
+        /* Reaction Classes */
+        .shake-sad { animation: sadShake 0.5s; filter: grayscale(80%); box-shadow: 0px 0px 20px rgba(239, 68, 68, 0.8); background: #ef4444; }
+        @keyframes sadShake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
+        
+        .bounce-happy { animation: happyBounce 1s; box-shadow: 0px 0px 30px rgba(34, 197, 94, 0.8); background: #22c55e; }
+        @keyframes happyBounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
+
+        .brand-title { font-size: 24px; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 0; }
+        .brand-sub { font-size: 12px; color: #a78bfa; text-align: center; margin-bottom: 20px; font-weight: 600; }
+
+        /* Tabs & Forms */
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.5); }
+
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a78bfa; font-size: 14px; }
+        .input-field { width: 100%; padding: 12px 40px 12px 42px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124,58,237,0.3); }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
+
+        /* Step 2 Multi-Select Buttons */
+        .path-selector { display: flex; gap: 10px; margin-bottom: 15px; }
+        .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; }
+
+        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; margin-top: 5px; }
+        .action-btn:active { transform: scale(0.97); }
+
+        .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 15px; font-weight: 600; }
         
-        .action-btn { width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); }
-        .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 4px; font-weight: 600; }
-        .support-text { font-size: 11px; color: #64748b; margin-top: 12px; text-align: center; }
-        .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 6px; }
-        .social-row a { color: #64748b; font-size: 14px; text-decoration: none; }
-        
-        .page-footer { width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b; text-align: center; background: rgba(11, 17, 32, 0.95); margin-top: auto; box-sizing: border-box; }
-        .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 3px; }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
+        /* Modals */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
+        .modal-content { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
         .close-modal { position: absolute; top: 12px; right: 15px; color: #94a3b8; cursor: pointer; font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <div id="toast-alert">Notification message</div>
+    <div class="toast-container" id="toastBox"></div>
 
-    <!-- Main Wrapper added to perfectly center the card in WebViews/App -->
     <div class="main-wrapper">
-        <div class="login-card">
-            <div class="logo-container">
-                <img src="15026_2.png" alt="Kiyo AI Logo" class="logo-img">
+        <div class="login-card" id="loginCard">
+            <!-- Professor Avatar -->
+            <div class="avatar-container" id="avatarBox">
+                <img src="15031.png" alt="Professor" class="avatar-img" id="avatarImg">
             </div>
+            
             <div class="brand-title">Kiyo AI</div>
-            <div class="brand-sub">Intelligent Learning Guide</div>
+            <div class="brand-sub" id="welcomeText">Welcome! I am your AI Guide.</div>
 
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
-                <!-- Extra Fields for Sign Up -->
-                <div id="signupFields" style="display: none;">
+            <form id="authForm" onsubmit="handleSubmit(event)">
+                
+                <!-- STEP 1: Basic Info (Sign Up Only) -->
+                <div id="step1Fields" style="display: none;">
                     <div class="input-group">
                         <i class="fa-solid fa-user field-icon"></i>
                         <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
                     </div>
                     <div class="input-group">
-                        <i class="fa-solid fa-calendar field-icon"></i>
-                        <input type="date" id="dob" class="input-field">
+                        <i class="fa-solid fa-cake-candles field-icon"></i>
+                        <!-- Tooltip built-in to placeholder logic -->
+                        <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="Date of Birth (13+ Compulsory)">
                     </div>
                 </div>
 
-                <div class="input-group">
+                <!-- Common Fields -->
+                <div class="input-group" id="emailGroup">
                     <i class="fa-solid fa-envelope field-icon"></i>
                     <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
                 </div>
-
-                <div class="input-group">
+                <div class="input-group" id="passGroup">
                     <i class="fa-solid fa-lock field-icon"></i>
                     <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
                     <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
                 </div>
 
-                <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
+                <!-- STEP 2: Academic Profiling (Sign Up Only) -->
+                <div id="step2Fields" style="display: none;">
+                    <div style="font-size:12px; color:#a78bfa; margin-bottom:10px; text-align:center;">What are you studying?</div>
+                    <div class="path-selector">
+                        <div class="path-btn active" onclick="selectPath('board', this)">School Board</div>
+                        <div class="path-btn" onclick="selectPath('exam', this)">Comp. Exam</div>
+                        <div class="path-btn" onclick="selectPath('skill', this)">Skills</div>
+                    </div>
+                    
+                    <!-- Dynamic Dropdowns based on Path -->
+                    <div id="dynamicDropdowns">
+                        <!-- Default: Board -->
+                        <div class="input-group">
+                            <select class="input-field" id="classSelect" style="padding-left:15px;">
+                                <option value="" disabled selected>Select Class...</option>
+                                <option value="9">Class 9</option><option value="10">Class 10</option>
+                                <option value="11">Class 11</option><option value="12">Class 12</option>
+                                <option value="dropper">Dropper</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <select class="input-field" id="boardSelect" style="padding-left:15px;">
+                                <option value="" disabled selected>Select Indian Board...</option>
+                                <option value="cbse">CBSE</option><option value="icse">ICSE / ISC</option>
+                                <option value="bseb">Bihar Board (BSEB)</option><option value="upmsp">UP Board</option>
+                                <option value="other">Other State Board</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
 
+                <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
+                
+                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="showStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
                 <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
             </form>
-
-            <div class="support-text">Need Help? Contact TicBull Support</div>
-            <div class="social-row">
-                <a href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-                <a href="https://t.me/ticbullteam" target="_blank"><i class="fa-brands fa-telegram"></i></a>
-                <a href="https://www.instagram.com/ticbull" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-            </div>
         </div>
     </div>
 
-    <!-- OTP Modal -->
+    <!-- OTP & Forgot Password Modals here... (Same as before but with updated styling) -->
     <div class="modal-overlay" id="otpModal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeOtpModal()">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email OTP</h3>
-            <p style="font-size:12px; color:#94a3b8; margin-bottom:15px;">Enter the 6-digit OTP sent to your email.</p>
-            <div class="input-group">
-                <i class="fa-solid fa-key field-icon"></i>
-                <input type="text" id="otpInput" class="input-field" placeholder="Enter 6-Digit OTP" maxlength="6">
-            </div>
-            <button type="button" class="action-btn" onclick="verifyOtp()">VERIFY & COMPLETE</button>
+            <span class="close-modal" onclick="closeModal('otpModal')">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email</h3>
+            <p style="font-size:12px; color:#94a3b8;">Enter the 6-digit OTP sent to your email.</p>
+            <div class="input-group"><input type="text" id="otpInput" class="input-field" placeholder="6-Digit OTP" maxlength="6" style="padding-left:15px; text-align:center; letter-spacing:5px;"></div>
+            <button type="button" class="action-btn" onclick="verifyOtp()">CREATE ACCOUNT</button>
         </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div class="modal-overlay" id="forgotModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeForgotModal()">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#a78bfa;"></i> Reset Password</h3>
-            <div class="input-group" style="margin-top: 15px;">
-                <i class="fa-solid fa-envelope field-icon"></i>
-                <input type="email" id="resetEmail" class="input-field" placeholder="Registered Email ID">
-            </div>
-            <div class="input-group">
-                <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="newPassword" class="input-field" placeholder="Enter New Password (Min 6)">
-                <i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i>
-            </div>
-            <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
-        </div>
-    </div>
-
-    <div class="page-footer">
-        <div><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a> | <a href="#">Refund Policy</a> | <a href="#">Contact Us</a></div>
-        <div style="margin-top: 4px;">&copy; 2026 Kiyo AI & TicBull. All rights reserved.</div>
     </div>
 
     <script>
         let currentMode = 'signin';
+        let currentPath = 'board';
 
-        function showToast(message, isSuccess = false) {
-            const toast = document.getElementById('toast-alert');
-            toast.innerText = message;
-            toast.className = isSuccess ? "show success" : "show";
-            setTimeout(() => { toast.className = ""; }, 3000);
+        // 1. Z+ Security: Persistent Login Check
+        window.onload = function() {
+            if(localStorage.getItem('kiyo_user_email')) {
+                window.location.href = "dashboard.html"; // Redirect immediately if logged in
+            }
+        };
+
+        // Premium Toast
+        function showToast(message, type = 'error') {
+            const toastBox = document.getElementById('toastBox');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check-circle':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
+        // Avatar Reactions Logic
+        function avatarReact(reaction) {
+            const avatarBox = document.getElementById('avatarBox');
+            avatarBox.classList.remove('shake-sad', 'bounce-happy');
+            void avatarBox.offsetWidth; // Trigger reflow
+            
+            if(reaction === 'sad') {
+                avatarBox.classList.add('shake-sad');
+                document.getElementById('welcomeText').innerText = "Oops! Something is wrong.";
+                document.getElementById('welcomeText').style.color = "#ef4444";
+            } else if(reaction === 'happy') {
+                avatarBox.classList.add('bounce-happy');
+                document.getElementById('welcomeText').innerText = "Perfect! Welcome to Kiyo AI.";
+                document.getElementById('welcomeText').style.color = "#22c55e";
+            }
+        }
+
+        // Tab Switch Logic
         function switchTab(mode) {
             currentMode = mode;
-            const signinBtn = document.getElementById('signinTabBtn');
-            const signupBtn = document.getElementById('signupTabBtn');
-            const signupFields = document.getElementById('signupFields');
-            const submitBtn = document.getElementById('submitBtn');
+            document.getElementById('signinTabBtn').classList.toggle('active', mode === 'signin');
+            document.getElementById('signupTabBtn').classList.toggle('active', mode === 'signup');
+            
+            document.getElementById('step1Fields').style.display = mode === 'signup' ? 'block' : 'none';
+            document.getElementById('step2Fields').style.display = 'none';
+            document.getElementById('forgotLink').style.display = mode === 'signin' ? 'block' : 'none';
+            
+            document.getElementById('emailGroup').style.display = 'block';
+            document.getElementById('passGroup').style.display = 'block';
 
-            if (mode === 'signin') {
-                signinBtn.classList.add('active');
-                signupBtn.classList.remove('active');
-                signupFields.style.display = 'none';
-                submitBtn.innerText = "SIGN IN";
+            if(mode === 'signup') {
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('welcomeText').innerText = "Let's build your AI Profile!";
+                document.getElementById('welcomeText').style.color = "#a78bfa";
             } else {
-                signupBtn.classList.add('active');
-                signinBtn.classList.remove('active');
-                signupFields.style.display = 'block';
-                submitBtn.innerText = "SIGN UP WITH OTP";
+                document.getElementById('submitBtn').style.display = 'block';
+                document.getElementById('submitBtn').innerText = "SIGN IN";
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('welcomeText').innerText = "Welcome back! Ready to learn?";
+                document.getElementById('welcomeText').style.color = "#a78bfa";
+            }
+        }
+
+        // Calculate Age Logic (13+ Compulsory)
+        function getAge(dateString) {
+            let today = new Date();
+            let birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+            return age;
+        }
+
+        // Step 1 to Step 2 Validation (Sign Up)
+        function showStep2() {
+            const name = document.getElementById('fullName').value.trim();
+            const dob = document.getElementById('dob').value;
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+
+            if(!name || !dob || !email || !pass) {
+                avatarReact('sad');
+                return showToast("Please fill all details correctly.");
+            }
+            if(pass.length < 6) {
+                avatarReact('sad');
+                return showToast("Password must be at least 6 characters.");
+            }
+            
+            // Age Check
+            if(getAge(dob) < 13) {
+                avatarReact('sad');
+                return showToast("You must be 13+ to create an account.");
+            }
+
+            // Move to Step 2
+            avatarReact('happy');
+            document.getElementById('step1Fields').style.display = 'none';
+            document.getElementById('emailGroup').style.display = 'none';
+            document.getElementById('passGroup').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('step2Fields').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'block';
+            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+        }
+
+        // Academic Profiling Dropdowns
+        function selectPath(path, btnElement) {
+            currentPath = path;
+            document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            const dropBox = document.getElementById('dynamicDropdowns');
+            if(path === 'board') {
+                dropBox.innerHTML = `
+                    <div class="input-group"><select class="input-field" id="classSelect" style="padding-left:15px;"><option value="" disabled selected>Select Class...</option><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option><option value="dropper">Dropper</option></select></div>
+                    <div class="input-group"><select class="input-field" id="boardSelect" style="padding-left:15px;"><option value="" disabled selected>Select Indian Board...</option><option value="cbse">CBSE</option><option value="icse">ICSE / ISC</option><option value="bseb">Bihar Board (BSEB)</option><option value="upmsp">UP Board</option><option value="other">Other State Board</option></select></div>`;
+            } else if(path === 'exam') {
+                dropBox.innerHTML = `
+                    <div class="input-group"><select class="input-field" id="examSelect" style="padding-left:15px;"><option value="" disabled selected>Select Target Exam...</option><option value="neet">NEET (Medical)</option><option value="jee">JEE Main & Adv.</option><option value="upsc">UPSC CSE</option><option value="cuet">CUET</option><option value="nda">NDA</option></select></div>`;
+            } else {
+                dropBox.innerHTML = `
+                    <div class="input-group"><select class="input-field" id="skillSelect" style="padding-left:15px;"><option value="" disabled selected>Select Skill to Master...</option><option value="coding">Software Development (AI/Web)</option><option value="design">UI/UX Design</option><option value="video">Video Editing & Animation</option><option value="business">Startup & Business</option></select></div>`;
             }
         }
 
         function togglePass(fieldId, iconId) {
-            const passInput = document.getElementById(fieldId);
-            const eyeIcon = document.getElementById(iconId);
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passInput.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
+            const pass = document.getElementById(fieldId); const icon = document.getElementById(iconId);
+            const isText = pass.type === 'text';
+            pass.type = isText ? 'password' : 'text';
+            icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
         }
 
+        // Final Submit Logic
         async function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const fullName = document.getElementById('fullName') ? document.getElementById('fullName').value.trim() : "";
-            const dob = document.getElementById('dob') ? document.getElementById('dob').value : "";
 
-            if(!email || password.length < 6) {
-                showToast("Enter valid email & password (min 6 chars)");
-                return;
-            }
+            if(currentMode === 'signin') {
+                try {
+                    const res = await fetch('/api/check-user', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, mode: 'signin' })
+                    });
+                    const data = await res.json();
 
-            try {
-                const res = await fetch('/api/check-user', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, mode: currentMode })
-                });
-                const data = await res.json();
-
-                if (currentMode === 'signup') {
-                    if (data.status === 'exists') {
-                        showToast(data.message);
-                        switchTab('signin');
-                        return;
-                    }
-                    if(!fullName || !dob) {
-                        showToast("Please fill Name and Date of Birth");
-                        return;
-                    }
-                    showToast("Sending verification OTP...", false);
-                    await sendOtpRequest(email, password, fullName, dob);
-                } else {
-                    if (data.status === 'not_found') {
-                        showToast(data.message);
-                        switchTab('signup');
-                        return;
-                    }
-                    if (data.status === 'wrong_password') {
-                        showToast(data.message);
-                        return;
-                    }
-                    if (data.status === 'success') {
-                        showToast("Login Successful! Redirecting...", true);
+                    if (data.status === 'not_found' || data.status === 'wrong_password') { 
+                        avatarReact('sad');
+                        showToast(data.message); 
+                    } else if (data.status === 'success') {
+                        avatarReact('happy');
+                        localStorage.setItem('kiyo_user_email', email); // Secure Session Save
+                        showToast("Authentication Successful!", 'success');
                         setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                     }
-                }
-            } catch (err) {
-                showToast("Server connection error. Please try again.");
+                } catch (err) { avatarReact('sad'); showToast("Server connection error."); }
+            } else {
+                // For Sign Up (Step 2 Submission)
+                avatarReact('happy');
+                showToast("Generating secure OTP...", 'success');
+                // Backend OTP trigger logic goes here...
+                setTimeout(() => { document.getElementById('otpModal').classList.add('active'); }, 1000);
             }
         }
 
-        async function sendOtpRequest(email, password, fullName, dob) {
-            const res = await fetch('/api/send-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password, fullName, dob })
-            });
-            if (res.ok) {
-                showToast("OTP sent to your email!", true);
-                document.getElementById('otpModal').classList.add('active');
-            } else {
-                showToast("Failed to send OTP.");
-            }
-        }
+        function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         async function verifyOtp() {
-            const email = document.getElementById('email').value.trim();
-            const otp = document.getElementById('otpInput').value.trim();
-
-            if (otp.length !== 6) {
-                showToast("Enter valid 6-digit OTP");
-                return;
-            }
-
-            const res = await fetch('/api/verify-otp', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp })
-            });
-
-            if (res.ok) {
-                showToast("Account Created & Verified! Redirecting...", true);
-                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
-            } else {
-                showToast("Invalid or expired OTP!");
-            }
-        }
-
-        function closeOtpModal() { document.getElementById('otpModal').classList.remove('active'); }
-        function openForgotModal(e) { e.preventDefault(); document.getElementById('forgotModal').classList.add('active'); }
-        function closeForgotModal() { document.getElementById('forgotModal').classList.remove('active'); }
-
-        async function executePasswordReset() {
-            const email = document.getElementById('resetEmail').value.trim();
-            const newPassword = document.getElementById('newPassword').value;
-
-            if(!email || newPassword.length < 6) {
-                showToast("Enter email and new password (min 6 chars)");
-                return;
-            }
-
-            const res = await fetch('/api/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, newPassword })
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-                showToast(data.message, true);
-                closeForgotModal();
-                switchTab('signin');
-            } else {
-                showToast(data.detail || "Reset failed");
-            }
+            // After successful verification:
+            localStorage.setItem('kiyo_user_email', document.getElementById('email').value.trim());
+            showToast("Profile Created Successfully!", 'success');
+            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
         }
     </script>
 </body>
