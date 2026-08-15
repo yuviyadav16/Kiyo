@@ -4,156 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Educating Bharat</title>
+    <!-- FontAwesome for Professional Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Premium Dark Navy Theme */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0b1120; /* Deep dark navy */
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #0b1120;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: opacity 0.8s ease-in-out;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; transition: opacity 0.8s ease-in-out;
         }
 
         /* Center Main UI */
         .main-ui {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; flex-direction: column; align-items: center;
             animation: slideUpFade 1.2s ease-out forwards;
         }
 
         /* TicBull Academy Style Glow Wrapper */
         .kiyo-logo-container {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: breath 4s infinite ease-in-out;
-            margin-bottom: 10px;
+            position: relative; display: flex; justify-content: center; align-items: center;
+            animation: breath 4s infinite ease-in-out; margin-bottom: 10px;
         }
 
-        /* 🔴 NEW: Premium AI Violet/Purple Soft Glow */
+        /* Soft Violet AI Glow */
         .kiyo-logo-container::before {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: #7c3aed; /* Premium AI Violet Color */
-            border-radius: 50%;
-            filter: blur(40px); /* Super soft aura */
-            opacity: 0.55; /* Subtle and professional, not too bright */
-            z-index: 0;
+            content: ''; position: absolute; width: 100px; height: 100px;
+            background: #7c3aed; border-radius: 50%; filter: blur(40px); opacity: 0.55; z-index: 0;
         }
 
-        /* Small, clean logo */
         .kiyo-logo {
-            width: 100px; 
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            position: relative;
-            z-index: 1;
-            background-color: #ffffff; /* White base */
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+            position: relative; z-index: 1; background-color: #ffffff;
             box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6); 
         }
 
-        /* KIYO AI Text */
         .kiyo-title {
-            color: #f8fafc;
-            font-size: 34px;
-            font-weight: 800;
-            letter-spacing: 5px;
-            margin-top: 20px;
-            text-transform: uppercase;
+            color: #f8fafc; font-size: 34px; font-weight: 800; letter-spacing: 5px;
+            margin-top: 20px; text-transform: uppercase;
         }
 
-        /* Subtitle */
         .kiyo-subtitle {
-            color: #94a3b8;
-            font-size: 13px;
-            letter-spacing: 1px;
-            margin-top: 8px;
-            font-weight: 500;
-            text-transform: uppercase;
+            color: #94a3b8; font-size: 13px; letter-spacing: 1px; margin-top: 8px;
+            font-weight: 500; text-transform: uppercase;
         }
 
-        /* Footer Branding */
-        .footer-brand {
-            position: absolute;
-            bottom: 35px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0;
-            animation: fadeInBrand 1.5s forwards 1s; 
+        /* Footer Branding & Socials */
+        .footer-wrapper {
+            position: absolute; bottom: 30px; display: flex; flex-direction: column; align-items: center;
+            opacity: 0; animation: fadeInBrand 1.5s forwards 1s; 
         }
 
         .powered-text {
-            color: #64748b;
-            font-size: 10px;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            font-weight: 700;
+            color: #64748b; font-size: 10px; letter-spacing: 3px; margin-bottom: 8px;
+            text-transform: uppercase; font-weight: 700;
         }
 
         .ticbull-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 8px 16px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.03);
+            padding: 8px 16px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer; transition: transform 0.3s, background 0.3s;
         }
 
-        /* Small Circle for TicBull Logo */
+        .ticbull-container:hover {
+            transform: scale(1.05); background: rgba(255, 255, 255, 0.08);
+        }
+
         .ticbull-circle {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #ffffff;
+            width: 28px; height: 28px; border-radius: 50%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; background: #ffffff;
         }
 
-        .ticbull-circle img {
-            width: 100%; 
-            height: auto;
-            object-fit: contain;
+        .ticbull-circle img { width: 100%; height: auto; object-fit: contain; }
+
+        .ticbull-name { color: #e2e8f0; font-size: 15px; font-weight: 800; letter-spacing: 1.5px; }
+
+        /* Social Icons Row */
+        .social-icons {
+            display: flex; gap: 18px; margin-top: 15px;
         }
 
-        .ticbull-name {
-            color: #e2e8f0;
-            font-size: 15px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
+        .social-icons a {
+            color: #64748b; font-size: 16px; text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
         }
+
+        .social-icons a:hover {
+            color: #ffffff; transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Premium Popup Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 100;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: #1e293b; padding: 30px; border-radius: 20px; width: 80%; max-width: 320px;
+            text-align: center; border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(20px) scale(0.95); transition: transform 0.4s ease;
+            box-shadow: 0px 15px 35px rgba(0,0,0,0.5); position: relative;
+        }
+
+        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; color: #94a3b8;
+            font-size: 24px; cursor: pointer; transition: color 0.3s;
+        }
+        .close-btn:hover { color: #fff; }
+
+        .modal-box h3 {
+            color: #fff; margin-top: 0; font-size: 20px; margin-bottom: 20px;
+        }
+
+        .support-link {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px 0; margin-bottom: 12px; border-radius: 10px;
+            text-decoration: none; font-weight: 600; font-size: 14px;
+            color: #fff; transition: background 0.3s, transform 0.2s;
+        }
+        .support-link:active { transform: scale(0.98); }
+        .bg-telegram { background: #0088cc; }
+        .bg-telegram:hover { background: #0077b5; }
+        .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .bg-email { background: #ea4335; }
+        .bg-email:hover { background: #d33828; }
 
         /* Animations */
-        @keyframes breath {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); } /* Floating effect */
-        }
-
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInBrand {
-            0% { opacity: 0; transform: translateY(15px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes breath { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInBrand { 0% { opacity: 0; transform: translateY(15px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -166,25 +152,76 @@
         <div class="kiyo-subtitle">Intelligent Learning Guide</div>
     </div>
 
-    <div class="footer-brand">
+    <!-- Footer Area -->
+    <div class="footer-wrapper">
         <div class="powered-text">POWERED BY</div>
-        <div class="ticbull-container">
+        
+        <!-- TicBull Clickable Pill -->
+        <div class="ticbull-container" onclick="openSupport()">
             <div class="ticbull-circle">
                 <img src="14882.jpg" alt="TicBull">
             </div>
             <div class="ticbull-name">TICBULL</div>
         </div>
+
+        <!-- Personal Social Icons Below TicBull -->
+        <div class="social-icons">
+            <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+        </div>
+    </div>
+
+    <!-- Help & Support Popup -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeSupport()">&times;</span>
+            <h3>Help & Support</h3>
+            <a href="https://t.me/ticbullteam" target="_blank" class="support-link bg-telegram">
+                <i class="fa-brands fa-telegram"></i> Join Telegram
+            </a>
+            <a href="https://www.instagram.com/ticbull" target="_blank" class="support-link bg-insta">
+                <i class="fa-brands fa-instagram"></i> Follow Instagram
+            </a>
+            <a href="mailto:ticbull.support@gmail.com" class="support-link bg-email">
+                <i class="fa-solid fa-envelope"></i> Email Support
+            </a>
+        </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            setTimeout(() => {
+        let redirectTimer;
+
+        // Function to handle the 10 sec redirect
+        function startTimer() {
+            redirectTimer = setTimeout(() => {
                 document.body.style.opacity = '0'; 
                 setTimeout(() => {
                     window.location.href = "login.html";
                 }, 800);
-            }, 9200); 
+            }, 9200);
+        }
+
+        // Run timer on load
+        document.addEventListener("DOMContentLoaded", () => {
+            startTimer();
         });
+
+        // Open Popup & Stop Timer
+        function openSupport() {
+            document.getElementById('supportModal').classList.add('active');
+            clearTimeout(redirectTimer); // Timer rok diya taaki redirect na ho
+        }
+
+        // Close Popup
+        function closeSupport() {
+            document.getElementById('supportModal').classList.remove('active');
+            // User wapas screen par aa gaya, aap chaho toh timer wapas start kar sakte ho
+            // startTimer(); 
+        }
     </script>
 </body>
 </html>
+
