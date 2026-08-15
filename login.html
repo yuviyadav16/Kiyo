@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiyo AI - Intelligent Login</title>
+    <title>Kiyo AI - Secure Portal Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --primary: #7c3aed;
             --bg-dark: #0b1120;
+            --card-bg: rgba(15, 23, 42, 0.85);
             --danger: #ef4444;
             --success: #22c55e;
         }
 
-        /* Continuous Color Animation Background */
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            background-color: var(--bg-dark);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff; overflow-x: hidden;
-            background: linear-gradient(45deg, #0f172a, #1e1b4b, #020617);
-            background-size: 300% 300%;
-            animation: gradientBG 15s ease infinite, hueRotate 20s infinite linear;
+            color: #fff; overflow-x: hidden; display: flex; flex-direction: column;
         }
-
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes hueRotate { 0% { filter: hue-rotate(0deg); } 100% { filter: hue-rotate(360deg); } }
 
         /* Premium Toast Custom Alert */
         .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
@@ -34,73 +29,88 @@
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        .main-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; padding: 40px 0; }
+        .main-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; padding: 40px 0; }
         
         .login-card {
-            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px;
-            width: 90%; max-width: 400px; padding: 30px 25px;
-            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.8);
-            position: relative; z-index: 10;
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
+            width: 90%; max-width: 380px; padding: 30px 25px;
+            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
         }
 
-        /* Professor Avatar & Animations */
+        /* 3D Video Avatar */
         .avatar-container {
-            width: 100px; height: 100px; margin: 0 auto 15px auto;
-            border-radius: 50%; padding: 4px; background: linear-gradient(45deg, #7c3aed, #ec4899);
-            box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.6);
-            transform: translateX(-150vw);
-            animation: slideInProfessor 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            width: 110px; height: 110px; margin: 0 auto 15px auto;
+            border-radius: 50%; overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s ease; background: #fff;
         }
-        @keyframes slideInProfessor { to { transform: translateX(0); } }
-        
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #0b1120; transition: 0.3s; }
-        
-        /* Reaction Classes */
-        .shake-sad { animation: sadShake 0.5s; filter: grayscale(80%); box-shadow: 0px 0px 20px rgba(239, 68, 68, 0.8); background: #ef4444; }
-        @keyframes sadShake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
-        
-        .bounce-happy { animation: happyBounce 1s; box-shadow: 0px 0px 30px rgba(34, 197, 94, 0.8); background: #22c55e; }
-        @keyframes happyBounce { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-15px);} }
+        .avatar-video { width: 100%; height: 100%; object-fit: cover; }
 
         .brand-title { font-size: 24px; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 0; }
-        .brand-sub { font-size: 12px; color: #a78bfa; text-align: center; margin-bottom: 20px; font-weight: 600; }
+        .brand-sub { font-size: 12px; color: #a78bfa; text-align: center; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
 
-        /* Tabs & Forms */
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
+        /* Tabs */
+        .tab-switcher { display: flex; background: rgba(2, 6, 23, 0.6); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
         .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.5); }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); }
 
+        /* Inputs */
         .input-group { position: relative; width: 100%; margin-bottom: 15px; }
-        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #a78bfa; font-size: 14px; }
-        .input-field { width: 100%; padding: 12px 40px 12px 42px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124,58,237,0.3); }
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
+        .input-field { width: 100%; padding: 12px 40px 12px 42px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary); }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
-        
-        select.input-field { padding-left: 15px; cursor: pointer; } /* Select specific padding */
 
-        /* Step 2 Multi-Select Buttons */
+        /* Custom Dropdown Trigger (Replaces Native <select>) */
+        .custom-select-btn {
+            width: 100%; padding: 12px 15px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px; color: #94a3b8; font-size: 14px; box-sizing: border-box; text-align: left;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s;
+        }
+        .custom-select-btn:hover { border-color: var(--primary); }
+        .custom-select-btn.selected { color: #fff; font-weight: 600; }
+
+        /* Path Buttons */
         .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
         .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 2px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; box-shadow: 0px 4px 10px rgba(79, 70, 229, 0.4);}
 
-        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; margin-top: 5px; }
+        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; }
         .action-btn:active { transform: scale(0.97); }
 
         .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 15px; font-weight: 600; }
         
-        /* Footer Links (TicBull & Yuvi Yadav) */
+        /* Footer Links */
         .footer-links { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
         .support-text { font-size: 10px; color: #94a3b8; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
         .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
         .social-row a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
         .social-row a:hover { color: #fff; transform: translateY(-2px); }
 
-        /* Modals */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
+        /* Professional Bottom Sheet Modals (Replaces cheap dropdowns & OTP) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
-        .close-modal { position: absolute; top: 12px; right: 15px; color: #94a3b8; cursor: pointer; font-size: 18px; }
+        .bottom-sheet { background: #1e293b; width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
+        .modal-overlay.active .bottom-sheet { transform: translateY(0); }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sheet-header h3 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
+        .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
+        
+        /* Custom List Items inside Bottom Sheet */
+        .custom-list-container { overflow-y: auto; padding: 10px 20px; }
+        .list-item { padding: 15px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; font-size: 14px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .list-item:hover { background: rgba(124, 58, 237, 0.1); color: #fff; border-radius: 8px; padding-left: 15px; }
+        .list-item i { color: var(--primary); display: none; }
+        .list-item.selected { color: var(--primary); font-weight: 700; }
+        .list-item.selected i { display: block; }
+
+        /* Center Modals for OTP & Forgot Pass */
+        .center-modal { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); transform: scale(0.9); transition: 0.3s; }
+        .modal-overlay.center-align { align-items: center; }
+        .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
 <body>
@@ -109,66 +119,101 @@
 
     <div class="main-wrapper">
         <div class="login-card" id="loginCard">
-            <!-- Professor Avatar -->
+            <!-- 3D Video Avatar -->
             <div class="avatar-container" id="avatarBox">
-                <img src="15031.png" alt="Professor" class="avatar-img" id="avatarImg">
+                <video id="avatarVideo" autoplay loop muted playsinline class="avatar-video">
+                    <source src="15468.mp4" type="video/mp4">
+                </video>
             </div>
             
             <div class="brand-title">Kiyo AI</div>
-            <div class="brand-sub" id="welcomeText">Welcome! I am your AI Guide.</div>
+            <div class="brand-sub" id="welcomeText">Welcome back! Ready to learn?</div>
 
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
+            <!-- Sign In / Sign Up Form -->
             <form id="authForm" onsubmit="handleSubmit(event)">
                 
-                <!-- STEP 1: Basic Info (Sign Up Only) -->
+                <!-- STEP 1: Basic Info -->
                 <div id="step1Fields" style="display: none;">
                     <div class="input-group">
                         <i class="fa-solid fa-user field-icon"></i>
                         <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
                     </div>
                     <div class="input-group">
-                        <i class="fa-solid fa-cake-candles field-icon"></i>
+                        <i class="fa-solid fa-calendar field-icon"></i>
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="Date of Birth (13+ Compulsory)">
                     </div>
                 </div>
 
-                <!-- Common Fields -->
-                <div class="input-group" id="emailGroup">
-                    <i class="fa-solid fa-envelope field-icon"></i>
-                    <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
-                </div>
-                <div class="input-group" id="passGroup">
-                    <i class="fa-solid fa-lock field-icon"></i>
-                    <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
-                    <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
+                <!-- Common Email & Pass -->
+                <div id="commonFields">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope field-icon"></i>
+                        <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="password" class="input-field" placeholder="Password (Min 6 chars)" required>
+                        <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
+                    </div>
                 </div>
 
-                <!-- STEP 2: Academic Profiling (Sign Up Only) -->
+                <!-- STEP 2: Custom Professional Profiling (Sign Up Only) -->
                 <div id="step2Fields" style="display: none;">
-                    <div style="font-size:12px; color:#a78bfa; margin-bottom:10px; text-align:center;">What are you studying?</div>
+                    <div style="font-size:12px; color:#a78bfa; margin-bottom:10px; text-align:center;">Select your learning path</div>
                     <div class="path-selector">
-                        <div class="path-btn active" onclick="selectPath('board', this)">School Board</div>
-                        <div class="path-btn" onclick="selectPath('exam', this)">Comp. Exam</div>
-                        <div class="path-btn" onclick="selectPath('skill', this)">Skills</div>
+                        <div class="path-btn active" onclick="setPath('board', this)">School Board</div>
+                        <div class="path-btn" onclick="setPath('exam', this)">Comp. Exam</div>
+                        <div class="path-btn" onclick="setPath('skill', this)">Skills</div>
                     </div>
-                    
-                    <!-- Dynamic Dropdowns based on Path -->
-                    <div id="dynamicDropdowns">
-                        <!-- Default: Board loaded via JS -->
+
+                    <!-- Hidden Inputs to store actual data -->
+                    <input type="hidden" id="selectedClass" value="">
+                    <input type="hidden" id="selectedBoard" value="">
+                    <input type="hidden" id="selectedExam" value="">
+                    <input type="hidden" id="selectedSkill" value="">
+
+                    <!-- Dynamic Custom Triggers (Replacing <select>) -->
+                    <div id="pathBoardUI">
+                        <div class="input-group">
+                            <div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')">
+                                <span>Select Class...</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')">
+                                <span>Select Indian Board...</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pathExamUI" style="display:none;">
+                        <div class="input-group">
+                            <div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')">
+                                <span>Select Target Exam...</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pathSkillUI" style="display:none;">
+                        <div class="input-group">
+                            <div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')">
+                                <span>Select Skill to Master...</span> <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
                 
-                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="showStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="goToStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
                 <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
             </form>
 
-            <!-- Support & Social Links -->
             <div class="footer-links">
                 <div class="support-text">TicBull Support</div>
                 <div class="social-row">
@@ -188,19 +233,35 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    <div class="modal-overlay" id="otpModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('otpModal')">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email</h3>
-            <p style="font-size:12px; color:#94a3b8;">Enter the 6-digit OTP sent to your email.</p>
-            <div class="input-group"><input type="text" id="otpInput" class="input-field" placeholder="6-Digit OTP" maxlength="6" style="padding-left:15px; text-align:center; letter-spacing:5px;"></div>
-            <button type="button" class="action-btn" onclick="verifyOtp()">CREATE ACCOUNT</button>
+    <!-- PROFESSIONAL CUSTOM SELECTION LISTS (Bottom Sheets) -->
+    <div class="modal-overlay" id="listModal">
+        <div class="bottom-sheet">
+            <div class="sheet-header">
+                <h3 id="listTitle">Select Option</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
+            </div>
+            <div class="custom-list-container" id="listContent">
+                <!-- Data injected via JS -->
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="forgotModal">
-        <div class="modal-content">
+    <!-- OTP & Forgot Password Modals -->
+    <div class="modal-overlay center-align" id="otpModal">
+        <div class="center-modal">
+            <span class="close-modal" onclick="closeModal('otpModal')">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email</h3>
+            <p style="font-size:12px; color:#94a3b8;">Enter the 6-digit OTP sent to your email.</p>
+            <div class="input-group">
+                <i class="fa-solid fa-key field-icon"></i>
+                <input type="text" id="otpInput" class="input-field" placeholder="6-Digit OTP" maxlength="6" style="padding-left:42px; text-align:center; letter-spacing:5px;">
+            </div>
+            <button type="button" class="action-btn" onclick="verifyOtp()">COMPLETE SIGN UP</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay center-align" id="forgotModal">
+        <div class="center-modal">
             <span class="close-modal" onclick="closeModal('forgotModal')">&times;</span>
             <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#a78bfa;"></i> Reset Password</h3>
             <div class="input-group" style="margin-top: 15px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email ID"></div>
@@ -213,12 +274,26 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
-        // Initialize Board dropdown on load
+        // Custom Data Arrays for Professional Lists
+        const dataLists = {
+            class: [
+                {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'}
+            ],
+            board: [
+                {id: 'cbse', name: 'CBSE'}, {id: 'icse', name: 'ICSE / ISC'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, {id: 'upmsp', name: 'UP Board (UPMSP)'}, {id: 'mah', name: 'Maharashtra Board'}, {id: 'raj', name: 'Rajasthan Board'}, {id: 'other', name: 'Other State Board'}
+            ],
+            exam: [
+                {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Advanced'}, {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET (UG/PG)'}, {id: 'nda', name: 'NDA & NA'}, {id: 'ssc', name: 'SSC CGL/CHSL'}, {id: 'banking', name: 'Banking (IBPS/SBI)'}
+            ],
+            skill: [
+                {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing & Animation'}, {id: 'business', name: 'Startup & Business'}, {id: 'marketing', name: 'Digital Marketing'}, {id: 'hacking', name: 'Ethical Hacking'}
+            ]
+        };
+
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) {
-                window.location.href = "dashboard.html";
+                window.location.href = "dashboard.html"; 
             }
-            selectPath('board', document.querySelector('.path-btn'));
         };
 
         function showToast(message, type = 'error') {
@@ -230,20 +305,32 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        function avatarReact(reaction) {
+        // Live Video Avatar Reaction
+        function avatarReact(state) {
+            const video = document.getElementById('avatarVideo');
+            const welcomeText = document.getElementById('welcomeText');
             const avatarBox = document.getElementById('avatarBox');
-            avatarBox.classList.remove('shake-sad', 'bounce-happy');
-            void avatarBox.offsetWidth; 
-            
-            if(reaction === 'sad') {
-                avatarBox.classList.add('shake-sad');
-                document.getElementById('welcomeText').innerText = "Oops! Something is wrong.";
-                document.getElementById('welcomeText').style.color = "#ef4444";
-            } else if(reaction === 'happy') {
-                avatarBox.classList.add('bounce-happy');
-                document.getElementById('welcomeText').innerText = "Perfect! Welcome to Kiyo AI.";
-                document.getElementById('welcomeText').style.color = "#22c55e";
+
+            if (state === 'sad') {
+                video.src = '15475.mp4';
+                welcomeText.innerText = "Oops! Check your details.";
+                welcomeText.style.color = "#ef4444";
+                avatarBox.style.boxShadow = "0px 0px 25px rgba(239, 68, 68, 0.8)";
+                avatarBox.style.borderColor = "#ef4444";
+            } else if (state === 'happy') {
+                video.src = '15474.mp4';
+                welcomeText.innerText = "Perfect! Proceeding...";
+                welcomeText.style.color = "#22c55e";
+                avatarBox.style.boxShadow = "0px 0px 25px rgba(34, 197, 94, 0.8)";
+                avatarBox.style.borderColor = "#22c55e";
+            } else {
+                video.src = '15468.mp4';
+                welcomeText.innerText = currentMode === 'signup' ? "Let's build your AI Profile!" : "Welcome back! Ready to learn?";
+                welcomeText.style.color = "#a78bfa";
+                avatarBox.style.boxShadow = "0px 0px 20px rgba(124, 58, 237, 0.4)";
+                avatarBox.style.borderColor = "#7c3aed";
             }
+            video.play();
         }
 
         function switchTab(mode) {
@@ -253,23 +340,18 @@
             
             document.getElementById('step1Fields').style.display = mode === 'signup' ? 'block' : 'none';
             document.getElementById('step2Fields').style.display = 'none';
+            document.getElementById('commonFields').style.display = 'block';
             document.getElementById('forgotLink').style.display = mode === 'signin' ? 'block' : 'none';
             
-            document.getElementById('emailGroup').style.display = 'block';
-            document.getElementById('passGroup').style.display = 'block';
-
             if(mode === 'signup') {
                 document.getElementById('submitBtn').style.display = 'none';
                 document.getElementById('nextBtn').style.display = 'block';
-                document.getElementById('welcomeText').innerText = "Let's build your AI Profile!";
-                document.getElementById('welcomeText').style.color = "#a78bfa";
             } else {
                 document.getElementById('submitBtn').style.display = 'block';
                 document.getElementById('submitBtn').innerText = "SIGN IN";
                 document.getElementById('nextBtn').style.display = 'none';
-                document.getElementById('welcomeText').innerText = "Welcome back! Ready to learn?";
-                document.getElementById('welcomeText').style.color = "#a78bfa";
             }
+            avatarReact('normal');
         }
 
         function getAge(dateString) {
@@ -280,117 +362,6 @@
             return age;
         }
 
-        function showStep2() {
-            const name = document.getElementById('fullName').value.trim();
-            const dob = document.getElementById('dob').value;
-            const email = document.getElementById('email').value.trim();
-            const pass = document.getElementById('password').value;
-
-            if(!name || !dob || !email || !pass) {
-                avatarReact('sad'); return showToast("Please fill all details correctly.");
-            }
-            if(pass.length < 6) {
-                avatarReact('sad'); return showToast("Password must be at least 6 characters.");
-            }
-            if(getAge(dob) < 13) {
-                avatarReact('sad'); return showToast("You must be 13+ to create an account.");
-            }
-
-            avatarReact('happy');
-            document.getElementById('step1Fields').style.display = 'none';
-            document.getElementById('emailGroup').style.display = 'none';
-            document.getElementById('passGroup').style.display = 'none';
-            document.getElementById('nextBtn').style.display = 'none';
-            document.getElementById('step2Fields').style.display = 'block';
-            document.getElementById('submitBtn').style.display = 'block';
-            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
-        }
-
-        // FULL INDIAN DATABASE FOR DROPDOWNS
-        function selectPath(path, btnElement) {
-            currentPath = path;
-            document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
-            if(btnElement) btnElement.classList.add('active');
-            
-            const dropBox = document.getElementById('dynamicDropdowns');
-            if(path === 'board') {
-                dropBox.innerHTML = `
-                    <div class="input-group">
-                        <select class="input-field" id="classSelect">
-                            <option value="" disabled selected>Select Class...</option>
-                            <option value="9">Class 9</option><option value="10">Class 10</option>
-                            <option value="11">Class 11</option><option value="12">Class 12</option>
-                            <option value="dropper">Dropper (12th Pass)</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <select class="input-field" id="boardSelect">
-                            <option value="" disabled selected>Select Indian Board...</option>
-                            <option value="cbse">CBSE</option>
-                            <option value="icse">ICSE / ISC</option>
-                            <option value="bseb">Bihar Board (BSEB)</option>
-                            <option value="upmsp">UP Board (UPMSP)</option>
-                            <option value="mah">Maharashtra Board (MSBSHSE)</option>
-                            <option value="raj">Rajasthan Board (RBSE)</option>
-                            <option value="mp">MP Board (MPBSE)</option>
-                            <option value="wb">West Bengal Board (WBBSE)</option>
-                            <option value="guj">Gujarat Board (GSEB)</option>
-                            <option value="kar">Karnataka Board (KSEEB)</option>
-                            <option value="tn">Tamil Nadu Board (TNBSE)</option>
-                            <option value="ap">Andhra Pradesh (BSEAP)</option>
-                            <option value="tel">Telangana (BSET)</option>
-                            <option value="kerala">Kerala Board (KBPE)</option>
-                            <option value="punjab">Punjab Board (PSEB)</option>
-                            <option value="haryana">Haryana Board (HBSE)</option>
-                            <option value="jac">Jharkhand Board (JAC)</option>
-                            <option value="cgbse">Chhattisgarh Board (CGBSE)</option>
-                            <option value="odisha">Odisha Board (BSE)</option>
-                            <option value="assam">Assam Board (SEBA)</option>
-                            <option value="nios">NIOS (Open Schooling)</option>
-                            <option value="other">Other State Board</option>
-                        </select>
-                    </div>`;
-            } else if(path === 'exam') {
-                dropBox.innerHTML = `
-                    <div class="input-group">
-                        <select class="input-field" id="examSelect">
-                            <option value="" disabled selected>Select Target Exam...</option>
-                            <option value="neet">NEET (Medical)</option>
-                            <option value="jee">JEE Main & Advanced</option>
-                            <option value="upsc">UPSC CSE</option>
-                            <option value="cuet">CUET (UG/PG)</option>
-                            <option value="nda">NDA & NA</option>
-                            <option value="ca">CA Foundation</option>
-                            <option value="clat">CLAT (Law)</option>
-                            <option value="cat">CAT (Management)</option>
-                            <option value="ssc">SSC CGL/CHSL</option>
-                            <option value="banking">Banking (IBPS/SBI)</option>
-                            <option value="railway">Railway (RRB)</option>
-                            <option value="gate">GATE</option>
-                            <option value="state_psc">State PSC (BPSC, UPPSC, etc.)</option>
-                        </select>
-                    </div>`;
-            } else {
-                dropBox.innerHTML = `
-                    <div class="input-group">
-                        <select class="input-field" id="skillSelect">
-                            <option value="" disabled selected>Select Skill to Master...</option>
-                            <option value="coding">Software Development (AI/Web)</option>
-                            <option value="design">UI/UX Design</option>
-                            <option value="video">Video Editing & Animation</option>
-                            <option value="business">Startup & Business</option>
-                            <option value="marketing">Digital Marketing</option>
-                            <option value="data">Data Science & Analytics</option>
-                            <option value="hacking">Ethical Hacking & Cyber Sec.</option>
-                            <option value="appdev">App Development (Android/iOS)</option>
-                            <option value="graphic">Graphic Design</option>
-                            <option value="content">Content & Copywriting</option>
-                            <option value="speaking">Communication & Public Speaking</option>
-                        </select>
-                    </div>`;
-            }
-        }
-
         function togglePass(fieldId, iconId) {
             const pass = document.getElementById(fieldId); const icon = document.getElementById(iconId);
             const isText = pass.type === 'text';
@@ -398,44 +369,181 @@
             icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
         }
 
+        // Advance Sign Up Flow
+        function goToStep2() {
+            const name = document.getElementById('fullName').value.trim();
+            const dob = document.getElementById('dob').value;
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+
+            if(!name || !dob || !email || !pass) { avatarReact('sad'); return showToast("Please fill all details."); }
+            if(pass.length < 6) { avatarReact('sad'); return showToast("Password must be at least 6 characters."); }
+            if(getAge(dob) < 13) { avatarReact('sad'); return showToast("You must be 13+ to create an account."); }
+
+            avatarReact('happy');
+            document.getElementById('step1Fields').style.display = 'none';
+            document.getElementById('commonFields').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            
+            document.getElementById('step2Fields').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'block';
+            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+        }
+
+        function setPath(path, btnElement) {
+            currentPath = path;
+            document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            document.getElementById('pathBoardUI').style.display = path === 'board' ? 'block' : 'none';
+            document.getElementById('pathExamUI').style.display = path === 'exam' ? 'block' : 'none';
+            document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
+        }
+
+        // CUSTOM PROFESSIONAL LIST LOGIC
+        let activeListType = '';
+        function openSelectionList(type) {
+            activeListType = type;
+            const contentBox = document.getElementById('listContent');
+            const titles = { class: "Select Class", board: "Select Indian Board", exam: "Select Target Exam", skill: "Select Skill" };
+            
+            document.getElementById('listTitle').innerText = titles[type];
+            contentBox.innerHTML = '';
+
+            const currentVal = document.getElementById('selected' + type.charAt(0).toUpperCase() + type.slice(1)).value;
+
+            dataLists[type].forEach(item => {
+                const isSelected = currentVal === item.id;
+                contentBox.innerHTML += `
+                    <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.id}', '${item.name}')">
+                        <span>${item.name}</span>
+                        <i class="fa-solid fa-check"></i>
+                    </div>`;
+            });
+            document.getElementById('listModal').classList.add('active');
+        }
+
+        function selectListItem(type, id, name) {
+            // Save value in hidden input
+            const hiddenId = 'selected' + type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById(hiddenId).value = id;
+            
+            // Update Button UI
+            const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
+            btn.classList.add('selected');
+            btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-check" style="color:var(--primary)"></i>`;
+            
+            closeListModal();
+        }
+
+        function closeListModal() { document.getElementById('listModal').classList.remove('active'); }
+
+        // Backend API Logic
         async function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            if(currentMode === 'signin') {
-                try {
-                    const res = await fetch('/api/check-user', {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password, mode: 'signin' })
-                    });
-                    const data = await res.json();
+            if(currentMode === 'signup') {
+                // Final Check before OTP
+                if(currentPath === 'board') {
+                    if(!document.getElementById('selectedClass').value || !document.getElementById('selectedBoard').value) {
+                        avatarReact('sad'); return showToast("Please select Class and Board.");
+                    }
+                } else if (currentPath === 'exam') {
+                    if(!document.getElementById('selectedExam').value) { avatarReact('sad'); return showToast("Please select an Exam."); }
+                } else {
+                    if(!document.getElementById('selectedSkill').value) { avatarReact('sad'); return showToast("Please select a Skill."); }
+                }
+            } else if(password.length < 6) {
+                avatarReact('sad'); return showToast("Password must be at least 6 characters.");
+            }
 
+            try {
+                const res = await fetch('/api/check-user', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, mode: currentMode })
+                });
+                const data = await res.json();
+
+                if (currentMode === 'signup') {
+                    if (data.status === 'exists') { 
+                        avatarReact('sad'); showToast(data.message); return switchTab('signin'); 
+                    }
+                    
+                    avatarReact('happy'); showToast("Sending verification OTP...", 'success');
+                    
+                    const otpRes = await fetch('/api/send-otp', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, fullName: document.getElementById('fullName').value, dob: document.getElementById('dob').value })
+                    });
+                    
+                    if(otpRes.ok) { setTimeout(() => { openModal('otpModal'); }, 1000); } 
+                    else { avatarReact('sad'); showToast("Failed to send OTP email."); }
+
+                } else {
                     if (data.status === 'not_found' || data.status === 'wrong_password') { 
                         avatarReact('sad'); showToast(data.message); 
                     } else if (data.status === 'success') {
                         avatarReact('happy');
-                        localStorage.setItem('kiyo_user_email', email); 
+                        localStorage.setItem('kiyo_user_email', email);
                         showToast("Authentication Successful!", 'success');
                         setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                     }
-                } catch (err) { avatarReact('sad'); showToast("Server connection error."); }
-            } else {
-                avatarReact('happy'); showToast("Generating secure OTP...", 'success');
-                setTimeout(() => { document.getElementById('otpModal').classList.add('active'); }, 1000);
-            }
+                }
+            } catch (err) { avatarReact('sad'); showToast("Server connection error."); }
         }
 
         function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); avatarReact('normal'); }
 
         async function verifyOtp() {
-            localStorage.setItem('kiyo_user_email', document.getElementById('email').value.trim());
-            const fn = document.getElementById('fullName').value.trim();
-            if(fn) localStorage.setItem('kiyo_user_name', fn);
+            const email = document.getElementById('email').value.trim();
+            const otp = document.getElementById('otpInput').value.trim();
             
-            showToast("Profile Created Successfully!", 'success');
-            setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+            if (otp.length !== 6) { avatarReact('sad'); return showToast("Enter valid 6-digit OTP"); }
+
+            const res = await fetch('/api/verify-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, otp })
+            });
+
+            if (res.ok) {
+                avatarReact('happy');
+                // Saving ALL Student Data to LocalStorage permanently
+                localStorage.setItem('kiyo_user_email', email);
+                localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
+                localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
+                localStorage.setItem('kiyo_user_path', currentPath);
+                
+                if(currentPath === 'board') {
+                    localStorage.setItem('kiyo_class', document.getElementById('selectedClass').value);
+                    localStorage.setItem('kiyo_board', document.getElementById('selectedBoard').value);
+                } else if(currentPath === 'exam') {
+                    localStorage.setItem('kiyo_exam', document.getElementById('selectedExam').value);
+                } else {
+                    localStorage.setItem('kiyo_skill', document.getElementById('selectedSkill').value);
+                }
+                
+                showToast("Account Created & Verified!", 'success');
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+            } else { 
+                avatarReact('sad'); showToast("Invalid or expired OTP!"); 
+            }
+        }
+
+        async function executePasswordReset() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            if(!email || newPassword.length < 6) return showToast("Enter email and new password (min 6 chars)");
+            
+            const res = await fetch('/api/reset-password', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, newPassword })
+            });
+            const data = await res.json();
+            
+            if (res.ok) { showToast(data.message, 'success'); closeModal('forgotModal'); switchTab('signin'); }
+            else { showToast(data.detail || "Reset failed"); }
         }
     </script>
 </body>
