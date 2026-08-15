@@ -2,66 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kiyo AI - Secure Portal Login</title>
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* Mobile ratio fix: overflow aur safe scrolling */
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100%; min-height: 100%;
             background-color: #0b1120;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            overflow-x: hidden; color: #fff;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+            overflow-y: auto; color: #fff;
+            box-sizing: border-box;
         }
 
-        /* Main Login Card */
+        /* Main Login Card with Safe Mobile Padding */
         .login-card {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-            width: 90%; max-width: 400px;
-            padding: 30px 25px;
-            box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.6);
+            width: 88%; max-width: 380px;
+            padding: 25px 20px;
+            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
             display: flex; flex-direction: column; align-items: center;
             box-sizing: border-box;
-            margin-top: auto; margin-bottom: auto;
+            margin: auto; /* Center align vertically across all phone screens */
         }
 
         /* Logo Area */
         .logo-container {
-            position: relative; width: 75px; height: 75px;
+            position: relative; width: 70px; height: 70px;
             display: flex; justify-content: center; align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .logo-container::before {
-            content: ''; position: absolute; width: 70px; height: 70px;
-            background: #7c3aed; border-radius: 50%; filter: blur(25px); opacity: 0.5;
+            content: ''; position: absolute; width: 65px; height: 65px;
+            background: #7c3aed; border-radius: 50%; filter: blur(20px); opacity: 0.5;
         }
         .logo-img {
-            width: 70px; height: 70px; border-radius: 50%; object-fit: cover;
+            width: 65px; height: 65px; border-radius: 50%; object-fit: cover;
             position: relative; z-index: 1; background: #fff;
             box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
         }
 
         .brand-title {
-            font-size: 24px; font-weight: 800; letter-spacing: 1.5px; margin: 0;
+            font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 0;
             color: #f8fafc; text-align: center;
         }
         .brand-sub {
-            font-size: 12px; color: #94a3b8; letter-spacing: 0.5px; margin-top: 4px;
-            margin-bottom: 22px; text-align: center; text-transform: uppercase;
+            font-size: 11px; color: #94a3b8; letter-spacing: 0.5px; margin-top: 4px;
+            margin-bottom: 18px; text-align: center; text-transform: uppercase;
         }
 
         /* Toggle Switch Tabs (Sign In / Sign Up) */
         .tab-switcher {
             display: flex; background: rgba(2, 6, 23, 0.6);
-            border-radius: 14px; padding: 4px; width: 100%; margin-bottom: 22px;
+            border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
         .tab-btn {
-            flex: 1; padding: 10px 0; text-align: center; font-size: 14px;
+            flex: 1; padding: 9px 0; text-align: center; font-size: 13px;
             font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px;
             transition: all 0.3s ease; border: none; background: transparent;
         }
@@ -72,55 +74,62 @@
 
         /* Form Fields */
         .input-group {
-            position: relative; width: 100%; margin-bottom: 14px;
+            position: relative; width: 100%; margin-bottom: 12px;
         }
-        .input-group i {
-            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
-            color: #64748b; font-size: 15px;
+        .input-group i.field-icon {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            color: #64748b; font-size: 14px;
         }
         .input-field {
-            width: 100%; padding: 12px 15px 12px 45px;
+            width: 100%; padding: 11px 40px 11px 42px;
             background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box;
+            border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box;
             outline: none; transition: border-color 0.3s;
         }
         .input-field:focus { border-color: #3b82f6; }
+        
+        /* Show/Hide Password Icon Position Fix */
         .toggle-password {
-            position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-            color: #64748b; cursor: pointer; font-size: 14px;
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            color: #64748b; cursor: pointer; font-size: 14px; z-index: 5;
         }
+        .toggle-password:hover { color: #fff; }
 
         /* Action Button */
         .action-btn {
-            width: 100%; padding: 13px 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white; border: none; border-radius: 12px; font-size: 15px;
-            font-weight: 700; cursor: pointer; margin-top: 6px; margin-bottom: 15px;
+            width: 100%; padding: 12px 0; background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white; border: none; border-radius: 10px; font-size: 14px;
+            font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px;
             box-shadow: 0px 6px 20px rgba(37, 99, 235, 0.4); transition: transform 0.2s;
         }
         .action-btn:active { transform: scale(0.98); }
 
         .forgot-link {
             font-size: 12px; color: #60a5fa; text-decoration: none; text-align: right;
-            display: block; width: 100%; margin-bottom: 5px; font-weight: 600;
+            display: block; width: 100%; margin-bottom: 4px; font-weight: 600;
         }
         .forgot-link:hover { text-decoration: underline; }
 
-        /* Footer Support & Links */
+        /* Support & Social Links */
         .support-text {
-            font-size: 11px; color: #64748b; margin-top: 15px; text-align: center;
+            font-size: 11px; color: #64748b; margin-top: 12px; text-align: center;
         }
         .social-row {
-            display: flex; justify-content: center; gap: 15px; margin-top: 8px;
+            display: flex; justify-content: center; gap: 15px; margin-top: 6px;
         }
         .social-row a { color: #64748b; font-size: 14px; text-decoration: none; transition: color 0.3s; }
         .social-row a:hover { color: #fff; }
 
-        /* Global Footer */
+        /* Global Footer - Safe for Mobile viewports */
         .page-footer {
-            margin-top: auto; padding: 15px 0; font-size: 11px; color: #64748b;
-            text-align: center; width: 100%; border-top: 1px solid rgba(255,255,255,0.03);
+            width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b;
+            text-align: center; border-top: 1px solid rgba(255,255,255,0.03);
+            background: rgba(11, 17, 32, 0.95);
+            margin-top: 20px;
+            box-sizing: border-box;
         }
-        .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 5px; }
+        .page-footer div { margin-bottom: 3px; }
+        .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 3px; }
         .page-footer a:hover { color: #fff; }
 
         /* Modal for Forgot Password */
@@ -132,7 +141,7 @@
         }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         .modal-content {
-            background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 330px;
+            background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px;
             border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative;
         }
         .close-modal { position: absolute; top: 12px; right: 15px; color: #94a3b8; cursor: pointer; font-size: 18px; }
@@ -160,25 +169,26 @@
             <!-- Extra Fields for Sign Up -->
             <div id="signupFields" style="display: none;">
                 <div class="input-group">
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-user field-icon"></i>
                     <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
                 </div>
                 <div class="input-group">
-                    <i class="fa-solid fa-calendar"></i>
-                    <input type="date" id="dob" class="input-field" placeholder="Date of Birth">
+                    <i class="fa-solid fa-calendar field-icon"></i>
+                    <input type="date" id="dob" class="input-field">
                 </div>
             </div>
 
             <!-- Common Fields -->
             <div class="input-group">
-                <i class="fa-solid fa-envelope"></i>
+                <i class="fa-solid fa-envelope field-icon"></i>
                 <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
             </div>
 
             <div class="input-group">
-                <i class="fa-solid fa-lock"></i>
+                <i class="fa-solid fa-lock field-icon"></i>
                 <input type="password" id="password" class="input-field" placeholder="Password" required>
-                <i class="fa-solid fa-eye toggle-password" onclick="togglePass()"></i>
+                <!-- Show / Hide Password Eye Icon -->
+                <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass()"></i>
             </div>
 
             <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
@@ -200,7 +210,7 @@
             <span class="close-modal" onclick="closeForgotModal()">&times;</span>
             <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#f59e0b;"></i> Reset Password</h3>
             <div class="input-group" style="margin-top: 15px;">
-                <i class="fa-solid fa-envelope"></i>
+                <i class="fa-solid fa-envelope field-icon"></i>
                 <input type="email" id="resetEmail" class="input-field" placeholder="Registered Email ID">
             </div>
             <button type="button" class="action-btn" onclick="sendResetOtp()">SEND RESET OTP</button>
@@ -215,7 +225,7 @@
             <a href="#">Refund Policy</a> | 
             <a href="#">Contact Us</a>
         </div>
-        <div style="margin-top: 5px;">&copy; 2026 Kiyo AI. All rights reserved.</div>
+        <div style="margin-top: 4px;">&copy; 2026 Kiyo AI & TicBull. All rights reserved.</div>
     </div>
 
     <script>
@@ -241,12 +251,18 @@
             }
         }
 
+        // Show/Hide Password Toggle Logic
         function togglePass() {
             const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
             if (passInput.type === 'password') {
                 passInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
             } else {
                 passInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
             }
         }
 
@@ -254,7 +270,6 @@
             e.preventDefault();
             const email = document.getElementById('email').value;
             alert(currentMode === 'signin' ? `Sending Sign-In OTP to ${email}` : `Sending Account Verification OTP to ${email}`);
-            // Yahan backend API call aayega jo Firebase aur SMTP OTP trigger karega
         }
 
         function openForgotModal(e) {
@@ -275,3 +290,4 @@
     </script>
 </body>
 </html>
+
