@@ -40,24 +40,16 @@
             position: relative;
         }
 
-        /* 3D Video Avatar - ZERO LAG FIX */
+        /* 3D Video Avatar - BULLETPROOF SINGLE VIDEO FIX */
         .avatar-container {
             width: 110px; height: 110px; margin: 0 auto 15px auto;
             border-radius: 50%; overflow: hidden;
             border: 3px solid var(--primary);
             box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.4);
-            transition: all 0.4s ease; background: var(--bg-dark);
-            position: relative; /* Important for stacked videos */
+            transition: all 0.3s ease; background: var(--bg-dark);
+            display: flex; justify-content: center; align-items: center;
         }
-        .avatar-video { 
-            width: 100%; height: 100%; object-fit: cover; 
-            position: absolute; top: 0; left: 0; 
-            opacity: 0; transition: opacity 0.4s ease-in-out; 
-            z-index: 1; pointer-events: none;
-        }
-        .avatar-video.active { 
-            opacity: 1; z-index: 5; 
-        }
+        .avatar-video { width: 100%; height: 100%; object-fit: cover; }
 
         .brand-title { font-size: 24px; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 0; }
         .brand-sub { font-size: 12px; color: #a78bfa; text-align: center; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
@@ -136,17 +128,10 @@
 
     <div class="main-wrapper">
         <div class="login-card" id="loginCard">
-            <!-- 3D Video Avatar (ZERO LAG STACKED SETUP) -->
+            <!-- 3D Video Avatar (Single Strict Setup) -->
             <div class="avatar-container" id="avatarBox">
-                <!-- Preload all 3 videos at once. Only the "active" one is visible. -->
-                <video id="vidNormal" class="avatar-video active" autoplay loop muted playsinline preload="auto">
+                <video id="avatarVideo" class="avatar-video" autoplay loop muted playsinline preload="auto">
                     <source src="15468.mp4" type="video/mp4">
-                </video>
-                <video id="vidHappy" class="avatar-video" loop muted playsinline preload="auto">
-                    <source src="15474.mp4" type="video/mp4">
-                </video>
-                <video id="vidSad" class="avatar-video" loop muted playsinline preload="auto">
-                    <source src="15475.mp4" type="video/mp4">
                 </video>
             </div>
             
@@ -313,57 +298,21 @@
         let currentPath = 'board';
 
         const dataLists = {
-            class: [
-                {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, 
-                {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'}
-            ],
-            stream: [
-                {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'},
-                {id: 'pcmb', name: 'PCMB (Math & Bio both)'}, {id: 'commerce', name: 'Commerce (Accounts, Business)'},
-                {id: 'arts', name: 'Arts / Humanities'}, {id: 'agriculture', name: 'Agriculture'}
-            ],
-            dream: [
-                {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE/IIT)'},
-                {id: 'upsc', name: 'IAS / IPS (Crack UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'},
-                {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'},
-                {id: 'board_topper', name: 'Only Board Topper 95%+'}
-            ],
-            board: [
-                {id: 'cbse', name: 'CBSE Board'}, {id: 'icse', name: 'ICSE / ISC Board'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, 
-                {id: 'upmsp', name: 'UP Board (UPMSP)'}, {id: 'mah', name: 'Maharashtra Board (HSC/SSC)'}, 
-                {id: 'raj', name: 'Rajasthan Board (RBSE)'}, {id: 'mp', name: 'MP Board (MPBSE)'}, 
-                {id: 'guj', name: 'Gujarat Board (GSEB)'}, {id: 'wb', name: 'West Bengal Board (WBBSE)'}, 
-                {id: 'kar', name: 'Karnataka Board (KSEEB)'}, {id: 'ap', name: 'Andhra Pradesh (BIEAP)'},
-                {id: 'tel', name: 'Telangana Board (TSBIE)'}, {id: 'kerala', name: 'Kerala Board (KBPE)'},
-                {id: 'tn', name: 'Tamil Nadu Board (TNBSE)'}, {id: 'punjab', name: 'Punjab Board (PSEB)'},
-                {id: 'haryana', name: 'Haryana Board (BSEH)'}, {id: 'jac', name: 'Jharkhand Board (JAC)'},
-                {id: 'cgbse', name: 'Chhattisgarh Board (CGBSE)'}, {id: 'odisha', name: 'Odisha Board (CHSE)'},
-                {id: 'assam', name: 'Assam Board (SEBA/AHSEC)'}, {id: 'uk', name: 'Uttarakhand Board (UBSE)'},
-                {id: 'hp', name: 'Himachal Board (HPBOSE)'}, {id: 'jk', name: 'J&K Board (JKBOSE)'},
-                {id: 'nios', name: 'NIOS (Open Schooling)'}, {id: 'other', name: 'Other State Board'}
-            ],
-            exam: [
-                {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Advanced'}, 
-                {id: 'bitsat', name: 'BITSAT'}, {id: 'mhtcet', name: 'MHT-CET'}, {id: 'wbjee', name: 'WBJEE'},
-                {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET (UG/PG)'}, 
-                {id: 'nda', name: 'NDA & NA'}, {id: 'ssc', name: 'SSC CGL/CHSL'}, 
-                {id: 'banking', name: 'Banking (IBPS/SBI)'}, {id: 'ca', name: 'CA Foundation'},
-                {id: 'clat', name: 'CLAT (Law)'}, {id: 'cat', name: 'CAT (MBA)'}, {id: 'icar', name: 'ICAR AIEEA'}
-            ],
-            skill: [
-                {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, 
-                {id: 'video', name: 'Video Editing & Animation'}, {id: 'business', name: 'Startup & Business'}, 
-                {id: 'marketing', name: 'Digital Marketing'}, {id: 'hacking', name: 'Ethical Hacking'}
-            ]
+            class: [ {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'} ],
+            stream: [ {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'}, {id: 'pcmb', name: 'PCMB (Math & Bio both)'}, {id: 'commerce', name: 'Commerce (Accounts, Business)'}, {id: 'arts', name: 'Arts / Humanities'}, {id: 'agriculture', name: 'Agriculture'} ],
+            dream: [ {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE/IIT)'}, {id: 'upsc', name: 'IAS / IPS (Crack UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'}, {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'}, {id: 'board_topper', name: 'Only Board Topper 95%+'} ],
+            board: [ {id: 'cbse', name: 'CBSE Board'}, {id: 'icse', name: 'ICSE / ISC Board'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, {id: 'upmsp', name: 'UP Board (UPMSP)'}, {id: 'mah', name: 'Maharashtra Board (HSC/SSC)'}, {id: 'raj', name: 'Rajasthan Board (RBSE)'}, {id: 'mp', name: 'MP Board (MPBSE)'}, {id: 'guj', name: 'Gujarat Board (GSEB)'}, {id: 'wb', name: 'West Bengal Board (WBBSE)'}, {id: 'kar', name: 'Karnataka Board (KSEEB)'}, {id: 'ap', name: 'Andhra Pradesh (BIEAP)'}, {id: 'tel', name: 'Telangana Board (TSBIE)'}, {id: 'kerala', name: 'Kerala Board (KBPE)'}, {id: 'tn', name: 'Tamil Nadu Board (TNBSE)'}, {id: 'punjab', name: 'Punjab Board (PSEB)'}, {id: 'haryana', name: 'Haryana Board (BSEH)'}, {id: 'jac', name: 'Jharkhand Board (JAC)'}, {id: 'cgbse', name: 'Chhattisgarh Board (CGBSE)'}, {id: 'odisha', name: 'Odisha Board (CHSE)'}, {id: 'assam', name: 'Assam Board (SEBA/AHSEC)'}, {id: 'uk', name: 'Uttarakhand Board (UBSE)'}, {id: 'hp', name: 'Himachal Board (HPBOSE)'}, {id: 'jk', name: 'J&K Board (JKBOSE)'}, {id: 'nios', name: 'NIOS (Open Schooling)'}, {id: 'other', name: 'Other State Board'} ],
+            exam: [ {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Advanced'}, {id: 'bitsat', name: 'BITSAT'}, {id: 'mhtcet', name: 'MHT-CET'}, {id: 'wbjee', name: 'WBJEE'}, {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET (UG/PG)'}, {id: 'nda', name: 'NDA & NA'}, {id: 'ssc', name: 'SSC CGL/CHSL'}, {id: 'banking', name: 'Banking (IBPS/SBI)'}, {id: 'ca', name: 'CA Foundation'}, {id: 'clat', name: 'CLAT (Law)'}, {id: 'cat', name: 'CAT (MBA)'}, {id: 'icar', name: 'ICAR AIEEA'} ],
+            skill: [ {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing & Animation'}, {id: 'business', name: 'Startup & Business'}, {id: 'marketing', name: 'Digital Marketing'}, {id: 'hacking', name: 'Ethical Hacking'} ]
         };
 
+        // Window Load & Video Force Play
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) {
                 window.location.href = "dashboard.html"; 
             }
-            
-            // Kickstart the normal video automatically on mobile browsers
-            document.getElementById('vidNormal').play().catch(e => console.log(e));
+            const video = document.getElementById('avatarVideo');
+            video.play().catch(e => console.log("Auto-play restricted by browser."));
         };
 
         function showToast(message, type = 'error') {
@@ -375,45 +324,42 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // SMOOTH ZERO-LAG AVATAR REACTION
+        // BULLETPROOF VIDEO SWITCHER
         function avatarReact(state) {
+            const video = document.getElementById('avatarVideo');
             const welcomeText = document.getElementById('welcomeText');
             const avatarBox = document.getElementById('avatarBox');
-            
-            // Get all video elements
-            const vidN = document.getElementById('vidNormal');
-            const vidH = document.getElementById('vidHappy');
-            const vidS = document.getElementById('vidSad');
-            
-            // Remove active class from all
-            vidN.classList.remove('active');
-            vidH.classList.remove('active');
-            vidS.classList.remove('active');
 
+            let newVideoFile = '15468.mp4';
+            
             if (state === 'sad') {
-                vidS.classList.add('active'); // Fade in sad video
-                vidS.play().catch(e=>console.log(e));
-                
+                newVideoFile = '15475.mp4';
                 welcomeText.innerText = "Oops! Check your details.";
                 welcomeText.style.color = "#ef4444";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(239, 68, 68, 0.8)";
                 avatarBox.style.borderColor = "#ef4444";
             } else if (state === 'happy') {
-                vidH.classList.add('active'); // Fade in happy video
-                vidH.play().catch(e=>console.log(e));
-                
+                newVideoFile = '15474.mp4';
                 welcomeText.innerText = "Perfect! Proceeding...";
                 welcomeText.style.color = "#22c55e";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(34, 197, 94, 0.8)";
                 avatarBox.style.borderColor = "#22c55e";
             } else {
-                vidN.classList.add('active'); // Fade back to normal video
-                vidN.play().catch(e=>console.log(e));
-                
+                newVideoFile = '15468.mp4';
                 welcomeText.innerText = currentMode === 'signup' ? "Let's build your AI Profile!" : "Welcome back! Ready to learn?";
                 welcomeText.style.color = "#a78bfa";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(124, 58, 237, 0.4)";
                 avatarBox.style.borderColor = "#7c3aed";
+            }
+
+            // Only load new video if it's different (Prevents flickering/black screen)
+            if (!video.src.includes(newVideoFile)) {
+                video.src = newVideoFile;
+                video.load();
+                let playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => console.log("Mobile browser paused swap:", e));
+                }
             }
         }
 
