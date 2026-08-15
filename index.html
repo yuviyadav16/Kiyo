@@ -29,11 +29,14 @@
             animation: slideUpFade 1.2s ease-out forwards;
         }
 
-        /* Kiyo Logo */
+        /* 🔴 NEW: Main Kiyo Logo Circular Style */
         .kiyo-logo {
-            width: 140px;
-            height: auto;
-            filter: drop-shadow(0px 10px 25px rgba(59, 130, 246, 0.4));
+            width: 150px;
+            height: 150px; /* Fixed height for perfect circle */
+            border-radius: 50%; /* Makes the white square a perfect circle */
+            object-fit: cover;
+            background-color: #ffffff; /* Fills the circle */
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle premium ring */
             animation: breath 4s infinite ease-in-out;
         }
 
@@ -43,7 +46,7 @@
             font-size: 36px;
             font-weight: 800;
             letter-spacing: 5px;
-            margin-top: 25px;
+            margin-top: 30px;
             text-transform: uppercase;
         }
 
@@ -114,8 +117,8 @@
 
         /* Animations */
         @keyframes breath {
-            0%, 100% { transform: translateY(0); filter: drop-shadow(0px 10px 25px rgba(59, 130, 246, 0.3)); }
-            50% { transform: translateY(-8px); filter: drop-shadow(0px 15px 35px rgba(59, 130, 246, 0.6)); }
+            0%, 100% { transform: translateY(0); box-shadow: 0px 10px 25px rgba(59, 130, 246, 0.2); }
+            50% { transform: translateY(-8px); box-shadow: 0px 15px 35px rgba(59, 130, 246, 0.5); }
         }
 
         @keyframes slideUpFade {
@@ -162,4 +165,3 @@
     </script>
 </body>
 </html>
-
