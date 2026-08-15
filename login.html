@@ -40,15 +40,24 @@
             position: relative;
         }
 
-        /* 3D Video Avatar (Fixed) */
+        /* 3D Video Avatar - ZERO LAG FIX */
         .avatar-container {
             width: 110px; height: 110px; margin: 0 auto 15px auto;
             border-radius: 50%; overflow: hidden;
             border: 3px solid var(--primary);
             box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.4);
-            transition: all 0.3s ease; background: #000;
+            transition: all 0.4s ease; background: var(--bg-dark);
+            position: relative; /* Important for stacked videos */
         }
-        .avatar-video { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-video { 
+            width: 100%; height: 100%; object-fit: cover; 
+            position: absolute; top: 0; left: 0; 
+            opacity: 0; transition: opacity 0.4s ease-in-out; 
+            z-index: 1; pointer-events: none;
+        }
+        .avatar-video.active { 
+            opacity: 1; z-index: 5; 
+        }
 
         .brand-title { font-size: 24px; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 0; }
         .brand-sub { font-size: 12px; color: #a78bfa; text-align: center; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
@@ -91,9 +100,7 @@
         .social-row a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
         .social-row a:hover { color: #fff; transform: translateY(-2px); }
 
-        /* ---------------------------------------------------
-           PROFESSIONAL BOTTOM SHEET & LIST UI (UPDATED)
-           --------------------------------------------------- */
+        /* Professional Bottom Sheet Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
@@ -110,21 +117,11 @@
         
         .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
         
-        /* New Premium List Item Design */
-        .list-item { 
-            padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
-            border-radius: 14px; color: #e2e8f0; font-size: 14px; font-weight: 500; cursor: pointer; 
-            transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; 
-        }
+        .list-item { padding: 14px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; color: #e2e8f0; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
         .list-item:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); transform: translateY(-1px); }
         .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
         
-        /* Selected State */
-        .list-item.selected { 
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(79, 70, 229, 0.15)); 
-            border: 1px solid var(--primary); color: #fff; font-weight: 700; 
-            box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.2); 
-        }
+        .list-item.selected { background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(79, 70, 229, 0.15)); border: 1px solid var(--primary); color: #fff; font-weight: 700; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.2); }
         .list-item.selected i { opacity: 1; transform: scale(1); }
 
         /* Center Modals */
@@ -139,10 +136,17 @@
 
     <div class="main-wrapper">
         <div class="login-card" id="loginCard">
-            <!-- 3D Video Avatar -->
+            <!-- 3D Video Avatar (ZERO LAG STACKED SETUP) -->
             <div class="avatar-container" id="avatarBox">
-                <video id="avatarVideo" autoplay loop muted playsinline preload="auto" class="avatar-video">
+                <!-- Preload all 3 videos at once. Only the "active" one is visible. -->
+                <video id="vidNormal" class="avatar-video active" autoplay loop muted playsinline preload="auto">
                     <source src="15468.mp4" type="video/mp4">
+                </video>
+                <video id="vidHappy" class="avatar-video" loop muted playsinline preload="auto">
+                    <source src="15474.mp4" type="video/mp4">
+                </video>
+                <video id="vidSad" class="avatar-video" loop muted playsinline preload="auto">
+                    <source src="15475.mp4" type="video/mp4">
                 </video>
             </div>
             
@@ -193,8 +197,6 @@
                     <input type="hidden" id="selectedBoard" value="">
                     <input type="hidden" id="selectedExam" value="">
                     <input type="hidden" id="selectedSkill" value="">
-                    
-                    <!-- New Inputs for 11th/12th Specific Logic -->
                     <input type="hidden" id="selectedStream" value="">
                     <input type="hidden" id="selectedDream" value="">
 
@@ -206,7 +208,6 @@
                             </div>
                         </div>
                         
-                        <!-- These two will dynamically show only if Class 11, 12 or Dropper is selected -->
                         <div class="input-group" id="streamGroup" style="display:none;">
                             <div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')">
                                 <span>Select Subjects (Stream)...</span> <i class="fa-solid fa-chevron-down"></i>
@@ -269,7 +270,7 @@
         </div>
     </div>
 
-    <!-- Professional Custom Selection List Modal (UPGRADED) -->
+    <!-- Professional Custom Selection List Modal -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
             <div class="sheet-header">
@@ -311,7 +312,6 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
-        // MASSIVE EXPANDED DATABASE FOR INDIA
         const dataLists = {
             class: [
                 {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, 
@@ -361,6 +361,9 @@
             if(localStorage.getItem('kiyo_user_email')) {
                 window.location.href = "dashboard.html"; 
             }
+            
+            // Kickstart the normal video automatically on mobile browsers
+            document.getElementById('vidNormal').play().catch(e => console.log(e));
         };
 
         function showToast(message, type = 'error') {
@@ -372,36 +375,45 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
+        // SMOOTH ZERO-LAG AVATAR REACTION
         function avatarReact(state) {
-            const video = document.getElementById('avatarVideo');
             const welcomeText = document.getElementById('welcomeText');
             const avatarBox = document.getElementById('avatarBox');
+            
+            // Get all video elements
+            const vidN = document.getElementById('vidNormal');
+            const vidH = document.getElementById('vidHappy');
+            const vidS = document.getElementById('vidSad');
+            
+            // Remove active class from all
+            vidN.classList.remove('active');
+            vidH.classList.remove('active');
+            vidS.classList.remove('active');
 
-            let videoFile = '15468.mp4';
             if (state === 'sad') {
-                videoFile = '15475.mp4';
+                vidS.classList.add('active'); // Fade in sad video
+                vidS.play().catch(e=>console.log(e));
+                
                 welcomeText.innerText = "Oops! Check your details.";
                 welcomeText.style.color = "#ef4444";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(239, 68, 68, 0.8)";
                 avatarBox.style.borderColor = "#ef4444";
             } else if (state === 'happy') {
-                videoFile = '15474.mp4';
+                vidH.classList.add('active'); // Fade in happy video
+                vidH.play().catch(e=>console.log(e));
+                
                 welcomeText.innerText = "Perfect! Proceeding...";
                 welcomeText.style.color = "#22c55e";
                 avatarBox.style.boxShadow = "0px 0px 25px rgba(34, 197, 94, 0.8)";
                 avatarBox.style.borderColor = "#22c55e";
             } else {
-                videoFile = '15468.mp4';
+                vidN.classList.add('active'); // Fade back to normal video
+                vidN.play().catch(e=>console.log(e));
+                
                 welcomeText.innerText = currentMode === 'signup' ? "Let's build your AI Profile!" : "Welcome back! Ready to learn?";
                 welcomeText.style.color = "#a78bfa";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(124, 58, 237, 0.4)";
                 avatarBox.style.borderColor = "#7c3aed";
-            }
-
-            if (video.getAttribute('src') !== videoFile) {
-                video.src = videoFile;
-                video.load();
-                video.play().catch(error => console.log("Video play error:", error));
             }
         }
 
@@ -452,13 +464,17 @@
             if(getAge(dob) < 13) { avatarReact('sad'); return showToast("You must be 13+ to create an account."); }
 
             avatarReact('happy');
-            document.getElementById('step1Fields').style.display = 'none';
-            document.getElementById('commonFields').style.display = 'none';
-            document.getElementById('nextBtn').style.display = 'none';
             
-            document.getElementById('step2Fields').style.display = 'block';
-            document.getElementById('submitBtn').style.display = 'block';
-            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+            setTimeout(() => {
+                avatarReact('normal');
+                document.getElementById('step1Fields').style.display = 'none';
+                document.getElementById('commonFields').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'none';
+                
+                document.getElementById('step2Fields').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'block';
+                document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+            }, 1000);
         }
 
         function setPath(path, btnElement) {
@@ -500,7 +516,6 @@
             btn.classList.add('selected');
             btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-circle-check" style="color:var(--primary)"></i>`;
             
-            // SMART LOGIC: If Class 11, 12, or Dropper is selected, show Stream and Dream Options
             if (type === 'class') {
                 if (id === '11' || id === '12' || id === 'dropper') {
                     document.getElementById('streamGroup').style.display = 'block';
@@ -516,7 +531,6 @@
                     document.getElementById('btnDream').innerHTML = `<span>What is your Dream/Goal?</span> <i class="fa-solid fa-chevron-down"></i>`;
                 }
             }
-
             closeListModal();
         }
 
@@ -531,9 +545,7 @@
                 if(currentPath === 'board') {
                     const selClass = document.getElementById('selectedClass').value;
                     const selBoard = document.getElementById('selectedBoard').value;
-                    if(!selClass || !selBoard) {
-                        avatarReact('sad'); return showToast("Please select Class and Board.");
-                    }
+                    if(!selClass || !selBoard) { avatarReact('sad'); return showToast("Please select Class and Board."); }
                     if (selClass === '11' || selClass === '12' || selClass === 'dropper') {
                         if(!document.getElementById('selectedStream').value || !document.getElementById('selectedDream').value) {
                             avatarReact('sad'); return showToast("Please select your Stream and Goal.");
@@ -556,9 +568,7 @@
                 const data = await res.json();
 
                 if (currentMode === 'signup') {
-                    if (data.status === 'exists') { 
-                        avatarReact('sad'); showToast(data.message); return switchTab('signin'); 
-                    }
+                    if (data.status === 'exists') { avatarReact('sad'); showToast(data.message); return switchTab('signin'); }
                     
                     avatarReact('happy'); showToast("Sending verification OTP...", 'success');
                     
@@ -589,18 +599,14 @@
         async function verifyOtp() {
             const email = document.getElementById('email').value.trim();
             const otp = document.getElementById('otpInput').value.trim();
-            
             if (otp.length !== 6) { avatarReact('sad'); return showToast("Enter valid 6-digit OTP"); }
 
             const res = await fetch('/api/verify-otp', {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp })
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, otp })
             });
 
             if (res.ok) {
                 avatarReact('happy');
-                
-                // Saving ALL Advanced Profiling Data securely
                 localStorage.setItem('kiyo_user_email', email);
                 localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
                 localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
@@ -614,17 +620,12 @@
                         localStorage.setItem('kiyo_stream', document.getElementById('selectedStream').value);
                         localStorage.setItem('kiyo_dream', document.getElementById('selectedDream').value);
                     }
-                } else if(currentPath === 'exam') {
-                    localStorage.setItem('kiyo_exam', document.getElementById('selectedExam').value);
-                } else {
-                    localStorage.setItem('kiyo_skill', document.getElementById('selectedSkill').value);
-                }
+                } else if(currentPath === 'exam') { localStorage.setItem('kiyo_exam', document.getElementById('selectedExam').value);
+                } else { localStorage.setItem('kiyo_skill', document.getElementById('selectedSkill').value); }
                 
                 showToast("Account Created & Verified!", 'success');
                 setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
-            } else { 
-                avatarReact('sad'); showToast("Invalid or expired OTP!"); 
-            }
+            } else { avatarReact('sad'); showToast("Invalid or expired OTP!"); }
         }
 
         async function executePasswordReset() {
