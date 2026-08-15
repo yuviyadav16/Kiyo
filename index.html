@@ -5,95 +5,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kiyo AI - Launching</title>
     <style>
-        /* Pure black premium background for video */
+        /* Ekdum clean background aur scroll lock */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #000000; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background-color: #000000; /* Video load hone se pehle seamless dark rahega */
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Video styling for mobile optimization */
+        /* Video screen ko puri tarah se bina strech kiye cover karegi */
         #intro-video {
-            width: 100%;
-            max-width: 450px; /* Mobile width maintain rakhne ke liye */
-            height: auto;
-            object-fit: cover;
-            border-radius: 10px; /* Thoda smooth edge dene ke liye (optional) */
-        }
-
-        /* Bottom TicBull Brand */
-        #brand-footer {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover; /* Mobile aur Desktop dono me perfect ratio */
             position: absolute;
-            bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            animation: fadeIn 1.5s forwards 0.5s; /* Video start hone ke thodi der baad fade in hoga */
-        }
-        
-        #brand-footer span {
-            color: #64748b;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            top: 0;
+            left: 0;
+            transition: opacity 0.6s ease-in-out; /* Fade out effect ke liye transition */
         }
 
-        #ticbull-logo {
-            width: 40px; /* Small brand logo */
-            filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.2));
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        /* Class jo video khatam hone par usko smooth gayab karegi */
+        .fade-out {
+            opacity: 0 !important;
         }
     </style>
 </head>
 <body>
 
-    <!-- Kiyo AI Motion Graphics Video -->
-    <!-- 'muted' zaroori hai mobile browsers me autoplay allow karne ke liye -->
-    <video id="intro-video" autoplay muted playsinline>
+    <!-- Preload auto taaki bina buffering jaldi start ho -->
+    <video id="intro-video" autoplay muted playsinline preload="auto">
         <source src="15200.mp4" type="video/mp4">
-        Your browser does not support the video tag.
     </video>
-
-    <!-- Bottom Brand Logo (TicBull) -->
-    <div id="brand-footer">
-        <span>Powered by</span>
-        <img id="ticbull-logo" src="15022_2.png" alt="TicBull">
-        <span style="color: white; font-weight: bold;">TicBull</span>
-    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const video = document.getElementById("intro-video");
 
-            // Ensure video plays smoothly
+            // Video play command
             video.play().catch(error => {
-                console.log("Autoplay blocked by browser. User interaction might be needed.", error);
+                console.log("Browser autoplay restriction, waiting for interaction", error);
             });
 
-            // 1. Primary Logic: Jaise hi video puri chal jayegi, automatically login page par bhej dega
-            video.addEventListener("ended", () => {
-                window.location.href = "login.html"; 
-            });
+            // Ye function smooth fade-out aur redirect ko handle karega
+            function transitionToLogin() {
+                video.classList.add("fade-out"); // Fade-out animation start
+                
+                // 600 milliseconds (fade-out khatam hone ka wait) ke baad naye page par bhejega
+                setTimeout(() => {
+                    window.location.href = "login.html"; 
+                }, 600); 
+            }
 
-            // 2. Fallback Logic: In case internet/browser issue ki wajah se video nahi chalti,
-            // toh 7 seconds baad backup ke taur par aage badha dega (Apni video length ke hisaab se adjust kar lena)
+            // 1. Primary trigger: Jaise hi 10 sec ki video officially complete ho
+            video.addEventListener("ended", transitionToLogin);
+
+            // 2. Failsafe trigger: Agar device slow hai, toh 11.5 seconds par forcefully aage bhej dega
             setTimeout(() => {
-                window.location.href = "login.html";
-            }, 7000); 
+                // Agar video khud khatam nahi hui hai, tabhi failsafe chalega
+                if (!video.ended) {
+                    transitionToLogin();
+                }
+            }, 11500); 
         });
     </script>
 </body>
 </html>
-
