@@ -4,24 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kiyo AI - Secure Portal Login</title>
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root {
-            --primary-glow: #7c3aed; /* AI Violet Theme */
-            --primary-btn: #7c3aed;
-            --primary-btn-hover: #6d28d9;
-        }
-
+        :root { --primary-glow: #7c3aed; --primary-btn: #7c3aed; }
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
-            background-color: #0b1120;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b1120; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex; flex-direction: column; justify-content: space-between; align-items: center;
-            overflow-y: auto; color: #fff; box-sizing: border-box;
+            color: #fff; box-sizing: border-box;
         }
-
-        /* Floating Alert Notification Toast */
         #toast-alert {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
             background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
@@ -29,173 +20,58 @@
             font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0;
             transition: transform 0.4s ease, opacity 0.4s ease;
         }
-        #toast-alert.show {
-            transform: translateX(-50%) translateY(0); opacity: 1;
-        }
+        #toast-alert.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         #toast-alert.success { border-left-color: #22c55e; }
-
-        /* Main Login Card */
         .login-card {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            width: 90%; max-width: 380px;
-            padding: 25px 20px;
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
+            width: 90%; max-width: 380px; padding: 25px 20px;
             box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
-            display: flex; flex-direction: column; align-items: center;
-            box-sizing: border-box;
-            margin: auto;
+            display: flex; flex-direction: column; align-items: center; margin: auto;
         }
-
-        /* Logo Area with Violet AI Glow */
-        .logo-container {
-            position: relative; width: 70px; height: 70px;
-            display: flex; justify-content: center; align-items: center;
-            margin-bottom: 10px;
-        }
-        .logo-container::before {
-            content: ''; position: absolute; width: 65px; height: 65px;
-            background: var(--primary-glow); border-radius: 50%; filter: blur(20px); opacity: 0.6;
-        }
-        .logo-img {
-            width: 65px; height: 65px; border-radius: 50%; object-fit: cover;
-            position: relative; z-index: 1; background: #fff;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.5);
-        }
-
-        .brand-title {
-            font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 0;
-            color: #f8fafc; text-align: center;
-        }
-        .brand-sub {
-            font-size: 11px; color: #94a3b8; letter-spacing: 0.5px; margin-top: 4px;
-            margin-bottom: 18px; text-align: center; text-transform: uppercase;
-        }
-
-        /* Toggle Switch Tabs */
-        .tab-switcher {
-            display: flex; background: rgba(2, 6, 23, 0.6);
-            border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .tab-btn {
-            flex: 1; padding: 9px 0; text-align: center; font-size: 13px;
-            font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px;
-            transition: all 0.3s ease; border: none; background: transparent;
-        }
-        .tab-btn.active {
-            background: var(--primary-btn); color: #ffffff;
-            box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4);
-        }
-
-        /* Form Fields */
-        .input-group {
-            position: relative; width: 100%; margin-bottom: 12px;
-        }
-        .input-group i.field-icon {
-            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
-            color: #64748b; font-size: 14px;
-        }
-        .input-field {
-            width: 100%; padding: 11px 40px 11px 42px;
-            background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box;
-            outline: none; transition: border-color 0.3s;
-        }
+        .logo-container { position: relative; width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; margin-bottom: 10px; }
+        .logo-container::before { content: ''; position: absolute; width: 65px; height: 65px; background: var(--primary-glow); border-radius: 50%; filter: blur(20px); opacity: 0.6; }
+        .logo-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; position: relative; z-index: 1; background: #fff; }
+        .brand-title { font-size: 22px; font-weight: 800; letter-spacing: 1.5px; margin: 0; text-align: center; }
+        .brand-sub { font-size: 11px; color: #94a3b8; margin: 4px 0 18px 0; text-transform: uppercase; text-align: center; }
+        .tab-switcher { display: flex; background: rgba(2, 6, 23, 0.6); border-radius: 12px; padding: 3px; width: 100%; margin-bottom: 18px; }
+        .tab-btn { flex: 1; padding: 9px 0; text-align: center; font-size: 13px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary-btn); color: #fff; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); }
+        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 14px; }
+        .input-field { width: 100%; padding: 11px 40px 11px 42px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
         .input-field:focus { border-color: #a78bfa; }
-        
-        .toggle-password {
-            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-            color: #64748b; cursor: pointer; font-size: 14px; z-index: 5;
-        }
-        .toggle-password:hover { color: #fff; }
-
-        /* Action Button */
-        .action-btn {
-            width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9);
-            color: white; border: none; border-radius: 10px; font-size: 14px;
-            font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px;
-            box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s;
-        }
-        .action-btn:active { transform: scale(0.98); }
-
-        .forgot-link {
-            font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right;
-            display: block; width: 100%; margin-bottom: 4px; font-weight: 600;
-        }
-        .forgot-link:hover { text-decoration: underline; }
-
-        /* Support & Social Links */
-        .support-text {
-            font-size: 11px; color: #64748b; margin-top: 12px; text-align: center;
-        }
-        .social-row {
-            display: flex; justify-content: center; gap: 15px; margin-top: 6px;
-        }
-        .social-row a { color: #64748b; font-size: 14px; text-decoration: none; transition: color 0.3s; }
-        .social-row a:hover { color: #fff; }
-
-        /* Global Footer */
-        .page-footer {
-            width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b;
-            text-align: center; border-top: 1px solid rgba(255,255,255,0.03);
-            background: rgba(11, 17, 32, 0.95); margin-top: 20px; box-sizing: border-box;
-        }
-        .page-footer div { margin-bottom: 3px; }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
+        .action-btn { width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px; margin-bottom: 12px; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); }
+        .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 4px; font-weight: 600; }
+        .support-text { font-size: 11px; color: #64748b; margin-top: 12px; text-align: center; }
+        .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 6px; }
+        .social-row a { color: #64748b; font-size: 14px; text-decoration: none; }
+        .page-footer { width: 100%; padding: 12px 10px; font-size: 10px; color: #64748b; text-align: center; background: rgba(11, 17, 32, 0.95); margin-top: 20px; box-sizing: border-box; }
         .page-footer a { color: #94a3b8; text-decoration: none; margin: 0 3px; }
-        .page-footer a:hover { color: #fff; }
-
-        /* Modals (OTP & Forgot Password) */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 100; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .modal-content {
-            background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px;
-            border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative;
-        }
+        .modal-content { background: #1e293b; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; }
         .close-modal { position: absolute; top: 12px; right: 15px; color: #94a3b8; cursor: pointer; font-size: 18px; }
     </style>
 </head>
 <body>
 
-    <!-- Toast Notification Box -->
     <div id="toast-alert">Notification message</div>
 
     <div class="login-card">
-        <!-- Logo -->
         <div class="logo-container">
             <img src="15026_2.png" alt="Kiyo AI Logo" class="logo-img">
         </div>
         <div class="brand-title">Kiyo AI</div>
         <div class="brand-sub">Intelligent Learning Guide</div>
 
-        <!-- Tabs -->
         <div class="tab-switcher">
             <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
             <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
         </div>
 
-        <!-- Form Container -->
         <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
-            
-            <!-- Extra Fields for Sign Up -->
-            <div id="signupFields" style="display: none;">
-                <div class="input-group">
-                    <i class="fa-solid fa-user field-icon"></i>
-                    <input type="text" id="fullName" class="input-field" placeholder="Full Student Name">
-                </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-calendar field-icon"></i>
-                    <input type="date" id="dob" class="input-field">
-                </div>
-            </div>
-
-            <!-- Common Fields -->
             <div class="input-group">
                 <i class="fa-solid fa-envelope field-icon"></i>
                 <input type="email" id="email" class="input-field" placeholder="Student Email ID" required>
@@ -209,7 +85,7 @@
 
             <a href="#" class="forgot-link" onclick="openForgotModal(event)">Forgot Password?</a>
 
-            <button type="submit" class="action-btn" id="submitBtn">SEND VERIFICATION OTP</button>
+            <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
         </form>
 
         <div class="support-text">Need Help? Contact TicBull Support</div>
@@ -230,11 +106,11 @@
                 <i class="fa-solid fa-key field-icon"></i>
                 <input type="text" id="otpInput" class="input-field" placeholder="Enter 6-Digit OTP" maxlength="6">
             </div>
-            <button type="button" class="action-btn" onclick="verifyOtp()">VERIFY & LOGIN</button>
+            <button type="button" class="action-btn" onclick="verifyOtp()">VERIFY & COMPLETE</button>
         </div>
     </div>
 
-    <!-- Forgot & Reset Password Modal -->
+    <!-- Forgot Password Modal -->
     <div class="modal-overlay" id="forgotModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeForgotModal()">&times;</span>
@@ -245,21 +121,15 @@
             </div>
             <div class="input-group">
                 <i class="fa-solid fa-lock field-icon"></i>
-                <input type="password" id="newPassword" class="input-field" placeholder="Enter New Password">
+                <input type="password" id="newPassword" class="input-field" placeholder="Enter New Password (Min 6)">
                 <i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i>
             </div>
-            <button type="button" class="action-btn" onclick="sendResetOtp()">UPDATE PASSWORD</button>
+            <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="page-footer">
-        <div>
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Terms & Conditions</a> | 
-            <a href="#">Refund Policy</a> | 
-            <a href="#">Contact Us</a>
-        </div>
+        <div><a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a> | <a href="#">Refund Policy</a> | <a href="#">Contact Us</a></div>
         <div style="margin-top: 4px;">&copy; 2026 Kiyo AI & TicBull. All rights reserved.</div>
     </div>
 
@@ -270,28 +140,23 @@
             const toast = document.getElementById('toast-alert');
             toast.innerText = message;
             toast.className = isSuccess ? "show success" : "show";
-            setTimeout(() => {
-                toast.className = "";
-            }, 3000);
+            setTimeout(() => { toast.className = ""; }, 3000);
         }
 
         function switchTab(mode) {
             currentMode = mode;
             const signinBtn = document.getElementById('signinTabBtn');
             const signupBtn = document.getElementById('signupTabBtn');
-            const signupFields = document.getElementById('signupFields');
             const submitBtn = document.getElementById('submitBtn');
 
             if (mode === 'signin') {
                 signinBtn.classList.add('active');
                 signupBtn.classList.remove('active');
-                signupFields.style.display = 'none';
-                submitBtn.innerText = "SEND VERIFICATION OTP";
+                submitBtn.innerText = "SIGN IN";
             } else {
                 signupBtn.classList.add('active');
                 signinBtn.classList.remove('active');
-                signupFields.style.display = 'block';
-                submitBtn.innerText = "CREATE ACCOUNT WITH OTP";
+                submitBtn.innerText = "SIGN UP WITH OTP";
             }
         }
 
@@ -315,50 +180,60 @@
             const password = document.getElementById('password').value;
 
             if(!email || password.length < 6) {
-                showToast("Invalid Email or Password (Min 6 chars)");
+                showToast("Enter valid email & password (min 6 chars)");
                 return;
             }
 
             try {
-                // Check if email exists in database
-                const checkRes = await fetch('/api/check-email', {
+                // Backend check user status
+                const res = await fetch('/api/check-user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({ email, password, mode: currentMode })
                 });
-                const checkData = await checkRes.json();
+                const data = await res.json();
 
-                // If user is trying to Sign Up, but account already exists
-                if (currentMode === 'signup' && checkData.exists) {
-                    showToast("Account already exists! Please Sign In.");
-                    switchTab('signin');
-                    return;
-                }
-
-                // If user is trying to Sign In, but account does not exist
-                if (currentMode === 'signin' && !checkData.exists) {
-                    showToast("Account not found! Please Sign Up first.");
-                    switchTab('signup');
-                    return;
-                }
-
-                // Proceed to send OTP
-                showToast("Sending OTP to your email...", false);
-                const otpRes = await fetch('/api/send-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                if (otpRes.ok) {
-                    showToast("OTP sent successfully to email!", true);
-                    document.getElementById('otpModal').classList.add('active');
+                if (currentMode === 'signup') {
+                    if (data.status === 'exists') {
+                        showToast(data.message);
+                        switchTab('signin');
+                        return;
+                    }
+                    // If available, send OTP for registration
+                    showToast("Sending verification OTP...", false);
+                    await sendOtpRequest(email, password);
                 } else {
-                    const errData = await otpRes.json();
-                    showToast(errData.detail || "Failed to send OTP");
+                    // Sign In mode checks
+                    if (data.status === 'not_found') {
+                        showToast(data.message);
+                        switchTab('signup');
+                        return;
+                    }
+                    if (data.status === 'wrong_password') {
+                        showToast(data.message);
+                        return;
+                    }
+                    if (data.status === 'success') {
+                        showToast("Login Successful! Redirecting...", true);
+                        setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                    }
                 }
             } catch (err) {
-                showToast("Network error. Please try again.");
+                showToast("Server connection error.");
+            }
+        }
+
+        async function sendOtpRequest(email, password) {
+            const res = await fetch('/api/send-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            if (res.ok) {
+                showToast("OTP sent to your email!", true);
+                document.getElementById('otpModal').classList.add('active');
+            } else {
+                showToast("Failed to send OTP.");
             }
         }
 
@@ -367,54 +242,53 @@
             const otp = document.getElementById('otpInput').value.trim();
 
             if (otp.length !== 6) {
-                showToast("Please enter a valid 6-digit OTP");
+                showToast("Enter valid 6-digit OTP");
                 return;
             }
 
-            try {
-                const res = await fetch('/api/verify-otp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, otp })
-                });
+            const res = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, otp })
+            });
 
-                if (res.ok) {
-                    showToast("Authentication Successful! Redirecting...", true);
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html";
-                    }, 1500);
-                } else {
-                    const errData = await res.json();
-                    showToast(errData.detail || "Invalid OTP!");
-                }
-            } catch (err) {
-                showToast("Verification failed. Try again.");
+            if (res.ok) {
+                showToast("Account Created & Verified! Redirecting...", true);
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+            } else {
+                showToast("Invalid or expired OTP!");
             }
         }
 
-        function closeOtpModal() {
-            document.getElementById('otpModal').classList.remove('active');
-        }
+        function closeOtpModal() { document.getElementById('otpModal').classList.remove('active'); }
+        function openForgotModal(e) { e.preventDefault(); document.getElementById('forgotModal').classList.add('active'); }
+        function closeForgotModal() { document.getElementById('forgotModal').classList.remove('active'); }
 
-        function openForgotModal(e) {
-            e.preventDefault();
-            document.getElementById('forgotModal').classList.add('active');
-        }
+        async function executePasswordReset() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
 
-        function closeForgotModal() {
-            document.getElementById('forgotModal').classList.remove('active');
-        }
-
-        function sendResetOtp() {
-            const resetEmail = document.getElementById('resetEmail').value.trim();
-            const newPass = document.getElementById('newPassword').value;
-            if(!resetEmail || newPass.length < 6) { 
-                showToast("Enter valid email and new password (min 6 chars)"); 
-                return; 
+            if(!email || newPassword.length < 6) {
+                showToast("Enter email and new password (min 6 chars)");
+                return;
             }
-            showToast(`Password updated successfully for ${resetEmail}`, true);
-            closeForgotModal();
+
+            const res = await fetch('/api/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, newPassword })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                showToast(data.message, true);
+                closeForgotModal();
+                switchTab('signin');
+            } else {
+                showToast(data.detail || "Reset failed");
+            }
         }
     </script>
 </body>
 </html>
+
