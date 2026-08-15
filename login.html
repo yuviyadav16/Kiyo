@@ -34,7 +34,7 @@
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        .main-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; padding: 20px 0; }
+        .main-wrapper { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; padding: 40px 0; }
         
         .login-card {
             background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(20px);
@@ -49,7 +49,7 @@
             width: 100px; height: 100px; margin: 0 auto 15px auto;
             border-radius: 50%; padding: 4px; background: linear-gradient(45deg, #7c3aed, #ec4899);
             box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.6);
-            transform: translateX(-150vw); /* Hidden initially for slide-in */
+            transform: translateX(-150vw);
             animation: slideInProfessor 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes slideInProfessor { to { transform: translateX(0); } }
@@ -76,17 +76,26 @@
         .input-field { width: 100%; padding: 12px 40px 12px 42px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
         .input-field:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(124,58,237,0.3); }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; }
+        
+        select.input-field { padding-left: 15px; cursor: pointer; } /* Select specific padding */
 
         /* Step 2 Multi-Select Buttons */
-        .path-selector { display: flex; gap: 10px; margin-bottom: 15px; }
-        .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; }
+        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
+        .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 10px 2px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
+        .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; box-shadow: 0px 4px 10px rgba(79, 70, 229, 0.4);}
 
         .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 20px rgba(124, 58, 237, 0.4); transition: transform 0.2s; margin-top: 5px; }
         .action-btn:active { transform: scale(0.97); }
 
         .forgot-link { font-size: 12px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 15px; font-weight: 600; }
         
+        /* Footer Links (TicBull & Yuvi Yadav) */
+        .footer-links { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .support-text { font-size: 10px; color: #94a3b8; text-align: center; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .social-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
+        .social-row a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
+        .social-row a:hover { color: #fff; transform: translateY(-2px); }
+
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
@@ -123,7 +132,6 @@
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-cake-candles field-icon"></i>
-                        <!-- Tooltip built-in to placeholder logic -->
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="Date of Birth (13+ Compulsory)">
                     </div>
                 </div>
@@ -150,23 +158,7 @@
                     
                     <!-- Dynamic Dropdowns based on Path -->
                     <div id="dynamicDropdowns">
-                        <!-- Default: Board -->
-                        <div class="input-group">
-                            <select class="input-field" id="classSelect" style="padding-left:15px;">
-                                <option value="" disabled selected>Select Class...</option>
-                                <option value="9">Class 9</option><option value="10">Class 10</option>
-                                <option value="11">Class 11</option><option value="12">Class 12</option>
-                                <option value="dropper">Dropper</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <select class="input-field" id="boardSelect" style="padding-left:15px;">
-                                <option value="" disabled selected>Select Indian Board...</option>
-                                <option value="cbse">CBSE</option><option value="icse">ICSE / ISC</option>
-                                <option value="bseb">Bihar Board (BSEB)</option><option value="upmsp">UP Board</option>
-                                <option value="other">Other State Board</option>
-                            </select>
-                        </div>
+                        <!-- Default: Board loaded via JS -->
                     </div>
                 </div>
 
@@ -175,10 +167,28 @@
                 <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="showStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
                 <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
             </form>
+
+            <!-- Support & Social Links -->
+            <div class="footer-links">
+                <div class="support-text">TicBull Support</div>
+                <div class="social-row">
+                    <a href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="https://t.me/ticbullteam" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                    <a href="https://www.instagram.com/ticbull" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <div class="support-text">Connect with Mr. Yuvi Yadav</div>
+                <div class="social-row" style="margin-bottom:0;">
+                    <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- OTP & Forgot Password Modals here... (Same as before but with updated styling) -->
+    <!-- Modals -->
     <div class="modal-overlay" id="otpModal">
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal('otpModal')">&times;</span>
@@ -189,18 +199,28 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="forgotModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('forgotModal')">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:#a78bfa;"></i> Reset Password</h3>
+            <div class="input-group" style="margin-top: 15px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email ID"></div>
+            <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password (Min 6)"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
+            <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
+        </div>
+    </div>
+
     <script>
         let currentMode = 'signin';
         let currentPath = 'board';
 
-        // 1. Z+ Security: Persistent Login Check
+        // Initialize Board dropdown on load
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) {
-                window.location.href = "dashboard.html"; // Redirect immediately if logged in
+                window.location.href = "dashboard.html";
             }
+            selectPath('board', document.querySelector('.path-btn'));
         };
 
-        // Premium Toast
         function showToast(message, type = 'error') {
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
@@ -210,11 +230,10 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // Avatar Reactions Logic
         function avatarReact(reaction) {
             const avatarBox = document.getElementById('avatarBox');
             avatarBox.classList.remove('shake-sad', 'bounce-happy');
-            void avatarBox.offsetWidth; // Trigger reflow
+            void avatarBox.offsetWidth; 
             
             if(reaction === 'sad') {
                 avatarBox.classList.add('shake-sad');
@@ -227,7 +246,6 @@
             }
         }
 
-        // Tab Switch Logic
         function switchTab(mode) {
             currentMode = mode;
             document.getElementById('signinTabBtn').classList.toggle('active', mode === 'signin');
@@ -254,17 +272,14 @@
             }
         }
 
-        // Calculate Age Logic (13+ Compulsory)
         function getAge(dateString) {
-            let today = new Date();
-            let birthDate = new Date(dateString);
+            let today = new Date(); let birthDate = new Date(dateString);
             let age = today.getFullYear() - birthDate.getFullYear();
             let m = today.getMonth() - birthDate.getMonth();
             if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
             return age;
         }
 
-        // Step 1 to Step 2 Validation (Sign Up)
         function showStep2() {
             const name = document.getElementById('fullName').value.trim();
             const dob = document.getElementById('dob').value;
@@ -272,21 +287,15 @@
             const pass = document.getElementById('password').value;
 
             if(!name || !dob || !email || !pass) {
-                avatarReact('sad');
-                return showToast("Please fill all details correctly.");
+                avatarReact('sad'); return showToast("Please fill all details correctly.");
             }
             if(pass.length < 6) {
-                avatarReact('sad');
-                return showToast("Password must be at least 6 characters.");
+                avatarReact('sad'); return showToast("Password must be at least 6 characters.");
             }
-            
-            // Age Check
             if(getAge(dob) < 13) {
-                avatarReact('sad');
-                return showToast("You must be 13+ to create an account.");
+                avatarReact('sad'); return showToast("You must be 13+ to create an account.");
             }
 
-            // Move to Step 2
             avatarReact('happy');
             document.getElementById('step1Fields').style.display = 'none';
             document.getElementById('emailGroup').style.display = 'none';
@@ -297,23 +306,88 @@
             document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
         }
 
-        // Academic Profiling Dropdowns
+        // FULL INDIAN DATABASE FOR DROPDOWNS
         function selectPath(path, btnElement) {
             currentPath = path;
             document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
+            if(btnElement) btnElement.classList.add('active');
             
             const dropBox = document.getElementById('dynamicDropdowns');
             if(path === 'board') {
                 dropBox.innerHTML = `
-                    <div class="input-group"><select class="input-field" id="classSelect" style="padding-left:15px;"><option value="" disabled selected>Select Class...</option><option value="9">Class 9</option><option value="10">Class 10</option><option value="11">Class 11</option><option value="12">Class 12</option><option value="dropper">Dropper</option></select></div>
-                    <div class="input-group"><select class="input-field" id="boardSelect" style="padding-left:15px;"><option value="" disabled selected>Select Indian Board...</option><option value="cbse">CBSE</option><option value="icse">ICSE / ISC</option><option value="bseb">Bihar Board (BSEB)</option><option value="upmsp">UP Board</option><option value="other">Other State Board</option></select></div>`;
+                    <div class="input-group">
+                        <select class="input-field" id="classSelect">
+                            <option value="" disabled selected>Select Class...</option>
+                            <option value="9">Class 9</option><option value="10">Class 10</option>
+                            <option value="11">Class 11</option><option value="12">Class 12</option>
+                            <option value="dropper">Dropper (12th Pass)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <select class="input-field" id="boardSelect">
+                            <option value="" disabled selected>Select Indian Board...</option>
+                            <option value="cbse">CBSE</option>
+                            <option value="icse">ICSE / ISC</option>
+                            <option value="bseb">Bihar Board (BSEB)</option>
+                            <option value="upmsp">UP Board (UPMSP)</option>
+                            <option value="mah">Maharashtra Board (MSBSHSE)</option>
+                            <option value="raj">Rajasthan Board (RBSE)</option>
+                            <option value="mp">MP Board (MPBSE)</option>
+                            <option value="wb">West Bengal Board (WBBSE)</option>
+                            <option value="guj">Gujarat Board (GSEB)</option>
+                            <option value="kar">Karnataka Board (KSEEB)</option>
+                            <option value="tn">Tamil Nadu Board (TNBSE)</option>
+                            <option value="ap">Andhra Pradesh (BSEAP)</option>
+                            <option value="tel">Telangana (BSET)</option>
+                            <option value="kerala">Kerala Board (KBPE)</option>
+                            <option value="punjab">Punjab Board (PSEB)</option>
+                            <option value="haryana">Haryana Board (HBSE)</option>
+                            <option value="jac">Jharkhand Board (JAC)</option>
+                            <option value="cgbse">Chhattisgarh Board (CGBSE)</option>
+                            <option value="odisha">Odisha Board (BSE)</option>
+                            <option value="assam">Assam Board (SEBA)</option>
+                            <option value="nios">NIOS (Open Schooling)</option>
+                            <option value="other">Other State Board</option>
+                        </select>
+                    </div>`;
             } else if(path === 'exam') {
                 dropBox.innerHTML = `
-                    <div class="input-group"><select class="input-field" id="examSelect" style="padding-left:15px;"><option value="" disabled selected>Select Target Exam...</option><option value="neet">NEET (Medical)</option><option value="jee">JEE Main & Adv.</option><option value="upsc">UPSC CSE</option><option value="cuet">CUET</option><option value="nda">NDA</option></select></div>`;
+                    <div class="input-group">
+                        <select class="input-field" id="examSelect">
+                            <option value="" disabled selected>Select Target Exam...</option>
+                            <option value="neet">NEET (Medical)</option>
+                            <option value="jee">JEE Main & Advanced</option>
+                            <option value="upsc">UPSC CSE</option>
+                            <option value="cuet">CUET (UG/PG)</option>
+                            <option value="nda">NDA & NA</option>
+                            <option value="ca">CA Foundation</option>
+                            <option value="clat">CLAT (Law)</option>
+                            <option value="cat">CAT (Management)</option>
+                            <option value="ssc">SSC CGL/CHSL</option>
+                            <option value="banking">Banking (IBPS/SBI)</option>
+                            <option value="railway">Railway (RRB)</option>
+                            <option value="gate">GATE</option>
+                            <option value="state_psc">State PSC (BPSC, UPPSC, etc.)</option>
+                        </select>
+                    </div>`;
             } else {
                 dropBox.innerHTML = `
-                    <div class="input-group"><select class="input-field" id="skillSelect" style="padding-left:15px;"><option value="" disabled selected>Select Skill to Master...</option><option value="coding">Software Development (AI/Web)</option><option value="design">UI/UX Design</option><option value="video">Video Editing & Animation</option><option value="business">Startup & Business</option></select></div>`;
+                    <div class="input-group">
+                        <select class="input-field" id="skillSelect">
+                            <option value="" disabled selected>Select Skill to Master...</option>
+                            <option value="coding">Software Development (AI/Web)</option>
+                            <option value="design">UI/UX Design</option>
+                            <option value="video">Video Editing & Animation</option>
+                            <option value="business">Startup & Business</option>
+                            <option value="marketing">Digital Marketing</option>
+                            <option value="data">Data Science & Analytics</option>
+                            <option value="hacking">Ethical Hacking & Cyber Sec.</option>
+                            <option value="appdev">App Development (Android/iOS)</option>
+                            <option value="graphic">Graphic Design</option>
+                            <option value="content">Content & Copywriting</option>
+                            <option value="speaking">Communication & Public Speaking</option>
+                        </select>
+                    </div>`;
             }
         }
 
@@ -324,7 +398,6 @@
             icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
         }
 
-        // Final Submit Logic
         async function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -339,20 +412,16 @@
                     const data = await res.json();
 
                     if (data.status === 'not_found' || data.status === 'wrong_password') { 
-                        avatarReact('sad');
-                        showToast(data.message); 
+                        avatarReact('sad'); showToast(data.message); 
                     } else if (data.status === 'success') {
                         avatarReact('happy');
-                        localStorage.setItem('kiyo_user_email', email); // Secure Session Save
+                        localStorage.setItem('kiyo_user_email', email); 
                         showToast("Authentication Successful!", 'success');
                         setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
                     }
                 } catch (err) { avatarReact('sad'); showToast("Server connection error."); }
             } else {
-                // For Sign Up (Step 2 Submission)
-                avatarReact('happy');
-                showToast("Generating secure OTP...", 'success');
-                // Backend OTP trigger logic goes here...
+                avatarReact('happy'); showToast("Generating secure OTP...", 'success');
                 setTimeout(() => { document.getElementById('otpModal').classList.add('active'); }, 1000);
             }
         }
@@ -361,8 +430,10 @@
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         async function verifyOtp() {
-            // After successful verification:
             localStorage.setItem('kiyo_user_email', document.getElementById('email').value.trim());
+            const fn = document.getElementById('fullName').value.trim();
+            if(fn) localStorage.setItem('kiyo_user_name', fn);
+            
             showToast("Profile Created Successfully!", 'success');
             setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
         }
