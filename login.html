@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* EXACT INTRO PAGE THEME COLORS */
+            /* EXACT INTRO PAGE DARK THEME */
             --primary: #6366f1;
             --primary-light: rgba(99, 102, 241, 0.15);
             --bg-dark: #0B101E; 
@@ -17,135 +17,128 @@
             --text-muted: #8b95a5;
         }
 
-        /* NATIVE APP FEEL: NO SCROLL BOUNCE ON SIGN IN */
+        /* STRICTLY 1 SCREEN MOBILE RATIO - NO SCROLLING ALLOWED */
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+            margin: 0; padding: 0; width: 100%; 
+            height: 100%; height: 100dvh; /* Force exact screen height */
             background-color: var(--bg-dark);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: var(--text-main);
-            display: flex; flex-direction: column; align-items: center; 
-            box-sizing: border-box; overscroll-behavior-y: none;
+            overflow: hidden; /* SCROLLING DISABLED */
+            box-sizing: border-box; -webkit-tap-highlight-color: transparent;
         }
 
-        /* Main Container - Full Screen, No Box */
         .main-wrapper { 
-            width: 100%; max-width: 400px; 
-            padding: 20px; box-sizing: border-box;
-            display: flex; flex-direction: column; 
-            height: 100%; overflow-y: auto; scrollbar-width: none;
+            width: 100%; max-width: 400px; margin: 0 auto;
+            height: 100%; padding: 15px 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
-        .main-wrapper::-webkit-scrollbar { display: none; }
-        
-        /* HEADER: Kiyo AI & WELCOME */
+
+        /* HEADER: Kiyo AI (Left) & WELCOME (Right) */
         .top-header {
             display: flex; justify-content: space-between; align-items: flex-start;
-            width: 100%; margin-top: 10px; margin-bottom: 30px; flex-shrink: 0;
+            width: 100%; flex-shrink: 0;
         }
-        .brand-title { font-size: 28px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: #fff; line-height: 1;}
-        .brand-sub { font-size: 10px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
-        .welcome-text { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
+        .brand-title { font-size: 24px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: #fff; line-height: 1;}
+        .brand-sub { font-size: 9px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+        .welcome-text { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
 
-        /* VIDEO AVATAR: PURE TRANSPARENT, NO BLUE SCREEN */
+        /* PERMANENT VIDEO AVATAR (NO BOX, DIRECT DISPLAY) */
         .avatar-container {
-            width: 110px; height: 110px; margin: 0 auto 30px auto;
+            width: 85px; height: 85px; margin: 5px auto 15px auto;
             border-radius: 50%; position: relative; overflow: hidden;
             border: 2px solid var(--primary);
-            box-shadow: 0px 0px 20px var(--primary-light);
-            background: transparent !important; 
-            display: flex; justify-content: center; align-items: center; flex-shrink: 0;
+            box-shadow: 0px 0px 15px var(--primary-light);
+            background: transparent; flex-shrink: 0;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         .avatar-video { 
-            position: absolute; top: 0; left: 0; 
             width: 100%; height: 100%; object-fit: cover; 
-            pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+            pointer-events: none; display: none; /* Only active shows as block */
         }
-        #vidNormal { opacity: 1; z-index: 1; }
-        .reaction-vid { z-index: 5; }
-        .reaction-vid.active { opacity: 1; }
+        #vidNormal { display: block; } /* Initial State */
 
-        /* TABS (Directly on screen) */
-        .tab-switcher { display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 25px; flex-shrink: 0;}
-        .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 12px var(--primary-light); }
+        /* FORM DIRECTLY ON SCREEN (NO BACKGROUND BOX) */
+        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
 
-        /* INPUTS (Directly on screen, No Card) */
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; flex-shrink: 0;}
-        .input-row { display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;}
-        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
-        .input-field { width: 100%; padding: 16px 15px 16px 45px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
-        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
+        .tab-switcher { display: flex; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; margin-bottom: 15px; flex-shrink: 0;}
+        .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 10px var(--primary-light); }
+
+        /* COMPACT INPUTS FOR NO-SCROLL FIT */
+        .input-group { position: relative; width: 100%; margin-bottom: 10px; flex-shrink: 0;}
+        .input-row { display: flex; gap: 10px; margin-bottom: 10px; flex-shrink: 0;}
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 12px; }
+        .input-field { width: 100%; padding: 12px 15px 12px 40px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: var(--text-main); font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary); background: rgba(255,255,255,0.08); }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 14px; }
         .input-no-icon { padding-left: 15px; }
 
-        .custom-select-btn { width: 100%; padding: 16px 15px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; color: var(--text-muted); font-size: 14px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .custom-select-btn { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: var(--text-muted); font-size: 13px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
         .custom-select-btn.selected { color: #fff; font-weight: 600; border-color: var(--primary); background: var(--primary-light); }
 
-        .path-selector { display: flex; gap: 10px; margin-bottom: 20px; flex-shrink: 0;}
-        .path-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 12px 5px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
+        .path-selector { display: flex; gap: 8px; margin-bottom: 12px; flex-shrink: 0;}
+        .path-btn { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 8px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 10px var(--primary-light);}
 
-        .action-btn { width: 100%; padding: 16px 0; background: var(--primary); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: 10px; flex-shrink: 0;}
+        .action-btn { width: 100%; padding: 14px 0; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: auto; flex-shrink: 0;}
         .action-btn:active { transform: scale(0.97); }
 
-        .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; flex-shrink: 0;}
+        .forgot-link { font-size: 11px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 5px; font-weight: 600; flex-shrink: 0;}
         
-        /* FOOTER */
-        .app-footer { width: 100%; text-align: center; margin-top: auto; padding-top: 40px; padding-bottom: 20px; flex-shrink: 0;}
+        /* FOOTER COMPACT */
+        .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 10px; }
         
-        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 25px; }
-        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase;}
-        .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 20px; border-radius: 30px; display: flex; align-items: center; gap: 10px; transition: 0.3s;}
-        .ticbull-badge:hover { background: rgba(255,255,255,0.08); }
-        .ticbull-badge img { width: 22px; height: 22px; mix-blend-mode: screen; object-fit: contain; } 
-        .ticbull-badge span { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px;}
+        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 15px; }
+        .ticbull-trigger .powered { font-size: 8px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase;}
+        .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 6px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px; transition: 0.3s;}
+        .ticbull-badge img { width: 18px; height: 18px; mix-blend-mode: screen; object-fit: contain; } 
+        .ticbull-badge span { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 1px;}
         
-        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
-        .user-socials a { color: var(--text-muted); font-size: 20px; text-decoration: none; transition: 0.3s; }
-        .user-socials a:hover { color: #fff; transform: translateY(-3px); }
+        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; }
+        .user-socials a { color: var(--text-muted); font-size: 16px; text-decoration: none; transition: 0.3s; }
+        .user-socials a:hover { color: #fff; transform: translateY(-2px); }
 
-        .policy-links { font-size: 11px; color: var(--text-muted); }
+        .policy-links { font-size: 10px; color: var(--text-muted); }
         .policy-links a { color: var(--text-muted); text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 500; }
         .policy-links a:hover { color: #fff; }
 
-        /* Modals & Toasts */
-        .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
-        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        /* Toasts & Modals */
+        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 18px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
-        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
-
+        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .bottom-sheet { background: var(--bg-dark); width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 25px; display: flex; flex-direction: column; max-height: 85vh; }
+        .bottom-sheet { background: var(--bg-dark); width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
         .modal-overlay.active .bottom-sheet { transform: translateY(0); }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sheet-header h3 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
-        .close-sheet { color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sheet-header h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 700; }
+        .close-sheet { color: var(--text-muted); font-size: 18px; cursor: pointer; }
         
-        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
-        .list-item { padding: 15px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
-        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
+        .custom-list-container { overflow-y: auto; padding: 10px 15px; display: flex; flex-direction: column; gap: 6px; }
+        .list-item { padding: 12px 15px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: var(--text-main); font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 14px; }
         .list-item.selected { background: var(--primary-light); border: 1px solid var(--primary); color: #fff; font-weight: 700; }
         .list-item.selected i { opacity: 1; transform: scale(1); }
 
-        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 15px; text-decoration: none; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;}
-        .ticbull-link-item:hover { background: rgba(255,255,255,0.05); }
-        .ticbull-link-item i { font-size: 22px; color: var(--primary); width: 30px; text-align: center;}
-        .ticbull-link-item span { font-size: 15px; font-weight: 600; }
+        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; text-decoration: none; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;}
+        .ticbull-link-item i { font-size: 20px; color: var(--primary); width: 25px; text-align: center;}
+        .ticbull-link-item span { font-size: 14px; font-weight: 600; }
 
-        .center-modal { background: var(--bg-dark); padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 50px rgba(0,0,0,0.8); }
+        .center-modal { background: var(--bg-dark); padding: 25px; border-radius: 20px; width: 85%; max-width: 300px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 50px rgba(0,0,0,0.8); }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body onclick="forcePlay()"> <!-- Ensures mobile video playback -->
+<body onclick="forcePlay()"> <!-- Force Play on Touch -->
 
     <div class="toast-container" id="toastBox"></div>
 
     <div class="main-wrapper">
         
+        <!-- HEADER (Welcome Right, Logo Left) -->
         <div class="top-header">
             <div>
                 <h1 class="brand-title">Kiyo AI</h1>
@@ -154,92 +147,93 @@
             <div class="welcome-text">WELCOME</div>
         </div>
 
-        <!-- PERMANENT VIDEO: Transparent Background, No Lag -->
+        <!-- PERMANENT VIDEO: Block/None Display Logic = Zero Lag -->
         <div class="avatar-container" id="avatarBox" onclick="forcePlay()">
             <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline>
                 <source src="15468.mp4" type="video/mp4">
             </video>
-            <video id="vidHappy" class="avatar-video reaction-vid" loop muted playsinline>
+            <video id="vidHappy" class="avatar-video" loop muted playsinline>
                 <source src="15474.mp4" type="video/mp4">
             </video>
-            <video id="vidAngry" class="avatar-video reaction-vid" loop muted playsinline>
+            <video id="vidAngry" class="avatar-video" loop muted playsinline>
                 <source src="15475.mp4" type="video/mp4">
             </video>
         </div>
 
-        <!-- FORM WITHOUT ANY BOX (Native App Layout) -->
-        <div class="tab-switcher">
-            <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
-            <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
+        <!-- FORM DIRECTLY ON SCREEN (NO BOX) -->
+        <div class="form-container">
+            <div class="tab-switcher">
+                <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
+                <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <form id="authForm" onsubmit="handleSubmit(event)" style="display:flex; flex-direction:column; flex:1;">
+                
+                <div id="step1Fields" style="display: none;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="fullName" class="input-field" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-calendar field-icon"></i>
+                        <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State">
+                        <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
+                    </div>
+                </div>
+
+                <div id="commonFields">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope field-icon"></i>
+                        <input type="email" id="email" class="input-field" placeholder="Email ID" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="password" class="input-field" placeholder="Password" required>
+                        <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
+                    </div>
+                </div>
+
+                <div id="step2Fields" style="display: none;">
+                    <div class="path-selector">
+                        <div class="path-btn active" onclick="setPath('board', this)">Board</div>
+                        <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
+                        <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
+                    </div>
+
+                    <input type="hidden" id="selectedClass" value="">
+                    <input type="hidden" id="selectedBoard" value="">
+                    <input type="hidden" id="selectedExam" value="">
+                    <input type="hidden" id="selectedSkill" value="">
+                    <input type="hidden" id="selectedStream" value="">
+                    <input type="hidden" id="selectedDream" value="">
+
+                    <!-- 11TH/12TH LOGIC FIXED & "OTHER BOARD" PRESENT -->
+                    <div id="pathBoardUI">
+                        <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span id="lblStream">Select Stream...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span id="lblDream">Your Goal?</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group"><div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')"><span id="lblBoard">Select Board...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                    </div>
+                    <div id="pathExamUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')"><span id="lblExam">Select Exam...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
+                    <div id="pathSkillUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')"><span id="lblSkill">Select Skill...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
+                </div>
+
+                <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
+                
+                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="goToStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
+            </form>
         </div>
 
-        <form id="authForm" onsubmit="handleSubmit(event)" style="width: 100%;">
-            
-            <div id="step1Fields" style="display: none;">
-                <div class="input-group">
-                    <i class="fa-solid fa-user field-icon"></i>
-                    <input type="text" id="fullName" class="input-field" placeholder="Full Name">
-                </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-calendar field-icon"></i>
-                    <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
-                </div>
-                <div class="input-row">
-                    <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State">
-                    <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
-                </div>
-            </div>
-
-            <div id="commonFields">
-                <div class="input-group">
-                    <i class="fa-solid fa-envelope field-icon"></i>
-                    <input type="email" id="email" class="input-field" placeholder="Email ID" required>
-                </div>
-                <div class="input-group">
-                    <i class="fa-solid fa-lock field-icon"></i>
-                    <input type="password" id="password" class="input-field" placeholder="Password" required>
-                    <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
-                </div>
-            </div>
-
-            <div id="step2Fields" style="display: none;">
-                <div class="path-selector">
-                    <div class="path-btn active" onclick="setPath('board', this)">Board</div>
-                    <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
-                    <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
-                </div>
-
-                <input type="hidden" id="selectedClass" value="">
-                <input type="hidden" id="selectedBoard" value="">
-                <input type="hidden" id="selectedExam" value="">
-                <input type="hidden" id="selectedSkill" value="">
-                <input type="hidden" id="selectedStream" value="">
-                <input type="hidden" id="selectedDream" value="">
-
-                <div id="pathBoardUI">
-                    <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')"><span>Select Class...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
-                    
-                    <!-- BUG FIXED: STREAM & DREAM DIVS ARE NOW DYNAMIC -->
-                    <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span>Select Subjects (Stream)...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
-                    <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span>Your Goal?</span> <i class="fa-solid fa-chevron-down"></i></div></div>
-                    
-                    <div class="input-group"><div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')"><span>Select Board...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
-                </div>
-                <div id="pathExamUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')"><span>Select Exam...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
-                <div id="pathSkillUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')"><span>Select Skill...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
-            </div>
-
-            <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
-            
-            <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="goToStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
-            <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
-        </form>
-
+        <!-- FOOTER COMPACT -->
         <div class="app-footer">
             <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
                 <span class="powered">POWERED BY</span>
                 <div class="ticbull-badge">
-                    <img src="14882.jpg" alt="TicBull"> <!-- Real White Horn Logo -->
+                    <img src="14882.jpg" alt="TicBull"> <!-- REAL WHITE HORN LOGO -->
                     <span class="brand">TICBULL</span>
                 </div>
             </div>
@@ -291,12 +285,12 @@
 
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:15px; right:20px; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Enter 6-digit OTP sent to your email.</p>
+            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:16px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:20px;">Enter 6-digit OTP sent to your email.</p>
             <div class="input-group">
                 <i class="fa-solid fa-key field-icon"></i>
-                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:45px; text-align:center; letter-spacing:8px; font-weight:bold; font-size:18px;">
+                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:bold; font-size:16px;">
             </div>
             <button type="button" class="action-btn" onclick="verifyOtp()">COMPLETE SIGN UP</button>
         </div>
@@ -304,9 +298,9 @@
 
     <div class="modal-overlay center-align" id="forgotModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:15px; right:20px; color:var(--text-muted); font-size:22px; cursor:pointer;">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
-            <div class="input-group" style="margin-top: 25px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
+            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:12px; right:15px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:16px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
+            <div class="input-group" style="margin-top: 20px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
             <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
             <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
         </div>
@@ -315,22 +309,23 @@
     <script>
         let currentMode = 'signin';
         let currentPath = 'board';
+        let reactionTimeout; // For auto-reverting video
 
-        // BUG FIXED: EXACTLY MATcHED WITH 11TH/12TH LOGIC AND ADDED 'OTHER STATE BOARD'
+        // FULL DATABASE (Includes PCB/PCM & Other Boards)
         const dataLists = {
-            class: [ {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th Pass)'} ],
+            class: [ {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th)'} ],
             stream: [ {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'}, {id: 'pcmb', name: 'PCMB (Math & Bio)'}, {id: 'commerce', name: 'Commerce (Accounts)'}, {id: 'arts', name: 'Arts / Humanities'}, {id: 'agriculture', name: 'Agriculture'} ],
             dream: [ {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE)'}, {id: 'upsc', name: 'IAS / IPS (UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'}, {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'}, {id: 'board_topper', name: 'Only Board Topper 95%+'} ],
             board: [ {id: 'cbse', name: 'CBSE Board'}, {id: 'icse', name: 'ICSE / ISC'}, {id: 'bseb', name: 'Bihar Board (BSEB)'}, {id: 'upmsp', name: 'UP Board'}, {id: 'mah', name: 'Maharashtra Board'}, {id: 'raj', name: 'Rajasthan Board'}, {id: 'mp', name: 'MP Board'}, {id: 'other', name: 'Other State Board'} ],
             exam: [ {id: 'neet', name: 'NEET (Medical)'}, {id: 'jee', name: 'JEE Main & Adv'}, {id: 'upsc', name: 'UPSC CSE'}, {id: 'cuet', name: 'CUET'}, {id: 'nda', name: 'NDA'}, {id: 'ssc', name: 'SSC CGL'}, {id: 'banking', name: 'Banking'} ],
-            skill: [ {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing & Anim'}, {id: 'business', name: 'Startup & Business'}, {id: 'hacking', name: 'Ethical Hacking'} ]
+            skill: [ {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing'}, {id: 'business', name: 'Startup & Business'}, {id: 'hacking', name: 'Ethical Hacking'} ]
         };
 
-        // Ensures mobile video kicks in immediately on first touch/load
+        // KICKSTART ALL VIDEOS ON LOAD/TOUCH (Prevents Pause)
         function forcePlay() {
             ['vidNormal', 'vidHappy', 'vidAngry'].forEach(id => {
                 let vid = document.getElementById(id);
-                if(vid && vid.paused) { vid.play().catch(e=>console.log("Auto-play wait")); }
+                if(vid && vid.paused) { vid.play().catch(e=>{}); }
             });
         }
         document.addEventListener('touchstart', forcePlay, {once:true});
@@ -350,30 +345,37 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        /* EXACT NATIVE OVERLAY REACTION (NO LAG, NO BLANK) */
+        /* 100% BLANK-FREE REACTION + AUTO REVERT */
         function avatarReact(state) {
             forcePlay();
+            clearTimeout(reactionTimeout); // Clear previous revert timer
+            
+            const vN = document.getElementById('vidNormal');
+            const vH = document.getElementById('vidHappy');
+            const vA = document.getElementById('vidAngry');
             const avatarBox = document.getElementById('avatarBox');
-            const vidS = document.getElementById('vidAngry');
-            const vidH = document.getElementById('vidHappy');
+
+            vN.style.display = 'none';
+            vH.style.display = 'none';
+            vA.style.display = 'none';
 
             if(state === 'sad') {
-                vidH.classList.remove('active');
-                vidS.classList.add('active');
-                vidS.currentTime = 0; vidS.play().catch(e=>{});
+                vA.style.display = 'block'; vA.currentTime = 0; vA.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--danger)";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.8)";
+                
+                // AUTO REVERT TO NORMAL AFTER 3 SECONDS
+                reactionTimeout = setTimeout(() => { avatarReact('normal'); }, 3000);
+
             } else if (state === 'happy') {
-                vidS.classList.remove('active');
-                vidH.classList.add('active');
-                vidH.currentTime = 0; vidH.play().catch(e=>{});
+                vH.style.display = 'block'; vH.currentTime = 0; vH.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--success)";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(34, 197, 94, 0.8)";
+                
             } else {
-                vidS.classList.remove('active');
-                vidH.classList.remove('active');
+                vN.style.display = 'block'; vN.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--primary)";
-                avatarBox.style.boxShadow = "0px 0px 20px var(--primary-light)";
+                avatarBox.style.boxShadow = "0px 0px 15px var(--primary-light)";
             }
         }
 
@@ -450,7 +452,7 @@
         function openSelectionList(type) {
             forcePlay();
             const contentBox = document.getElementById('listContent');
-            const titles = { class: "Select Class", board: "Select Board", exam: "Target Exam", skill: "Select Skill", stream: "Select Stream", dream: "Select Goal" };
+            const titles = { class: "Select Class", board: "Select Board", exam: "Target Exam", skill: "Select Skill", stream: "Select Subjects", dream: "Select Goal" };
             document.getElementById('listTitle').innerText = titles[type];
             contentBox.innerHTML = '';
 
@@ -468,14 +470,14 @@
             document.getElementById('listModal').classList.add('active');
         }
 
-        /* 11TH/12TH BUG FIX LOGIC EXACTLY IMPLEMENTED */
+        /* STRICT 11TH/12TH LOGIC */
         function selectListItem(type, id, name) {
             const hiddenId = 'selected' + type.charAt(0).toUpperCase() + type.slice(1);
             document.getElementById(hiddenId).value = id;
             
             const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
             btn.classList.add('selected');
-            btn.innerHTML = `<span>${name}</span> <i class="fa-solid fa-circle-check" style="color:var(--primary)"></i>`;
+            document.getElementById('lbl' + type.charAt(0).toUpperCase() + type.slice(1)).innerText = name;
             
             if (type === 'class') {
                 if (id === '11' || id === '12' || id === 'dropper') {
@@ -487,9 +489,9 @@
                     document.getElementById('selectedStream').value = '';
                     document.getElementById('selectedDream').value = '';
                     document.getElementById('btnStream').classList.remove('selected');
-                    document.getElementById('btnStream').innerHTML = `<span>Select Subjects (Stream)...</span> <i class="fa-solid fa-chevron-down"></i>`;
+                    document.getElementById('lblStream').innerText = 'Select Stream...';
                     document.getElementById('btnDream').classList.remove('selected');
-                    document.getElementById('btnDream').innerHTML = `<span>Your Goal?</span> <i class="fa-solid fa-chevron-down"></i>`;
+                    document.getElementById('lblDream').innerText = 'Your Goal?';
                 }
             }
             closeListModal();
@@ -608,4 +610,3 @@
     </script>
 </body>
 </html>
-
