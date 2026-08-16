@@ -7,159 +7,169 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary: #7c3aed;
-            --primary-light: rgba(124, 58, 237, 0.15);
-            --bg-dark: #070b14;
-            --card-bg: rgba(15, 23, 42, 0.6);
+            /* Professional EdTech Blue Theme */
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --primary-light: rgba(79, 70, 229, 0.15);
+            --bg-dark: #070f1e;
+            --card-bg: rgba(17, 24, 39, 0.8);
             --danger: #ef4444;
-            --success: #22c55e;
+            --success: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: var(--bg-dark);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff; overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-main); overflow-x: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         /* Toast Alert */
-        .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 20px; border-radius: 50px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 14px 20px; border-radius: 16px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* HEADER OUTSIDE THE BOX */
-        .header-section { text-align: center; margin-bottom: 20px; z-index: 10; }
+        /* Real App Main Wrapper */
+        .main-wrapper { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 100%; max-width: 400px; padding: 20px 15px; box-sizing: border-box; 
+        }
         
-        /* ZERO-LAG AVATAR SYSTEM */
+        /* Top Header Area */
+        .header-section { text-align: center; margin-bottom: 25px; width: 100%; }
+        .header-welcome { font-size: 13px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+        .brand-title { font-size: 32px; font-weight: 800; letter-spacing: 1px; margin: 0; color: #fff; }
+        
+        /* Video Avatar (Fixed Black Screen & Size) */
         .avatar-container {
-            width: 100px; height: 100px; margin: 0 auto 15px auto;
+            width: 90px; height: 90px; margin: 15px auto 0 auto;
             border-radius: 50%; position: relative; overflow: hidden;
-            border: 2px solid var(--primary);
-            box-shadow: 0px 0px 20px rgba(124, 58, 237, 0.5);
-            transition: all 0.3s ease; background: #000;
+            border: 3px solid var(--primary);
+            box-shadow: 0px 10px 25px var(--primary-light);
+            /* Gradient fallback so it never looks like a black hole */
+            background: linear-gradient(135deg, var(--primary), #818cf8); 
+            display: flex; justify-content: center; align-items: center;
         }
-        .avatar-video {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;
-            transition: opacity 0.3s ease-in-out; pointer-events: none;
-        }
-        #vidNormal { opacity: 1; z-index: 1; } /* Always playing in background */
-        #vidHappy, #vidAngry { opacity: 0; z-index: 2; } /* Fades in on top */
-        #vidHappy.active-reaction, #vidAngry.active-reaction { opacity: 1; }
+        .avatar-video { width: 100%; height: 100%; object-fit: cover; }
 
-        .brand-title { font-size: 26px; font-weight: 800; letter-spacing: 1px; margin: 0; color: #fff; }
-        .brand-sub { font-size: 11px; color: #a78bfa; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; }
-
-        /* PERFECT 1:1 LOGIN BOX */
+        /* Professional Login Card */
         .login-card {
             background: var(--card-bg); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
-            width: 90%; max-width: 320px; 
-            aspect-ratio: 1 / 1; /* FORCES PERFECT SQUARE */
-            padding: 20px; box-sizing: border-box;
-            box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.8);
-            display: flex; flex-direction: column; justify-content: center;
-            overflow-y: auto; scrollbar-width: none;
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 32px;
+            width: 100%; padding: 25px 20px; box-sizing: border-box;
+            box-shadow: 0px 20px 50px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
         }
-        .login-card::-webkit-scrollbar { display: none; }
 
         /* Tabs */
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 4px; margin-bottom: 15px; flex-shrink: 0; }
-        .tab-btn { flex: 1; padding: 8px 0; text-align: center; font-size: 12px; font-weight: 700; color: #94a3b8; cursor: pointer; border-radius: 8px; border: none; background: transparent; transition: 0.3s; }
-        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 10px rgba(124, 58, 237, 0.4); }
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 14px; padding: 5px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 12px var(--primary-light); }
 
-        /* Inputs */
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; flex-shrink: 0; }
-        .input-row { display: flex; gap: 10px; }
-        .input-group i.field-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 13px; }
-        .input-field { width: 100%; padding: 12px 12px 12px 35px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #fff; font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: var(--primary); }
-        .toggle-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #64748b; cursor: pointer; font-size: 13px; }
+        /* Modern App Inputs */
+        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
+        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.06); }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 14px; }
 
-        .custom-select-btn { width: 100%; padding: 10px 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; color: #94a3b8; font-size: 12px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        /* Specific style for inputs without icons (State/City) */
+        .input-no-icon { padding-left: 15px; }
+
+        .custom-select-btn { width: 100%; padding: 14px 15px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; color: var(--text-muted); font-size: 13px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
         .custom-select-btn.selected { color: #fff; font-weight: 600; border-color: var(--primary); background: var(--primary-light); }
 
         /* Path Buttons */
-        .path-selector { display: flex; gap: 6px; margin-bottom: 12px; flex-shrink: 0; }
-        .path-btn { flex: 1; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; padding: 8px 2px; border-radius: 8px; font-size: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
-        .path-btn.active { background: #4f46e5; color: #fff; border-color: #4f46e5; box-shadow: 0px 4px 10px rgba(79, 70, 229, 0.4);}
+        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
+        .path-btn { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 10px 5px; border-radius: 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
+        .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 12px var(--primary-light);}
 
-        .action-btn { width: 100%; padding: 12px 0; background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; box-shadow: 0px 4px 15px rgba(124, 58, 237, 0.4); transition: transform 0.2s; flex-shrink: 0;}
+        .action-btn { width: 100%; padding: 15px 0; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px var(--primary-light); transition: transform 0.2s; margin-top: 10px; }
         .action-btn:active { transform: scale(0.97); }
 
-        .forgot-link { font-size: 11px; color: #a78bfa; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; flex-shrink: 0;}
+        .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; }
         
-        /* STRICT TICBULL FOOTER */
-        .ticbull-footer { margin-top: 30px; text-align: center; z-index: 10; }
-        .powered-text { font-size: 9px; color: #64748b; letter-spacing: 1.5px; margin-bottom: 5px; }
-        .ticbull-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; margin-bottom: 15px; }
-        .ticbull-badge img { width: 18px; height: 18px; border-radius: 50%; }
-        .ticbull-badge span { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 1px;}
+        /* FOOTER STRUCTURE EXACTLY AS REQUESTED */
+        .app-footer { width: 100%; text-align: center; }
         
-        .social-row { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; }
-        .social-row a { color: #94a3b8; font-size: 18px; text-decoration: none; transition: 0.3s; }
-        .social-row a:hover { color: var(--primary); transform: translateY(-3px); }
+        /* TicBull Button (Opens New Modal) */
+        .ticbull-trigger { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
+        .ticbull-trigger:hover { background: rgba(255,255,255,0.1); }
+        .ticbull-trigger img { width: 20px; height: 20px; border-radius: 50%; }
+        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; display: block; text-align: left; line-height: 1; }
+        .ticbull-trigger .brand { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px; display: block; line-height: 1; margin-top: 2px;}
         
-        .policy-links { font-size: 10px; color: #64748b; }
-        .policy-links a { color: #94a3b8; text-decoration: none; margin: 0 5px; transition: 0.2s; }
+        /* 5 User Social Icons */
+        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .user-socials a { color: var(--text-muted); font-size: 18px; text-decoration: none; transition: 0.3s; }
+        .user-socials a:hover { color: #fff; transform: translateY(-3px); }
+
+        /* Terms & Privacy */
+        .policy-links { font-size: 11px; color: var(--text-muted); }
+        .policy-links a { color: var(--text-muted); text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 500; }
         .policy-links a:hover { color: #fff; }
 
-        /* Professional Modals */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .bottom-sheet { background: #0f172a; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
+        
+        /* Bottom Sheet */
+        .bottom-sheet { background: var(--bg-dark); width: 100%; max-width: 500px; border-radius: 30px 30px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 25px; display: flex; flex-direction: column; max-height: 85vh; }
         .modal-overlay.active .bottom-sheet { transform: translateY(0); }
-        .sheet-header { display: flex; flex-direction: column; padding: 15px 20px 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .sheet-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .brand-badge-modal { font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        .brand-badge-modal span { color: var(--primary); }
-        .sheet-header h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 700; }
-        .close-sheet { color: #94a3b8; font-size: 18px; cursor: pointer; transition: 0.2s; }
-        .custom-list-container { overflow-y: auto; padding: 10px 15px; display: flex; flex-direction: column; gap: 6px; }
-        .list-item { padding: 12px 15px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: #e2e8f0; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: space-between; }
-        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 14px; }
-        .list-item.selected { background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(79, 70, 229, 0.15)); border: 1px solid var(--primary); color: #fff; font-weight: 700; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sheet-header h3 { margin: 0; font-size: 16px; color: #fff; font-weight: 700; }
+        .close-sheet { color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        
+        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .list-item { padding: 15px 18px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; color: var(--text-main); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
+        .list-item.selected { background: var(--primary-light); border: 1px solid var(--primary); color: #fff; font-weight: 700; }
         .list-item.selected i { opacity: 1; transform: scale(1); }
 
-        .center-modal { background: #1e293b; padding: 20px; border-radius: 16px; width: 85%; max-width: 300px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; }
+        /* TicBull Support Modal Item */
+        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 15px; text-decoration: none; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s;}
+        .ticbull-link-item:hover { background: rgba(255,255,255,0.05); }
+        .ticbull-link-item i { font-size: 22px; color: var(--primary); width: 30px; text-align: center;}
+        .ticbull-link-item span { font-size: 15px; font-weight: 600; }
+
+        /* Center Modals (OTP) */
+        .center-modal { background: var(--bg-dark); padding: 25px; border-radius: 24px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 50px rgba(0,0,0,0.8); }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body>
+<body onclick="forcePlayVideo()"> <!-- Body click forces video play on mobile -->
 
     <div class="toast-container" id="toastBox"></div>
 
     <div class="main-wrapper">
         
-        <!-- TITLE & AVATAR OUTSIDE THE BOX -->
+        <!-- TOP HEADER OUTSIDE THE BOX -->
         <div class="header-section">
-            <div class="avatar-container" id="avatarBox" onclick="forcePlayAll()">
-                <!-- STACKED VIDEOS: NO LAG, NO BLACK SCREEN -->
-                <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline>
+            <div class="header-welcome">Welcome to</div>
+            <h1 class="brand-title">Kiyo AI</h1>
+            <div class="avatar-container" id="avatarBox">
+                <!-- SINGLE VIDEO TAG TO PREVENT BLACK SCREEN / LAG -->
+                <video id="avatarVideo" class="avatar-video" autoplay loop muted playsinline>
                     <source src="15468_2.mp4" type="video/mp4">
                 </video>
-                <video id="vidHappy" class="avatar-video" loop muted playsinline>
-                    <source src="15522.mp4" type="video/mp4">
-                </video>
-                <video id="vidAngry" class="avatar-video" loop muted playsinline>
-                    <source src="15523.mp4" type="video/mp4">
-                </video>
             </div>
-            <h1 class="brand-title">Kiyo AI</h1>
-            <p class="brand-sub" id="welcomeText">Your Intelligent Learning Guide</p>
         </div>
 
-        <!-- STRICTLY 1:1 SQUARE LOGIN BOX -->
+        <!-- REAL APP LOGIN CARD (Responsive, Not 1:1) -->
         <div class="login-card" id="loginCard">
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <form id="authForm" onsubmit="handleSubmit(event)" onclick="forcePlayAll()">
+            <form id="authForm" onsubmit="handleSubmit(event)">
                 
                 <!-- STEP 1: Basic Info -->
                 <div id="step1Fields" style="display: none;">
@@ -171,13 +181,10 @@
                         <i class="fa-solid fa-calendar field-icon"></i>
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
                     </div>
+                    <!-- State & City (Side by Side, Space saved) -->
                     <div class="input-row">
-                        <div class="input-group">
-                            <input type="text" id="stateInput" class="input-field" placeholder="State" style="padding-left:12px;">
-                        </div>
-                        <div class="input-group">
-                            <input type="text" id="cityInput" class="input-field" placeholder="City" style="padding-left:12px;">
-                        </div>
+                        <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State" style="width: 50%;">
+                        <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City" style="width: 50%;">
                     </div>
                 </div>
 
@@ -195,6 +202,7 @@
 
                 <!-- STEP 2: Profiling -->
                 <div id="step2Fields" style="display: none;">
+                    <div style="font-size:11px; color:var(--text-muted); margin-bottom:8px; text-align:center; text-transform:uppercase; letter-spacing:1px;">Select Learning Path</div>
                     <div class="path-selector">
                         <div class="path-btn active" onclick="setPath('board', this)">Board</div>
                         <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
@@ -255,56 +263,89 @@
             </form>
         </div>
 
-        <!-- TICBULL FOOTER -->
-        <div class="ticbull-footer">
-            <div class="powered-text">POWERED BY</div>
-            <div class="ticbull-badge">
+        <!-- FOOTER: EXACTLY AS REQUESTED -->
+        <div class="app-footer">
+            
+            <!-- 1. TicBull Trigger -->
+            <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
+                <div>
+                    <span class="powered">POWERED BY</span>
+                    <span class="brand">TICBULL</span>
+                </div>
                 <img src="15026_2.png" alt="TicBull Logo">
-                <span>TICBULL</span>
             </div>
-            <div class="social-row">
-                <a href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-envelope"></i></a>
-                <a href="https://www.instagram.com/ticbull" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://t.me/ticbullteam" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+
+            <!-- 2. Personal Social Icons (5 Icons) -->
+            <div class="user-socials">
+                <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
             </div>
+
+            <!-- 3. Terms & Privacy -->
             <div class="policy-links">
                 <a href="#">Terms of Service</a> &bull; <a href="#">Privacy Policy</a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- TicBull Support Modal (Opens on clicking TicBull button) -->
+    <div class="modal-overlay" id="ticbullSupportModal">
+        <div class="bottom-sheet" style="max-height: 50vh;">
+            <div class="sheet-header">
+                <h3>TicBull Support</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeModal('ticbullSupportModal')"></i>
+            </div>
+            <div style="padding: 10px 20px;">
+                <a href="mailto:ticbull.support@gmail.com" class="ticbull-link-item">
+                    <i class="fa-solid fa-envelope"></i> <span>ticbull.support@gmail.com</span>
+                </a>
+                <a href="https://www.instagram.com/ticbull" target="_blank" class="ticbull-link-item">
+                    <i class="fa-brands fa-instagram"></i> <span>@ticbull on Instagram</span>
+                </a>
+                <a href="https://t.me/ticbullteam" target="_blank" class="ticbull-link-item" style="border:none;">
+                    <i class="fa-brands fa-telegram"></i> <span>TicBull Telegram Channel</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <!-- Modals (Bottom Sheet & OTP) -->
+    <!-- Selection Lists Bottom Sheet -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
             <div class="sheet-header">
-                <div class="sheet-header-top">
-                    <div class="brand-badge-modal"><span>Kiyo</span> | TicBull</div>
-                    <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
-                </div>
                 <h3 id="listTitle">Select Option</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
             </div>
             <div class="custom-list-container" id="listContent"></div>
         </div>
     </div>
 
+    <!-- OTP Modal -->
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:18px; cursor:pointer;">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:16px;"><i class="fa-solid fa-shield-halved" style="color:#a78bfa;"></i> Verify Email</h3>
-            <p style="font-size:11px; color:#94a3b8;">Enter 6-digit OTP sent to your email.</p>
+            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:15px; right:20px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px;">Enter 6-digit OTP sent to your email.</p>
             <div class="input-group">
                 <i class="fa-solid fa-key field-icon"></i>
-                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:35px; text-align:center; letter-spacing:5px;">
+                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:bold;">
             </div>
             <button type="button" class="action-btn" onclick="verifyOtp()">COMPLETE SIGN UP</button>
         </div>
     </div>
 
+    <!-- Forgot Password Modal -->
     <div class="modal-overlay center-align" id="forgotModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:18px; cursor:pointer;">&times;</span>
-            <h3 style="margin-top:0; color:#fff; font-size:16px;"><i class="fa-solid fa-key" style="color:#a78bfa;"></i> Reset Password</h3>
-            <div class="input-group" style="margin-top: 15px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
+            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:15px; right:20px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
+            <h3 style="margin-top:0; color:#fff; font-size:18px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
+            <div class="input-group" style="margin-top: 20px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
             <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
             <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
         </div>
@@ -325,57 +366,51 @@
 
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
-            forcePlayAll(); // Ensure mobile playback starts
+            forcePlayVideo();
         };
 
-        function forcePlayAll() {
-            document.getElementById('vidNormal').play().catch(e=>{});
+        // Ensures video plays on mobile
+        function forcePlayVideo() {
+            const video = document.getElementById('avatarVideo');
+            if (video.paused) { video.play().catch(e => console.log(e)); }
         }
 
         function showToast(message, type = 'error') {
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-check-circle':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
             toastBox.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        /* ZERO LAG OVERLAP REACTION */
+        /* FIXED SINGLE VIDEO SWITCHER */
         function avatarReact(state) {
-            forcePlayAll();
-            const vidN = document.getElementById('vidNormal');
-            const vidS = document.getElementById('vidAngry');
-            const vidH = document.getElementById('vidHappy');
+            forcePlayVideo();
+            const video = document.getElementById('avatarVideo');
             const avatarBox = document.getElementById('avatarBox');
-            const welcomeText = document.getElementById('welcomeText');
 
+            let newSrc = '15468_2.mp4';
+            
             if(state === 'sad') {
-                vidH.classList.remove('active-reaction');
-                vidS.classList.add('active-reaction');
-                vidS.currentTime = 0; vidS.play().catch(e=>{});
-                
-                welcomeText.innerText = "Oops! Check your details.";
-                welcomeText.style.color = "#ef4444";
-                avatarBox.style.borderColor = "#ef4444";
-                avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.6)";
+                newSrc = '15523.mp4';
+                avatarBox.style.borderColor = "var(--danger)";
+                avatarBox.style.boxShadow = "0px 0px 25px rgba(239, 68, 68, 0.6)";
             } else if (state === 'happy') {
-                vidS.classList.remove('active-reaction');
-                vidH.classList.add('active-reaction');
-                vidH.currentTime = 0; vidH.play().catch(e=>{});
-                
-                welcomeText.innerText = "Perfect! Proceeding...";
-                welcomeText.style.color = "#22c55e";
-                avatarBox.style.borderColor = "#22c55e";
-                avatarBox.style.boxShadow = "0px 0px 20px rgba(34, 197, 94, 0.6)";
+                newSrc = '15522.mp4';
+                avatarBox.style.borderColor = "var(--success)";
+                avatarBox.style.boxShadow = "0px 0px 25px rgba(16, 185, 129, 0.6)";
             } else {
-                vidS.classList.remove('active-reaction');
-                vidH.classList.remove('active-reaction');
-                
-                welcomeText.innerText = currentMode === 'signup' ? "Let's build your AI Profile!" : "Welcome back! Ready to learn?";
-                welcomeText.style.color = "#a78bfa";
-                avatarBox.style.borderColor = "#7c3aed";
-                avatarBox.style.boxShadow = "0px 0px 20px rgba(124, 58, 237, 0.5)";
+                newSrc = '15468_2.mp4';
+                avatarBox.style.borderColor = "var(--primary)";
+                avatarBox.style.boxShadow = "0px 10px 25px var(--primary-light)";
+            }
+
+            // Only change if different to avoid reloading
+            if(!video.src.includes(newSrc)) {
+                video.src = newSrc;
+                video.load();
+                video.play().catch(e=>{});
             }
         }
 
@@ -450,7 +485,7 @@
         }
 
         function openSelectionList(type) {
-            forcePlayAll();
+            forcePlayVideo();
             const contentBox = document.getElementById('listContent');
             const titles = { class: "Select Class", board: "Select Board", exam: "Target Exam", skill: "Select Skill", stream: "Select Stream", dream: "Select Goal" };
             document.getElementById('listTitle').innerText = titles[type];
@@ -500,7 +535,7 @@
 
         async function handleSubmit(e) {
             e.preventDefault();
-            forcePlayAll();
+            forcePlayVideo();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
@@ -540,7 +575,7 @@
                         body: JSON.stringify({ email, password, fullName: document.getElementById('fullName').value, dob: document.getElementById('dob').value })
                     });
                     
-                    if(otpRes.ok) { setTimeout(() => { openModal('otpModal'); }, 1000); } 
+                    if(otpRes.ok) { setTimeout(() => { document.getElementById('otpModal').classList.add('active'); }, 1000); } 
                     else { avatarReact('sad'); showToast("Failed to send OTP"); }
 
                 } else {
@@ -609,4 +644,3 @@
     </script>
 </body>
 </html>
-
