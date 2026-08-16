@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* EXACT INTRO PAGE DARK THEME */
+            /* EXACT PURE DARK THEME (NO WHITE/LIGHT THEME KACHRA) */
             --primary: #6366f1;
             --primary-light: rgba(99, 102, 241, 0.15);
             --bg-dark: #0B101E; 
@@ -17,14 +17,14 @@
             --text-muted: #8b95a5;
         }
 
-        /* STRICTLY 1 SCREEN MOBILE RATIO - NO SCROLLING ALLOWED */
+        /* STRICTLY 1 SCREEN (100dvh) - NO SCROLLING ALLOWED */
         body, html {
             margin: 0; padding: 0; width: 100%; 
             height: 100%; height: 100dvh; 
             background-color: var(--bg-dark);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: var(--text-main);
-            overflow: hidden; /* SCROLLING DISABLED */
+            overflow: hidden; /* SCROLLING COMPLETELY DISABLED */
             box-sizing: border-box; -webkit-tap-highlight-color: transparent;
         }
 
@@ -34,7 +34,7 @@
             display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        /* HEADER: Kiyo AI (Left) & WELCOME (Right) */
+        /* HEADER: Kiyo AI & WELCOME */
         .top-header {
             display: flex; justify-content: space-between; align-items: flex-start;
             width: 100%; flex-shrink: 0;
@@ -43,13 +43,14 @@
         .brand-sub { font-size: 9px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
         .welcome-text { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
 
-        /* PERMANENT VIDEO AVATAR (2-LAYER SYSTEM TO PREVENT BROWSER CRASH) */
+        /* PERMANENT VIDEO AVATAR (PURE TRANSPARENT BACKGROUND = NO WHITE SCREEN BUG) */
         .avatar-container {
             width: 85px; height: 85px; margin: 5px auto 15px auto;
             border-radius: 50%; position: relative; overflow: hidden;
             border: 2px solid var(--primary);
             box-shadow: 0px 0px 15px var(--primary-light);
-            background: transparent; flex-shrink: 0;
+            background: transparent !important; /* STRICTLY NO COLORS HERE */
+            flex-shrink: 0;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         .avatar-video { 
@@ -57,11 +58,12 @@
             width: 100%; height: 100%; object-fit: cover; 
             pointer-events: none; 
         }
-        /* Layer 1: Normal Video (Always plays, never hidden) */
-        #vidNormal { z-index: 1; opacity: 1; }
         
-        /* Layer 2: Reaction Video (Hidden by default, overlays when needed) */
-        #vidReaction { z-index: 2; opacity: 0; transition: opacity 0.2s ease; }
+        /* Layer 1: Normal Video ALWAYS visible */
+        #vidNormal { z-index: 1; opacity: 1; } 
+        
+        /* Layer 2: Reaction Videos fade in over normal video */
+        .reaction-vid { z-index: 5; opacity: 0; transition: opacity 0.3s ease; }
 
         /* FORM DIRECTLY ON SCREEN (NO BACKGROUND BOX) */
         .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
@@ -70,7 +72,7 @@
         .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 10px var(--primary-light); }
 
-        /* COMPACT INPUTS FOR NO-SCROLL FIT */
+        /* COMPACT INPUTS FOR NO-SCROLL 1 SCREEN FIT */
         .input-group { position: relative; width: 100%; margin-bottom: 10px; flex-shrink: 0;}
         .input-row { display: flex; gap: 10px; margin-bottom: 10px; flex-shrink: 0;}
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 12px; }
@@ -137,7 +139,7 @@
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body onclick="forcePlay()"> <!-- Force Play on Touch -->
+<body onclick="forcePlay()"> <!-- Ensures playback unblocks on interaction -->
 
     <div class="toast-container" id="toastBox"></div>
 
@@ -151,15 +153,18 @@
             <div class="welcome-text">WELCOME</div>
         </div>
 
-        <!-- 2-LAYER VIDEO SYSTEM: NO BROWSER CRASH, NORMAL ALWAYS PLAYS -->
+        <!-- 100% BULLETPROOF VIDEO: webkit-playsinline avoids browser restrictions -->
         <div class="avatar-container" id="avatarBox" onclick="forcePlay()">
-            <!-- LAYER 1: Always playing -->
-            <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline preload="auto">
+            <!-- LAYER 1: ALWAYS PLAYING -->
+            <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline webkit-playsinline>
                 <source src="15468.mp4" type="video/mp4">
             </video>
-            <!-- LAYER 2: Reaction overlay (Fades in/out) -->
-            <video id="vidReaction" class="avatar-video" loop muted playsinline>
-                <source src="" type="video/mp4">
+            <!-- LAYER 2: OVERLAY REACTIONS -->
+            <video id="vidHappy" class="avatar-video reaction-vid" loop muted playsinline webkit-playsinline>
+                <source src="15474.mp4" type="video/mp4">
+            </video>
+            <video id="vidAngry" class="avatar-video reaction-vid" loop muted playsinline webkit-playsinline>
+                <source src="15475.mp4" type="video/mp4">
             </video>
         </div>
 
@@ -264,7 +269,7 @@
                     <i class="fa-solid fa-envelope"></i> <span>Email Support</span>
                 </a>
                 <a href="https://www.instagram.com/ticbull" target="_blank" class="ticbull-link-item">
-                    <i class="fa-brands fa-instagram"></i> <span>Instagram @ticbull</span>
+                    <i class="fa-brands fa-instagram"></i> <span>Instagram</span>
                 </a>
                 <a href="https://t.me/ticbullteam" target="_blank" class="ticbull-link-item" style="border:none;">
                     <i class="fa-brands fa-telegram"></i> <span>Telegram Channel</span>
@@ -301,7 +306,7 @@
             <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:12px; right:15px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
             <h3 style="margin-top:0; color:#fff; font-size:16px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
             <div class="input-group" style="margin-top: 20px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
-            <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
+            <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password (Min 6)"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
             <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
         </div>
     </div>
@@ -309,6 +314,7 @@
     <script>
         let currentMode = 'signin';
         let currentPath = 'board';
+        let reactionTimeout; 
 
         const dataLists = {
             class: [ {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'}, {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'dropper', name: 'Dropper (12th)'} ],
@@ -319,13 +325,20 @@
             skill: [ {id: 'coding', name: 'Software Development'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing'}, {id: 'business', name: 'Startup & Business'}, {id: 'hacking', name: 'Ethical Hacking'} ]
         };
 
-        // KICKSTART NORMAL VIDEO IMMEDIATELY
+        // KICKSTART VIDEOS IMMEDIATELY
         function forcePlay() {
-            let vN = document.getElementById('vidNormal');
-            if(vN && vN.paused) { vN.play().catch(e=>{}); }
+            ['vidNormal', 'vidHappy', 'vidAngry'].forEach(id => {
+                let vid = document.getElementById(id);
+                if(vid && vid.paused) { 
+                    let p = vid.play();
+                    if(p !== undefined) p.catch(e=>{}); 
+                }
+            });
         }
+        
         document.addEventListener('touchstart', forcePlay, {once:true});
         document.addEventListener('click', forcePlay);
+        window.addEventListener('load', forcePlay);
 
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
@@ -341,31 +354,29 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        /* MASTER TRICK: REACTION VIDEO IS AN OVERLAY */
+        /* OPACITY BASED REACTION SYSTEM (NO BROWSER CRASH, NORMAL NEVER STOPS) */
         function avatarReact(state) {
             forcePlay();
             clearTimeout(window.reactionTimeout); 
             
-            const vR = document.getElementById('vidReaction');
+            const vH = document.getElementById('vidHappy');
+            const vA = document.getElementById('vidAngry');
             const avatarBox = document.getElementById('avatarBox');
 
+            vH.style.opacity = '0';
+            vA.style.opacity = '0';
+
             if(state === 'sad') {
-                vR.src = '15475.mp4';
-                vR.play().catch(e=>{});
-                vR.style.opacity = '1';
+                vA.style.opacity = '1'; vA.currentTime = 0; vA.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--danger)";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.8)";
                 window.reactionTimeout = setTimeout(() => { avatarReact('normal'); }, 3000);
             } else if (state === 'happy') {
-                vR.src = '15474.mp4';
-                vR.play().catch(e=>{});
-                vR.style.opacity = '1';
+                vH.style.opacity = '1'; vH.currentTime = 0; vH.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--success)";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(16, 185, 129, 0.8)";
                 window.reactionTimeout = setTimeout(() => { avatarReact('normal'); }, 3000);
             } else {
-                // Fade out reaction, Normal video continues flawlessly underneath
-                vR.style.opacity = '0';
                 avatarBox.style.borderColor = "var(--primary)";
                 avatarBox.style.boxShadow = "0px 0px 15px var(--primary-light)";
             }
