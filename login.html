@@ -7,25 +7,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary: #7c3aed;
-            --primary-light: rgba(124, 58, 237, 0.15);
-            --bg-dark: #070b14;
-            --card-bg: #111827;
+            /* EXACT INTRO PAGE THEME COLORS */
+            --primary: #6366f1;
+            --primary-light: rgba(99, 102, 241, 0.15);
+            --bg-dark: #0B101E; /* Intro Dark Background */
+            --card-bg: rgba(18, 24, 38, 0.95);
             --danger: #ef4444;
             --success: #22c55e;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-main: #ffffff;
+            --text-muted: #8b95a5;
         }
 
-        /* FIX: Natural Scrolling, No Cut-Offs */
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: var(--bg-dark);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: var(--text-main);
             display: flex; flex-direction: column; align-items: center; 
-            overflow-y: auto; /* Allows smooth scrolling when form expands */
-            box-sizing: border-box;
+            overflow-y: auto; box-sizing: border-box;
         }
 
         /* Toast Alert */
@@ -35,30 +34,30 @@
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* Main Wrapper */
+        /* Main Container */
         .main-wrapper { 
             width: 100%; max-width: 380px; 
-            padding: 30px 20px; box-sizing: border-box;
+            padding: 30px 20px 20px 20px; box-sizing: border-box;
             display: flex; flex-direction: column; 
-            min-height: 100vh; /* Pushes footer to bottom */
+            min-height: 100vh;
         }
         
-        /* FIX: Top Header (Welcome on Right) */
+        /* HEADER: Kiyo AI (Left) & WELCOME (Right) */
         .top-header {
             display: flex; justify-content: space-between; align-items: flex-start;
-            width: 100%; margin-bottom: 25px;
+            width: 100%; margin-bottom: 30px;
         }
         .brand-title { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: #fff; line-height: 1;}
-        .brand-sub { font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-        .welcome-text { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; }
+        .brand-sub { font-size: 10px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+        .welcome-text { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
 
-        /* FIX: 100% Transparent Avatar Container (NO BLUE SCREEN) */
+        /* VIDEO AVATAR: STRICTLY NO COLORS, JUST VIDEO */
         .avatar-container {
-            width: 95px; height: 95px; margin: 0 auto 25px auto;
+            width: 100px; height: 100px; margin: 0 auto 30px auto;
             border-radius: 50%; position: relative; overflow: hidden;
             border: 2px solid var(--primary);
             box-shadow: 0px 0px 20px var(--primary-light);
-            background: transparent; /* STRICTLY NO COLORS HERE */
+            background: transparent !important; /* FALTU COLOR REMOVED */
             display: flex; justify-content: center; align-items: center;
         }
         .avatar-video { 
@@ -66,68 +65,75 @@
             width: 100%; height: 100%; object-fit: cover; 
             pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
         }
-        #vidNormal { opacity: 1; z-index: 1; } /* Normal Video ALWAYS visible */
+        #vidNormal { opacity: 1; z-index: 1; } /* Normal Video ALWAYS plays */
         .reaction-vid { z-index: 5; }
         .reaction-vid.active { opacity: 1; }
 
-        /* Professional Login Card */
+        /* EXACT 1:1 SQUARE LOGIN CARD */
         .login-card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px;
-            width: 100%; padding: 25px 20px; box-sizing: border-box;
-            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px; /* Space before footer */
+            width: 100%; 
+            aspect-ratio: 1 / 1; /* FORCES 1:1 RATIO */
+            padding: 25px 20px; box-sizing: border-box;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: auto;
+            display: flex; flex-direction: column; 
+            overflow-y: auto; scrollbar-width: none;
         }
+        .login-card::-webkit-scrollbar { display: none; }
 
         /* Tabs */
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.4); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; flex-shrink: 0;}
+        .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 12px var(--primary-light); }
 
-        /* Modern App Inputs */
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
-        .input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+        /* Inputs */
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; flex-shrink: 0;}
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;}
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; }
-        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; color: var(--text-main); font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        .input-field:focus { border-color: var(--primary); background: rgba(0, 0, 0, 0.5); }
+        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: var(--text-main); font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--primary); background: rgba(0, 0, 0, 0.4); }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 14px; }
-        .input-no-icon { padding-left: 15px; } /* For State/City */
+        .input-no-icon { padding-left: 15px; }
 
-        .custom-select-btn { width: 100%; padding: 14px 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 14px; color: var(--text-muted); font-size: 13px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .custom-select-btn { width: 100%; padding: 14px 15px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: var(--text-muted); font-size: 13px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
         .custom-select-btn.selected { color: #fff; font-weight: 600; border-color: var(--primary); background: var(--primary-light); }
 
-        /* Path Buttons */
-        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
-        .path-btn { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
+        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
+        .path-btn { flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 10px var(--primary-light);}
 
-        .action-btn { width: 100%; padding: 15px 0; background: var(--primary); color: white; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: 10px; }
+        .action-btn { width: 100%; padding: 15px 0; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: auto; flex-shrink: 0;}
         .action-btn:active { transform: scale(0.97); }
 
-        .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; }
+        .forgot-link { font-size: 11px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; flex-shrink: 0;}
         
-        /* FOOTER (Pushed to bottom safely) */
-        .app-footer { width: 100%; text-align: center; margin-top: auto; padding-bottom: 10px; }
+        /* FOOTER */
+        .app-footer { width: 100%; text-align: center; margin-top: 30px; padding-bottom: 20px; }
         
-        .ticbull-trigger { display: inline-flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 8px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-        .ticbull-trigger:hover { background: rgba(255,255,255,0.08); }
-        .ticbull-trigger img { width: 20px; height: 20px; border-radius: 50%; }
-        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; display: block; text-align: left; line-height: 1; }
-        .ticbull-trigger .brand { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px; display: block; line-height: 1; margin-top: 2px;}
+        /* TICBULL BUTTON (NO KIYO AI LOGO) */
+        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 20px; }
+        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase;}
+        .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 20px; border-radius: 30px; display: flex; align-items: center; gap: 8px; transition: 0.3s;}
+        .ticbull-badge:hover { background: rgba(255,255,255,0.08); }
+        .ticbull-badge i { color: #fff; font-size: 14px; } /* Generic Icon till you add real logo */
+        .ticbull-badge span { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px;}
         
+        /* User Social Icons */
         .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .user-socials a { color: var(--text-muted); font-size: 18px; text-decoration: none; transition: 0.3s; }
         .user-socials a:hover { color: #fff; transform: translateY(-3px); }
 
+        /* Terms & Privacy */
         .policy-links { font-size: 11px; color: var(--text-muted); }
         .policy-links a { color: var(--text-muted); text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 500; }
         .policy-links a:hover { color: #fff; }
 
-        /* Professional Modals */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
         
-        /* Bottom Sheet */
         .bottom-sheet { background: var(--bg-dark); width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; border-top: 1px solid rgba(255,255,255,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 25px; display: flex; flex-direction: column; max-height: 85vh; }
         .modal-overlay.active .bottom-sheet { transform: translateY(0); }
         .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -145,19 +151,18 @@
         .ticbull-link-item i { font-size: 22px; color: var(--primary); width: 30px; text-align: center;}
         .ticbull-link-item span { font-size: 15px; font-weight: 600; }
 
-        /* Center Modals (OTP) */
         .center-modal { background: var(--bg-dark); padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid rgba(255,255,255,0.1); text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 50px rgba(0,0,0,0.8); }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body onclick="forcePlayAll()"> <!-- Body click ensures mobile video playback -->
+<body onclick="forcePlayAll()">
 
     <div class="toast-container" id="toastBox"></div>
 
     <div class="main-wrapper">
         
-        <!-- FIX: HEADER - Welcome Top Right, Brand Top Left -->
+        <!-- HEADER EXACTLY AS REQUESTED -->
         <div class="top-header">
             <div>
                 <h1 class="brand-title">Kiyo AI</h1>
@@ -166,27 +171,28 @@
             <div class="welcome-text">WELCOME</div>
         </div>
 
-        <!-- FIX: AVATAR - No Blue Background, Clean Overlay Videos -->
+        <!-- ZERO LAG, ZERO COLOR AVATAR -->
         <div class="avatar-container" id="avatarBox" onclick="forcePlayAll()">
+            <!-- EXACT GITHUB FILENAMES USED -->
             <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline>
-                <source src="15468_2.mp4" type="video/mp4">
+                <source src="15468.mp4" type="video/mp4">
             </video>
             <video id="vidHappy" class="avatar-video reaction-vid" loop muted playsinline>
-                <source src="15522.mp4" type="video/mp4">
+                <source src="15474.mp4" type="video/mp4">
             </video>
             <video id="vidAngry" class="avatar-video reaction-vid" loop muted playsinline>
-                <source src="15523.mp4" type="video/mp4">
+                <source src="15475.mp4" type="video/mp4">
             </video>
         </div>
 
-        <!-- LOGIN CARD -->
+        <!-- EXACT 1:1 LOGIN CARD -->
         <div class="login-card" id="loginCard">
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <form id="authForm" onsubmit="handleSubmit(event)">
+            <form id="authForm" onsubmit="handleSubmit(event)" style="display:flex; flex-direction:column; height:100%;">
                 
                 <!-- STEP 1: Basic Info -->
                 <div id="step1Fields" style="display: none;">
@@ -218,7 +224,6 @@
 
                 <!-- STEP 2: Profiling -->
                 <div id="step2Fields" style="display: none;">
-                    <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px; text-align:center; text-transform:uppercase; letter-spacing:1px;">Select Learning Path</div>
                     <div class="path-selector">
                         <div class="path-btn active" onclick="setPath('board', this)">Board</div>
                         <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
@@ -233,43 +238,13 @@
                     <input type="hidden" id="selectedDream" value="">
 
                     <div id="pathBoardUI">
-                        <div class="input-group">
-                            <div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')">
-                                <span>Select Class...</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        <div class="input-group" id="streamGroup" style="display:none;">
-                            <div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')">
-                                <span>Select Stream...</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        <div class="input-group" id="dreamGroup" style="display:none;">
-                            <div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')">
-                                <span>Your Goal?</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')">
-                                <span>Select Board...</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
+                        <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="openSelectionList('class')"><span>Select Class...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span>Select Stream...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span>Your Goal?</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group"><div class="custom-select-btn" id="btnBoard" onclick="openSelectionList('board')"><span>Select Board...</span> <i class="fa-solid fa-chevron-down"></i></div></div>
                     </div>
-
-                    <div id="pathExamUI" style="display:none;">
-                        <div class="input-group">
-                            <div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')">
-                                <span>Select Exam...</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="pathSkillUI" style="display:none;">
-                        <div class="input-group">
-                            <div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')">
-                                <span>Select Skill...</span> <i class="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="pathExamUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnExam" onclick="openSelectionList('exam')"><span>Select Exam...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
+                    <div id="pathSkillUI" style="display:none;"><div class="input-group"><div class="custom-select-btn" id="btnSkill" onclick="openSelectionList('skill')"><span>Select Skill...</span> <i class="fa-solid fa-chevron-down"></i></div></div></div>
                 </div>
 
                 <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
@@ -282,11 +257,11 @@
         <!-- FOOTER -->
         <div class="app-footer">
             <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
-                <div>
-                    <span class="powered">POWERED BY</span>
+                <span class="powered">POWERED BY</span>
+                <div class="ticbull-badge">
+                    <i class="fa-solid fa-bullseye"></i> <!-- Replaced Kiyo bulb logo -->
                     <span class="brand">TICBULL</span>
                 </div>
-                <img src="15026_2.png" alt="TicBull Logo">
             </div>
 
             <!-- User Social Icons -->
@@ -305,7 +280,6 @@
     </div>
 
     <!-- MODALS -->
-
     <!-- TicBull Support -->
     <div class="modal-overlay" id="ticbullSupportModal">
         <div class="bottom-sheet" style="max-height: 50vh;">
@@ -315,13 +289,13 @@
             </div>
             <div style="padding: 10px 20px;">
                 <a href="mailto:ticbull.support@gmail.com" class="ticbull-link-item">
-                    <i class="fa-solid fa-envelope"></i> <span>ticbull.support@gmail.com</span>
+                    <i class="fa-solid fa-envelope"></i> <span>Email Support</span>
                 </a>
                 <a href="https://www.instagram.com/ticbull" target="_blank" class="ticbull-link-item">
-                    <i class="fa-brands fa-instagram"></i> <span>@ticbull on Instagram</span>
+                    <i class="fa-brands fa-instagram"></i> <span>Instagram</span>
                 </a>
                 <a href="https://t.me/ticbullteam" target="_blank" class="ticbull-link-item" style="border:none;">
-                    <i class="fa-brands fa-telegram"></i> <span>TicBull Telegram Channel</span>
+                    <i class="fa-brands fa-telegram"></i> <span>Telegram Channel</span>
                 </a>
             </div>
         </div>
