@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* EXACT INTRO PAGE THEME COLORS */
-            --primary: #6366f1;
-            --primary-light: rgba(99, 102, 241, 0.15);
-            --bg-dark: #0B101E; /* Intro Dark Background */
+            /* Pure Premium Dark Theme */
+            --primary: #7c3aed;
+            --primary-light: rgba(124, 58, 237, 0.15);
+            --bg-dark: #0B101E; 
             --card-bg: rgba(18, 24, 38, 0.95);
             --danger: #ef4444;
             --success: #22c55e;
@@ -27,70 +27,57 @@
             overflow-y: auto; box-sizing: border-box;
         }
 
-        /* Toast Alert */
         .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* Main Container */
         .main-wrapper { 
             width: 100%; max-width: 380px; 
             padding: 30px 20px 20px 20px; box-sizing: border-box;
             display: flex; flex-direction: column; 
-            min-height: 100vh;
         }
         
-        /* HEADER: Kiyo AI (Left) & WELCOME (Right) */
         .top-header {
             display: flex; justify-content: space-between; align-items: flex-start;
-            width: 100%; margin-bottom: 30px;
+            width: 100%; margin-bottom: 25px;
         }
         .brand-title { font-size: 26px; font-weight: 800; letter-spacing: 0.5px; margin: 0; color: #fff; line-height: 1;}
         .brand-sub { font-size: 10px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
         .welcome-text { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
 
-        /* VIDEO AVATAR: STRICTLY NO COLORS, JUST VIDEO */
+        /* PERMANENT VIDEO CONTAINER (No Lag, No Blank) */
         .avatar-container {
-            width: 100px; height: 100px; margin: 0 auto 30px auto;
+            width: 95px; height: 95px; margin: 0 auto 25px auto;
             border-radius: 50%; position: relative; overflow: hidden;
             border: 2px solid var(--primary);
             box-shadow: 0px 0px 20px var(--primary-light);
-            background: transparent !important; /* FALTU COLOR REMOVED */
+            background: transparent; 
             display: flex; justify-content: center; align-items: center;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         .avatar-video { 
-            position: absolute; top: 0; left: 0; 
             width: 100%; height: 100%; object-fit: cover; 
-            pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+            pointer-events: none;
         }
-        #vidNormal { opacity: 1; z-index: 1; } /* Normal Video ALWAYS plays */
-        .reaction-vid { z-index: 5; }
-        .reaction-vid.active { opacity: 1; }
 
-        /* EXACT 1:1 SQUARE LOGIN CARD */
+        /* AUTO-EXPANDING LOGIN CARD (No Cut-offs) */
         .login-card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px;
-            width: 100%; 
-            aspect-ratio: 1 / 1; /* FORCES 1:1 RATIO */
-            padding: 25px 20px; box-sizing: border-box;
+            width: 100%; padding: 25px 20px; box-sizing: border-box;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
-            margin-bottom: auto;
+            margin-bottom: 30px;
             display: flex; flex-direction: column; 
-            overflow-y: auto; scrollbar-width: none;
         }
-        .login-card::-webkit-scrollbar { display: none; }
 
-        /* Tabs */
-        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; flex-shrink: 0;}
+        .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
         .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: var(--primary); color: #fff; box-shadow: 0px 4px 12px var(--primary-light); }
 
-        /* Inputs */
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; flex-shrink: 0;}
-        .input-row { display: flex; gap: 10px; margin-bottom: 15px; flex-shrink: 0;}
+        .input-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .input-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 13px; }
         .input-field { width: 100%; padding: 14px 15px 14px 42px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: var(--text-main); font-size: 13px; box-sizing: border-box; outline: none; transition: 0.3s; }
         .input-field:focus { border-color: var(--primary); background: rgba(0, 0, 0, 0.4); }
@@ -100,32 +87,29 @@
         .custom-select-btn { width: 100%; padding: 14px 15px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; color: var(--text-muted); font-size: 13px; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
         .custom-select-btn.selected { color: #fff; font-weight: 600; border-color: var(--primary); background: var(--primary-light); }
 
-        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
+        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; }
         .path-btn { flex: 1; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); color: var(--text-muted); padding: 10px 5px; border-radius: 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 10px var(--primary-light);}
 
-        .action-btn { width: 100%; padding: 15px 0; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: auto; flex-shrink: 0;}
+        .action-btn { width: 100%; padding: 15px 0; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 6px 15px var(--primary-light); transition: transform 0.2s; margin-top: 10px; }
         .action-btn:active { transform: scale(0.97); }
 
-        .forgot-link { font-size: 11px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; flex-shrink: 0;}
+        .forgot-link { font-size: 11px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; }
         
-        /* FOOTER */
-        .app-footer { width: 100%; text-align: center; margin-top: 30px; padding-bottom: 20px; }
+        /* STRICT FOOTER & REAL TICBULL LOGO */
+        .app-footer { width: 100%; text-align: center; margin-top: auto; padding-bottom: 20px; }
         
-        /* TICBULL BUTTON (NO KIYO AI LOGO) */
-        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 20px; }
+        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 25px; }
         .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase;}
         .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 20px; border-radius: 30px; display: flex; align-items: center; gap: 8px; transition: 0.3s;}
         .ticbull-badge:hover { background: rgba(255,255,255,0.08); }
-        .ticbull-badge i { color: #fff; font-size: 14px; } /* Generic Icon till you add real logo */
+        .ticbull-badge img { width: 22px; height: 22px; object-fit: contain; } /* REAL LOGO */
         .ticbull-badge span { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px;}
         
-        /* User Social Icons */
         .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .user-socials a { color: var(--text-muted); font-size: 18px; text-decoration: none; transition: 0.3s; }
         .user-socials a:hover { color: #fff; transform: translateY(-3px); }
 
-        /* Terms & Privacy */
         .policy-links { font-size: 11px; color: var(--text-muted); }
         .policy-links a { color: var(--text-muted); text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 500; }
         .policy-links a:hover { color: #fff; }
@@ -156,13 +140,12 @@
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body onclick="forcePlayAll()">
+<body onclick="forcePlay()"> <!-- Ensures mobile video playback -->
 
     <div class="toast-container" id="toastBox"></div>
 
     <div class="main-wrapper">
         
-        <!-- HEADER EXACTLY AS REQUESTED -->
         <div class="top-header">
             <div>
                 <h1 class="brand-title">Kiyo AI</h1>
@@ -171,30 +154,21 @@
             <div class="welcome-text">WELCOME</div>
         </div>
 
-        <!-- ZERO LAG, ZERO COLOR AVATAR -->
-        <div class="avatar-container" id="avatarBox" onclick="forcePlayAll()">
-            <!-- EXACT GITHUB FILENAMES USED -->
-            <video id="vidNormal" class="avatar-video" autoplay loop muted playsinline>
+        <!-- 100% BLANK-FREE VIDEO (It never stops playing) -->
+        <div class="avatar-container" id="avatarBox" onclick="forcePlay()">
+            <video id="avatarVideo" class="avatar-video" autoplay loop muted playsinline>
                 <source src="15468.mp4" type="video/mp4">
-            </video>
-            <video id="vidHappy" class="avatar-video reaction-vid" loop muted playsinline>
-                <source src="15474.mp4" type="video/mp4">
-            </video>
-            <video id="vidAngry" class="avatar-video reaction-vid" loop muted playsinline>
-                <source src="15475.mp4" type="video/mp4">
             </video>
         </div>
 
-        <!-- EXACT 1:1 LOGIN CARD -->
         <div class="login-card" id="loginCard">
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
 
-            <form id="authForm" onsubmit="handleSubmit(event)" style="display:flex; flex-direction:column; height:100%;">
+            <form id="authForm" onsubmit="handleSubmit(event)">
                 
-                <!-- STEP 1: Basic Info -->
                 <div id="step1Fields" style="display: none;">
                     <div class="input-group">
                         <i class="fa-solid fa-user field-icon"></i>
@@ -222,7 +196,6 @@
                     </div>
                 </div>
 
-                <!-- STEP 2: Profiling -->
                 <div id="step2Fields" style="display: none;">
                     <div class="path-selector">
                         <div class="path-btn active" onclick="setPath('board', this)">Board</div>
@@ -254,17 +227,15 @@
             </form>
         </div>
 
-        <!-- FOOTER -->
         <div class="app-footer">
             <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
                 <span class="powered">POWERED BY</span>
                 <div class="ticbull-badge">
-                    <i class="fa-solid fa-bullseye"></i> <!-- Replaced Kiyo bulb logo -->
+                    <img src="14882.jpg" alt="TicBull"> <!-- EXACT TICBULL LOGO FROM GITHUB -->
                     <span class="brand">TICBULL</span>
                 </div>
             </div>
 
-            <!-- User Social Icons -->
             <div class="user-socials">
                 <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
@@ -279,8 +250,7 @@
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- TicBull Support -->
+    <!-- Modals -->
     <div class="modal-overlay" id="ticbullSupportModal">
         <div class="bottom-sheet" style="max-height: 50vh;">
             <div class="sheet-header">
@@ -301,7 +271,6 @@
         </div>
     </div>
 
-    <!-- Selection Lists -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
             <div class="sheet-header">
@@ -312,7 +281,6 @@
         </div>
     </div>
 
-    <!-- OTP Modal -->
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
             <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
@@ -326,7 +294,6 @@
         </div>
     </div>
 
-    <!-- Forgot Password -->
     <div class="modal-overlay center-align" id="forgotModal">
         <div class="center-modal">
             <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:12px; right:15px; color:var(--text-muted); font-size:20px; cursor:pointer;">&times;</span>
@@ -352,11 +319,12 @@
 
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
-            forcePlayAll();
+            forcePlay();
         };
 
-        function forcePlayAll() {
-            document.getElementById('vidNormal').play().catch(e=>{});
+        function forcePlay() {
+            const video = document.getElementById('avatarVideo');
+            if (video.paused) { video.play().catch(e => console.log(e)); }
         }
 
         function showToast(message, type = 'error') {
@@ -368,28 +336,18 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        /* 100% BLANK-SCREEN FREE VIDEO SWITCHER */
+        /* 100% FIXED REACTION (NO VIDEO SWAP = NO BLANK SCREEN) */
         function avatarReact(state) {
-            forcePlayAll();
-            const vidS = document.getElementById('vidAngry');
-            const vidH = document.getElementById('vidHappy');
+            forcePlay();
             const avatarBox = document.getElementById('avatarBox');
 
             if(state === 'sad') {
-                vidH.classList.remove('active');
-                vidS.classList.add('active');
-                vidS.currentTime = 0; vidS.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--danger)";
-                avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.6)";
+                avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.8)";
             } else if (state === 'happy') {
-                vidS.classList.remove('active');
-                vidH.classList.add('active');
-                vidH.currentTime = 0; vidH.play().catch(e=>{});
                 avatarBox.style.borderColor = "var(--success)";
-                avatarBox.style.boxShadow = "0px 0px 20px rgba(34, 197, 94, 0.6)";
+                avatarBox.style.boxShadow = "0px 0px 20px rgba(34, 197, 94, 0.8)";
             } else {
-                vidS.classList.remove('active');
-                vidH.classList.remove('active');
                 avatarBox.style.borderColor = "var(--primary)";
                 avatarBox.style.boxShadow = "0px 0px 20px var(--primary-light)";
             }
@@ -466,7 +424,7 @@
         }
 
         function openSelectionList(type) {
-            forcePlayAll();
+            forcePlay();
             const contentBox = document.getElementById('listContent');
             const titles = { class: "Select Class", board: "Select Board", exam: "Target Exam", skill: "Select Skill", stream: "Select Stream", dream: "Select Goal" };
             document.getElementById('listTitle').innerText = titles[type];
@@ -516,7 +474,7 @@
 
         async function handleSubmit(e) {
             e.preventDefault();
-            forcePlayAll();
+            forcePlay();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
