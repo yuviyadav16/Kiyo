@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* Pure Premium Dark Theme */
+            /* PURE PREMIUM DARK THEME */
             --primary: #7c3aed;
             --primary-light: rgba(124, 58, 237, 0.15);
             --bg-dark: #0B101E; 
@@ -18,13 +18,15 @@
             --text-muted: #8b95a5;
         }
 
+        /* FIX: ALLOW NATURAL SCROLLING, NO CUT-OFFS */
         body, html {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             background-color: var(--bg-dark);
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             color: var(--text-main);
-            display: flex; flex-direction: column; align-items: center; 
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
             overflow-y: auto; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
@@ -33,10 +35,11 @@
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
+        /* Main Container setup for easy scrolling */
         .main-wrapper { 
             width: 100%; max-width: 380px; 
-            padding: 30px 20px 20px 20px; box-sizing: border-box;
-            display: flex; flex-direction: column; 
+            padding: 30px 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
         }
         
         .top-header {
@@ -47,13 +50,13 @@
         .brand-sub { font-size: 10px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
         .welcome-text { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; text-align: right; margin-top: 5px; }
 
-        /* PERMANENT VIDEO CONTAINER (No Lag, No Blank) */
+        /* VIDEO CONTAINER: NO BACKGROUND COLOR, NO BLANK HOLE */
         .avatar-container {
-            width: 95px; height: 95px; margin: 0 auto 25px auto;
+            width: 100px; height: 100px; margin: 0 auto 25px auto;
             border-radius: 50%; position: relative; overflow: hidden;
             border: 2px solid var(--primary);
             box-shadow: 0px 0px 20px var(--primary-light);
-            background: transparent; 
+            background: transparent; /* PURE TRANSPARENT */
             display: flex; justify-content: center; align-items: center;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
@@ -62,14 +65,13 @@
             pointer-events: none;
         }
 
-        /* AUTO-EXPANDING LOGIN CARD (No Cut-offs) */
+        /* AUTO-EXPANDING LOGIN CARD (Heights removed) */
         .login-card {
             background: var(--card-bg);
             border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px;
             width: 100%; padding: 25px 20px; box-sizing: border-box;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.4);
-            margin-bottom: 30px;
-            display: flex; flex-direction: column; 
+            margin-bottom: 30px; flex-shrink: 0;
         }
 
         .tab-switcher { display: flex; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 20px; }
@@ -96,14 +98,15 @@
 
         .forgot-link { font-size: 11px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 600; }
         
-        /* STRICT FOOTER & REAL TICBULL LOGO */
+        /* FOOTER & LOGO */
         .app-footer { width: 100%; text-align: center; margin-top: auto; padding-bottom: 20px; }
         
         .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 25px; }
         .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase;}
-        .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 20px; border-radius: 30px; display: flex; align-items: center; gap: 8px; transition: 0.3s;}
+        .ticbull-badge { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 20px; border-radius: 30px; display: flex; align-items: center; gap: 10px; transition: 0.3s;}
         .ticbull-badge:hover { background: rgba(255,255,255,0.08); }
-        .ticbull-badge img { width: 22px; height: 22px; object-fit: contain; } /* REAL LOGO */
+        /* REAL TICBULL LOGO SETTINGS */
+        .ticbull-badge img { width: 22px; height: 22px; mix-blend-mode: screen; object-fit: contain; } 
         .ticbull-badge span { font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 1px;}
         
         .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
@@ -140,7 +143,7 @@
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
-<body onclick="forcePlay()"> <!-- Ensures mobile video playback -->
+<body>
 
     <div class="toast-container" id="toastBox"></div>
 
@@ -154,8 +157,8 @@
             <div class="welcome-text">WELCOME</div>
         </div>
 
-        <!-- 100% BLANK-FREE VIDEO (It never stops playing) -->
-        <div class="avatar-container" id="avatarBox" onclick="forcePlay()">
+        <!-- PERMANENT VIDEO: Plays on load, and forced play on any touch -->
+        <div class="avatar-container" id="avatarBox">
             <video id="avatarVideo" class="avatar-video" autoplay loop muted playsinline>
                 <source src="15468.mp4" type="video/mp4">
             </video>
@@ -179,8 +182,8 @@
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
                     </div>
                     <div class="input-row">
-                        <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State" style="width: 50%;">
-                        <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City" style="width: 50%;">
+                        <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State">
+                        <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
                     </div>
                 </div>
 
@@ -231,7 +234,7 @@
             <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
                 <span class="powered">POWERED BY</span>
                 <div class="ticbull-badge">
-                    <img src="14882.jpg" alt="TicBull"> <!-- EXACT TICBULL LOGO FROM GITHUB -->
+                    <img src="14882.jpg" alt="TicBull"> <!-- Real Uploaded Logo -->
                     <span class="brand">TICBULL</span>
                 </div>
             </div>
@@ -317,15 +320,18 @@
             skill: [ {id: 'coding', name: 'Coding/AI'}, {id: 'design', name: 'UI/UX Design'}, {id: 'video', name: 'Video Editing'}, {id: 'business', name: 'Business'}, {id: 'hacking', name: 'Ethical Hacking'} ]
         };
 
+        // SUPER STRONG VIDEO KICKSTART FOR MOBILE
+        function forcePlay() {
+            let vid = document.getElementById('avatarVideo');
+            if(vid && vid.paused) { vid.play().catch(e=>console.log(e)); }
+        }
+        document.addEventListener('touchstart', forcePlay, {once:true});
+        document.addEventListener('click', forcePlay);
+
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
             forcePlay();
         };
-
-        function forcePlay() {
-            const video = document.getElementById('avatarVideo');
-            if (video.paused) { video.play().catch(e => console.log(e)); }
-        }
 
         function showToast(message, type = 'error') {
             const toastBox = document.getElementById('toastBox');
@@ -336,11 +342,10 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        /* 100% FIXED REACTION (NO VIDEO SWAP = NO BLANK SCREEN) */
+        /* REACTION CHANGES GLOW/BORDER ONLY - NO VIDEO SWAP = NO LAG */
         function avatarReact(state) {
             forcePlay();
             const avatarBox = document.getElementById('avatarBox');
-
             if(state === 'sad') {
                 avatarBox.style.borderColor = "var(--danger)";
                 avatarBox.style.boxShadow = "0px 0px 20px rgba(239, 68, 68, 0.8)";
@@ -410,6 +415,7 @@
                 document.getElementById('step2Fields').style.display = 'block';
                 document.getElementById('submitBtn').style.display = 'block';
                 document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+                window.scrollTo(0, document.body.scrollHeight); // Auto scroll down
             }, 800);
         }
 
@@ -583,3 +589,4 @@
     </script>
 </body>
 </html>
+
