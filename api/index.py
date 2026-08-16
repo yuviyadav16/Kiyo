@@ -72,17 +72,55 @@ async def send_otp(request: Request):
     otp_storage[email] = {"otp": otp, "password": password, "fullName": fullName, "dob": dob}
     
     try:
+        # Professional Email Template with Social Icons & TicBull Branding
         html_content = f"""
-        <div style="font-family: Arial, sans-serif; background-color: #0b1120; padding: 30px; color: #ffffff; border-radius: 12px;">
-            <h2 style="color: #a78bfa; text-align: center;">Kiyo AI Intelligent Learning Guide</h2>
-            <p style="font-size: 14px; color: #94a3b8;">Hello Student,</p>
-            <p style="font-size: 14px; color: #f8fafc;">Your secure verification code is:</p>
-            <div style="background: #1e293b; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #a78bfa; border-radius: 8px; margin: 20px 0;">
-                {otp}
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f5; margin: 0; padding: 20px;">
+            <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+                
+                <!-- Premium Dark Header -->
+                <div style="background-color: #0B101E; padding: 30px 20px; text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 1px;">Kiyo AI</h1>
+                    <p style="color: #6366f1; font-size: 11px; margin: 5px 0 0 0; text-transform: uppercase; letter-spacing: 2px;">Intelligent Learning Guide</p>
+                </div>
+                
+                <!-- Content Body -->
+                <div style="padding: 30px; text-align: center; color: #334155;">
+                    <h2 style="margin-top:0; font-size: 20px; color: #0f172a;">Verify Your Email</h2>
+                    <p style="font-size: 14px; line-height: 1.5; color: #475569;">Hi there, you are almost ready to start learning! Use the secure OTP below to verify your account.</p>
+                    
+                    <div style="background-color: #f8fafc; border: 2px dashed #6366f1; padding: 15px; font-size: 36px; font-weight: 800; letter-spacing: 10px; color: #6366f1; border-radius: 12px; margin: 25px 0;">
+                        {otp}
+                    </div>
+                    
+                    <p style="font-size: 12px; color: #94a3b8; margin: 0;">This OTP is valid for 10 minutes. Do not share it with anyone.</p>
+                </div>
+                
+                <!-- Footer with TicBull & Socials -->
+                <div style="background-color: #f8fafc; padding: 25px; text-align: center; border-top: 1px solid #e2e8f0;">
+                    <div style="font-size: 10px; color: #94a3b8; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 15px;">Powered By TicBull</div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <a href="https://youtube.com/@mryuviyadav" style="display: inline-block; margin: 0 6px; text-decoration: none; font-weight: 700; color: #64748b; font-size: 12px;">YouTube</a> | 
+                        <a href="https://www.instagram.com/mryuvi_yadav" style="display: inline-block; margin: 0 6px; text-decoration: none; font-weight: 700; color: #64748b; font-size: 12px;">Instagram</a> | 
+                        <a href="https://facebook.com/mryuviyadav" style="display: inline-block; margin: 0 6px; text-decoration: none; font-weight: 700; color: #64748b; font-size: 12px;">Facebook</a> | 
+                        <a href="https://x.com/mryuviyadav" style="display: inline-block; margin: 0 6px; text-decoration: none; font-weight: 700; color: #64748b; font-size: 12px;">X</a> | 
+                        <a href="https://t.me/mryuviyadav" style="display: inline-block; margin: 0 6px; text-decoration: none; font-weight: 700; color: #64748b; font-size: 12px;">Telegram</a>
+                    </div>
+                    
+                    <p style="font-size: 10px; color: #cbd5e1; margin: 0;">&copy; 2026 TicBull & Mr. Yuvi Yadav. All rights reserved.</p>
+                </div>
+                
             </div>
-            <p style="font-size: 12px; color: #64748b; text-align: center;">Valid for 5 minutes. Do not share.</p>
-        </div>
+        </body>
+        </html>
         """
+        
         msg = MIMEText(html_content, "html")
         msg["Subject"] = "Kiyo AI - Secure Verification OTP"
         msg["From"] = SMTP_EMAIL
@@ -136,3 +174,4 @@ async def reset_password(request: Request):
         
     ref.update({"password": new_password})
     return {"status": "success", "message": "Password updated successfully"}
+
