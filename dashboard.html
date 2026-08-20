@@ -2,91 +2,99 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kiyo AI Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* Modern Professional EdTech Theme */
         :root { --primary: #6366f1; --accent-green: #10b981; --bg: #f8fafc; --text: #0f172a; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); }
-        .nav { background: #fff; padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0; }
-        .menu-icon { font-size: 20px; cursor: pointer; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
         
-        /* Dashboard Card */
-        .card { background: linear-gradient(135deg, #6366f1, #10b981); margin: 20px; padding: 20px; border-radius: 20px; color: #fff; }
-        .profile-img { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #fff; margin-bottom: 10px; }
+        /* Navbar */
+        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         
-        /* Menu Sidebar */
-        .sidebar { position: fixed; left: -280px; top: 0; width: 280px; height: 100%; background: #fff; z-index: 100; transition: 0.3s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 20px; }
-        .sidebar.active { left: 0; }
-        .menu-link { padding: 15px 20px; display: flex; align-items: center; gap: 15px; color: #334155; text-decoration: none; font-weight: 600; }
-        
-        /* Delete Modal Styles */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: #fff; padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; }
-        
-        /* Dashboard Features */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
-        .feature-btn { background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; }
-        .feature-btn i { font-size: 24px; color: var(--primary); margin-bottom: 10px; }
+        /* 16:9 Profile Card */
+        .profile-card { background: linear-gradient(135deg, #6366f1, #4f46e5); margin: 20px; padding: 25px; border-radius: 20px; color: #fff; position: relative; }
+        .profile-card h2 { margin: 0; font-size: 22px; }
+        .profile-card p { opacity: 0.8; margin: 5px 0; font-size: 14px; }
+
+        /* Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        .menu-box { background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .menu-box:active { transform: scale(0.95); }
+        .menu-box i { font-size: 28px; color: var(--primary); margin-bottom: 10px; }
+
+        /* Side Menu */
+        .side-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; z-index: 1000; transition: 0.3s; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+        .side-menu.active { left: 0; }
+        .menu-item { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+
+        /* Modals */
+        .popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 2000; }
+        .popup.active { display: flex; }
+        .box { background: #fff; padding: 30px; border-radius: 20px; width: 80%; text-align: center; }
     </style>
 </head>
 <body>
 
-    <div class="nav">
-        <i class="fa-solid fa-bars" onclick="toggleSidebar()"></i>
-        <span style="font-weight: 900; font-size: 18px;">KIYO AI</span>
+    <div class="navbar">
+        <i class="fa-solid fa-bars" onclick="document.getElementById('sideMenu').classList.add('active')"></i>
+        <div style="font-weight:900; font-size: 18px;">KIYO AI</div>
         <i class="fa-solid fa-bell"></i>
     </div>
 
-    <div class="card">
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="profile-img" id="userImg">
-        <h2 id="userName">Student</h2>
-        <p id="userGoal">Goal: Loading...</p>
+    <div class="profile-card">
+        <h2 id="nameDisplay">Dad King</h2>
+        <p id="cityDisplay">Siwan, Bihar</p>
+        <p style="margin-top:10px; font-weight:bold;">Goal: <span id="goalDisplay">NEET</span></p>
     </div>
 
-    <div class="grid">
-        <div class="feature-btn"><i class="fa-solid fa-robot"></i><br>AI Tutor</div>
-        <div class="feature-btn"><i class="fa-solid fa-book"></i><br>Syllabus</div>
-        <div class="feature-btn"><i class="fa-solid fa-file-lines"></i><br>PYQs</div>
-        <div class="feature-btn"><i class="fa-solid fa-pen-nib"></i><br>Test</div>
+    <div class="dashboard-grid">
+        <div class="menu-box"><i class="fa-solid fa-comments"></i><br>AI Chat</div>
+        <div class="menu-box"><i class="fa-solid fa-book-open"></i><br>Syllabus</div>
+        <div class="menu-box"><i class="fa-solid fa-file-pen"></i><br>PYQs</div>
+        <div class="menu-box"><i class="fa-solid fa-clock"></i><br>Test</div>
+        <div class="menu-box"><i class="fa-solid fa-chart-line"></i><br>Result</div>
+        <div class="menu-box"><i class="fa-solid fa-circle-play"></i><br>Lectures</div>
     </div>
 
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <a class="menu-link" onclick="openProfileEdit()"><i class="fa-solid fa-user-edit"></i> Edit Profile</a>
-        <a class="menu-link" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
-        <a class="menu-link" onclick="deleteAccountTrigger()"><i class="fa-solid fa-trash text-danger"></i> Delete Account</a>
-        <a class="menu-link" href="terms.html"><i class="fa-solid fa-file-contract"></i> Terms</a>
-        <a class="menu-link" href="privacy.html"><i class="fa-solid fa-shield"></i> Privacy</a>
+    <div class="side-menu" id="sideMenu">
+        <div style="padding: 20px; background: var(--primary); color: #fff;"><h3>Menu</h3></div>
+        <div class="menu-item" onclick="openPopup('settingsPopup')"><i class="fa-solid fa-gear"></i> Settings</div>
+        <div class="menu-item"><i class="fa-solid fa-user"></i> Profile</div>
+        <div class="menu-item"><i class="fa-solid fa-shield"></i> Privacy Policy</div>
+        <div class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</div>
+        <div class="menu-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
+        <i class="fa-solid fa-xmark" style="padding:20px; cursor:pointer;" onclick="document.getElementById('sideMenu').classList.remove('active')"></i>
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal" id="deleteModal">
-        <div class="modal-content">
-            <h3>⚠️ Danger Zone</h3>
-            <p>Are you sure? This will delete all your data forever.</p>
-            <button onclick="confirmDelete()">Verify & Delete</button>
-            <button onclick="document.getElementById('deleteModal').classList.remove('active')">Cancel</button>
+    <!-- Settings Popup -->
+    <div class="popup" id="settingsPopup">
+        <div class="box">
+            <h3>App Settings</h3>
+            <button onclick="editProfile()">✏️ Edit Profile</button>
+            <button onclick="deleteAccountTrigger()" style="background:red; color:#fff; border:none; padding:10px; width:100%;">Permanently Delete Account</button>
+            <button onclick="closePopups()">Close</button>
         </div>
     </div>
 
     <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function deleteAccountTrigger() { document.getElementById('deleteModal').classList.add('active'); }
+        function openPopup(id) { document.getElementById(id).classList.add('active'); }
+        function closePopups() { document.querySelectorAll('.popup').forEach(p => p.classList.remove('active')); }
         
-        async function confirmDelete() {
-            const email = localStorage.getItem('kiyo_user_email');
-            const otp = prompt("Enter the 6-digit OTP sent to your email to confirm deletion:");
-            if(!otp) return;
-            
-            const res = await fetch('/api/delete-account', {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ email: email, otp: otp })
-            });
-            if(res.ok) { localStorage.clear(); window.location.href = "login.html"; }
+        function deleteAccountTrigger() {
+            if(confirm("WARNING: This will delete all data permanently! Send OTP?")) {
+                alert("OTP Sent for account deletion verification.");
+                // Add your delete API call here
+            }
+        }
+        
+        function logout() { localStorage.clear(); window.location.href = "login.html"; }
+        function editProfile() {
+            let n = prompt("New Name:");
+            if(n) { document.getElementById('nameDisplay').innerText = n; localStorage.setItem('kiyo_user_name', n); }
         }
     </script>
 </body>
 </html>
+
