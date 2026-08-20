@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- 1-SEC GLITCH FIX: Ye code page load hone se pehle execute hoga -->
+    <script>
+        if(!localStorage.getItem('kiyo_user_email')) {
+            window.location.replace("login.html");
+        }
+    </script>
+
     <style>
         /* LIGHT & DARK THEME VARIABLES */
         :root {
@@ -71,7 +79,7 @@
         }
         #fileInput { display: none; }
 
-        .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; }
+        .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; display: flex; align-items: center; gap: 10px; }
         .student-info p { margin: 2px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
 
         .profile-bottom { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); }
@@ -174,7 +182,7 @@
         .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* CUSTOM MODALS FOR EDIT/DELETE (Replaces browser alerts/prompts) */
+        /* CUSTOM MODALS FOR EDIT/DELETE */
         .custom-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
             z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
@@ -219,7 +227,10 @@
                     <input type="file" id="fileInput" accept="image/*" onchange="updateProfilePic(event)">
                 </div>
                 <div class="student-info">
-                    <h2 id="studentName">Student Name</h2>
+                    <!-- EDIT PENCIL ICON ADDED NEXT TO NAME -->
+                    <h2 id="studentName">
+                        Student Name <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>
+                    </h2>
                     <p id="studentLocation">City, State</p>
                 </div>
             </div>
@@ -231,20 +242,19 @@
 
         <h3 class="quick-action-header">Learning Hub</h3>
         
-        <!-- Premium Chat Button -->
-        <div class="chat-btn-container">
+        <!-- Premium Chat Button (Linked to chat.html) -->
+        <div class="chat-btn-container" onclick="window.location.href='chat.html'">
             <div class="chat-icon-bg"><i class="fa-solid fa-robot"></i></div>
             <div class="chat-btn-text">Chat with Kiyo AI</div>
         </div>
 
-        <!-- App Features Grid -->
+        <!-- App Features Grid (Ask Doubts Removed, Links Added) -->
         <div class="dashboard-grid">
-            <div class="grid-item"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
-            <div class="grid-item"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
-            <div class="grid-item"><i class="fa-solid fa-stopwatch"></i><span>Mock Tests</span></div>
-            <div class="grid-item"><i class="fa-solid fa-chart-line"></i><span>Performance</span></div>
-            <div class="grid-item"><i class="fa-solid fa-bookmark"></i><span>Saved Notes</span></div>
-            <div class="grid-item"><i class="fa-solid fa-circle-question"></i><span>Ask Doubts</span></div>
+            <div class="grid-item" onclick="window.location.href='syllabus.html'"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
+            <div class="grid-item" onclick="window.location.href='pyqs.html'"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
+            <div class="grid-item" onclick="window.location.href='tests.html'"><i class="fa-solid fa-stopwatch"></i><span>Mock Tests</span></div>
+            <div class="grid-item" onclick="window.location.href='performance.html'"><i class="fa-solid fa-chart-line"></i><span>Performance</span></div>
+            <div class="grid-item" onclick="window.location.href='notes.html'"><i class="fa-solid fa-bookmark"></i><span>Saved Notes</span></div>
         </div>
     </div>
 
@@ -265,15 +275,15 @@
         </div>
 
         <div class="menu-items">
-            <a href="#" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
+            <a href="dashboard.html" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="syllabus.html" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
+            <a href="performance.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
+            <a href="notes.html" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
-            <a href="#" class="menu-item" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="javascript:void(0)" class="menu-item" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
-            <a href="#" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
+            <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
         </div>
 
         <div class="sidebar-footer">
@@ -371,12 +381,11 @@
 
         // Load User Data
         window.onload = function() {
-            const email = localStorage.getItem('kiyo_user_email');
-            if(!email) window.location.href = "login.html";
-
-            document.getElementById('studentName').innerText = localStorage.getItem('kiyo_user_name') || "Student";
+            // WE DON'T DO REDIRECT LOGIC HERE ANYMORE. (Moved to HEAD to fix 1-sec glitch)
+            
+            document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>';
             document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
-            document.getElementById('studentEmail').innerText = email;
+            document.getElementById('studentEmail').innerText = localStorage.getItem('kiyo_user_email');
             
             let goal = "Learning Guide";
             if(localStorage.getItem('kiyo_user_path') === 'board') goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_board');
@@ -436,7 +445,7 @@
 
         function logout() {
             localStorage.clear();
-            window.location.href = "login.html";
+            window.location.replace("login.html");
         }
 
         // Custom Modal Controls
@@ -467,7 +476,7 @@
                 if(res.ok) {
                     localStorage.setItem('kiyo_user_name', newName);
                     localStorage.setItem('kiyo_user_city', newCity);
-                    document.getElementById('studentName').innerText = newName;
+                    document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>';
                     document.getElementById('studentLocation').innerText = newCity + ", " + localStorage.getItem('kiyo_user_state');
                     showToast("Profile Updated!", "success");
                 } else { showToast("Failed to update."); }
@@ -510,7 +519,7 @@
                     showToast("Account Deleted", "success");
                     setTimeout(() => {
                         localStorage.clear();
-                        window.location.href = "login.html";
+                        window.location.replace("login.html");
                     }, 1500);
                 } else { showToast("Invalid OTP."); }
             } catch(e) { showToast("Network Error."); }
@@ -518,4 +527,3 @@
     </script>
 </body>
 </html>
-
