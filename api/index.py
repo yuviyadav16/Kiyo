@@ -31,6 +31,7 @@ SMTP_EMAIL = os.getenv("SMTP_EMAIL")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
 
 otp_storage = {}
+delete_otp_storage = {} # Naya storage delete verification ke liye
 
 @app.post("/api/check-user")
 async def check_user(request: Request):
@@ -73,21 +74,16 @@ async def send_otp(request: Request):
     otp_storage[email] = {"otp": otp, "password": password, "fullName": fullName, "dob": dob}
     
     try:
-        # CLEAN & SPAM-FREE HTML TEMPLATE (No External Links or Images)
         html_content = f"""
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
             <h2 style="color: #4338ca; text-align: center; margin-top: 0; letter-spacing: 1px;">Kiyo AI</h2>
             <p style="color: #0f172a; font-size: 15px; font-weight: bold; text-align: center;">Intelligent Learning Guide</p>
-            
             <p style="color: #334155; font-size: 14px; margin-top: 30px;">Hello,</p>
             <p style="color: #334155; font-size: 14px;">Your secure verification code to join Kiyo AI is:</p>
-            
             <div style="background-color: #f8fafc; padding: 15px; text-align: center; font-size: 32px; font-weight: bold; color: #10b981; border-radius: 8px; margin: 25px 0; border: 2px dashed #e2e8f0; letter-spacing: 5px;">
                 {otp}
             </div>
-            
             <p style="color: #64748b; font-size: 12px; text-align: center;">This OTP is valid for 10 minutes. Please do not share it with anyone.</p>
-            
             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;">
             <p style="color: #94a3b8; font-size: 11px; text-align: center; margin: 0; text-transform: uppercase; font-weight: bold;">Powered By TicBull Academy</p>
         </div>
@@ -95,7 +91,8 @@ async def send_otp(request: Request):
         
         msg = MIMEMultipart('alternative')
         msg["Subject"] = "Kiyo AI - Secure Verification OTP"
-        msg["From"] = SMTP_EMAIL
+        # YAHAN SENDER NAME "TicBull" SET KIYA HAI
+        msg["From"] = f"TicBull <{SMTP_EMAIL}>"
         msg["To"] = email
         
         part = MIMEText(html_content, "html")
@@ -118,21 +115,16 @@ async def verify_otp(request: Request):
     
     stored = otp_storage.get(email)
     if stored and stored["otp"] == user_otp:
-        try:
-            formatted_email = email.replace(".", "_")
-            ref = db.reference(f'users/{formatted_email}')
-            ref.set({
-                "email": email,
-                "password": stored["password"],
-                "fullName": stored["fullName"],
-                "dob": stored["dob"],
-                "verified": True
-            })
-        except Exception as db_err:
-            print("DB Error:", db_err)
-            
+        formatted_email = email.replace(".", "_")
+        ref = db.reference(f'users/{formatted_email}')
+        ref.set({
+            "email": email,
+            "password": stored["password"],
+            "fullName": stored["fullName"],
+            "dob": stored["dob"],
+            "verified": True
+        })
         return {"status": "success", "message": "Verified successfully"}
-    
     raise HTTPException(status_code=400, detail="Invalid OTP")
 
 @app.post("/api/reset-password")
@@ -150,4 +142,83 @@ async def reset_password(request: Request):
         
     ref.update({"password": new_password})
     return {"status": "success", "message": "Password updated successfully"}
+
+
+# ---------------- NAYE DASHBOARD APIS ---------------- #
+
+@app.post("/api/update-profile")
+async def update_profile(request: Request):
+    data = await request.json()
+    email = data.get("email")
+    if not email:
+        raise HTTPException(status_code=400, detail="Email required")
+        
+    formatted_email = email.replace(".", "_")
+    ref = db.reference(f'users/{formatted_email}')
+    
+    updates = {}
+    if "fullName" in data: updates["fullName"] = data["fullName"]
+    if "city" in data: updates["city"] = data["city"]
+    if "state" in data: updates["state"] = data["state"]
+    
+    ref.update(updates)
+    return {"status": "success", "message": "Profile updated!"}
+
+@app.post("/api/send-delete-otp")
+async def send_delete_otp(request: Request):
+    data = await request.json()
+    email = data.get("email")
+    
+    if not email:
+        raise HTTPException(status_code=400, detail="Email required")
+        
+    otp = str(random.randint(100000, 999900))
+    delete_otp_storage[email] = otp
+    
+    try:
+        html_content = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+            <h2 style="color: #ef4444; text-align: center; margin-top: 0; letter-spacing: 1px;">WARNING: Account Deletion</h2>
+            <p style="color: #334155; font-size: 14px; margin-top: 30px;">Hello,</p>
+            <p style="color: #334155; font-size: 14px;">We received a request to permanently delete your Kiyo AI account. Use this OTP to confirm. This action cannot be undone.</p>
+            <div style="background-color: #fef2f2; padding: 15px; text-align: center; font-size: 32px; font-weight: bold; color: #ef4444; border-radius: 8px; margin: 25px 0; border: 2px dashed #fca5a5; letter-spacing: 5px;">
+                {otp}
+            </div>
+            <p style="color: #64748b; font-size: 12px; text-align: center;">If you didn't request this, ignore this email. Your account is safe.</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;">
+            <p style="color: #94a3b8; font-size: 11px; text-align: center; margin: 0; text-transform: uppercase; font-weight: bold;">Powered By TicBull Academy</p>
+        </div>
+        """
+        msg = MIMEMultipart('alternative')
+        msg["Subject"] = "Kiyo AI - Account Deletion Verification"
+        msg["From"] = f"TicBull <{SMTP_EMAIL}>"
+        msg["To"] = email
+        
+        part = MIMEText(html_content, "html")
+        msg.attach(part)
+
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+            server.login(SMTP_EMAIL, SMTP_PASSWORD)
+            server.sendmail(SMTP_EMAIL, email, msg.as_string())
+            
+        return {"status": "success", "message": "Delete OTP sent"}
+    except Exception as e:
+        print(f"SMTP EXCEPTION: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to send email.")
+
+@app.post("/api/delete-account")
+async def delete_account(request: Request):
+    data = await request.json()
+    email = data.get("email")
+    user_otp = data.get("otp")
+    
+    stored_otp = delete_otp_storage.get(email)
+    if stored_otp and stored_otp == user_otp:
+        formatted_email = email.replace(".", "_")
+        ref = db.reference(f'users/{formatted_email}')
+        ref.delete() # Permanent delete from Firebase
+        del delete_otp_storage[email] # Clear memory
+        return {"status": "success", "message": "Account deleted permanently"}
+    
+    raise HTTPException(status_code=400, detail="Invalid OTP")
 
