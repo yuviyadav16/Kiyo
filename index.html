@@ -166,7 +166,7 @@
         </div>
         <div class="kiyo-subtitle">Intelligent Learning Guide</div>
 
-        <!-- NEW: Horizontal Progress Bar & 0-100% Counter -->
+        <!-- Horizontal Progress Bar & 0-100% Counter -->
         <div class="progress-container">
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
@@ -240,7 +240,12 @@
             if (percent >= 100) {
                 document.body.style.opacity = '0';
                 setTimeout(() => {
-                    window.location.href = "login.html";
+                    // GLITCH FIX: Yahan check karega. Agar login hai toh direct dashboard jayega!
+                    if (localStorage.getItem('kiyo_user_email')) {
+                        window.location.replace("dashboard.html");
+                    } else {
+                        window.location.replace("login.html");
+                    }
                 }, 600); // Wait for fade out to finish before redirect
             } else {
                 requestAnimationFrame(updateProgress);
@@ -265,4 +270,3 @@
     </script>
 </body>
 </html>
-
