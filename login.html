@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* PREMIUM EDUCATIONAL LIGHT THEME (Based on your screenshot) */
+            /* PREMIUM EDUCATIONAL LIGHT THEME */
             --primary: #6366f1; /* Indigo */
             --primary-dark: #4338ca;
             --primary-light: rgba(99, 102, 241, 0.1);
@@ -39,7 +39,7 @@
             display: flex; flex-direction: column; 
         }
 
-        /* MODERN HEADER (No Video, Clean Typography) */
+        /* MODERN HEADER */
         .header-section {
             text-align: center;
             margin-bottom: 25px;
@@ -78,24 +78,24 @@
         .custom-select-btn { width: 100%; padding: 14px 15px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-muted); font-size: 14px; font-weight: 600; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .custom-select-btn.selected { color: var(--primary-dark); border-color: var(--primary); background: #f8fafc; }
 
-        /* PATH SELECTORS (Board/Exam/Skill) */
+        /* PATH SELECTORS */
         .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
         .path-btn { flex: 1; background: #f1f5f9; border: 1px solid #e2e8f0; color: var(--text-muted); padding: 10px 5px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 12px var(--primary-light);}
 
-        /* GREEN ACTION BUTTON (Like the screenshot) */
+        /* GREEN ACTION BUTTON */
         .action-btn { width: 100%; padding: 16px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
         .action-btn:active { transform: scale(0.97); }
 
         .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 700; flex-shrink: 0;}
         
-        /* FOOTER (Darker text for light bg) */
+        /* FOOTER */
         .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 15px; }
         
         .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 15px; }
         .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;}
         .ticbull-badge { background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s;}
-        .ticbull-badge img { width: 18px; height: 18px; object-fit: contain; } /* Your uploaded logo */
+        .ticbull-badge img { width: 18px; height: 18px; object-fit: contain; } 
         .ticbull-badge span { font-size: 13px; font-weight: 900; color: #0f172a; letter-spacing: 1px;}
         
         .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; }
@@ -106,7 +106,7 @@
         .policy-links a { color: #64748b; text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 600; }
         .policy-links a:hover { color: #0f172a; }
 
-        /* Toasts & Modals (Adjusted for Light Theme) */
+        /* Toasts & Modals */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
@@ -142,7 +142,6 @@
 
     <div class="main-wrapper">
         
-        <!-- NEW CLEAN HEADER (NO VIDEO) -->
         <div class="header-section">
             <h1>Welcome to<br><span class="brand-highlight">Kiyo AI</span></h1>
             <p>Your Intelligent Learning Guide</p>
@@ -232,7 +231,8 @@
             </div>
 
             <div class="policy-links">
-                <a href="#">Terms of Service</a> &bull; <a href="#">Privacy Policy</a>
+                <!-- LINKS ADDED HERE -->
+                <a href="terms.html">Terms of Service</a> &bull; <a href="privacy.html">Privacy Policy</a>
             </div>
         </div>
     </div>
@@ -270,7 +270,7 @@
 
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:15px; right:20px; color:#94a3b8; font-size:22px; cursor:pointer;">&times;</span>
+            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
             <h3 style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
             <p style="font-size:12px; color:#64748b; margin-bottom:20px;">Enter the 6-digit OTP sent to your email.</p>
             <div class="input-group">
@@ -283,10 +283,10 @@
 
     <div class="modal-overlay center-align" id="forgotModal">
         <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:15px; right:20px; color:#94a3b8; font-size:22px; cursor:pointer;">&times;</span>
+            <span class="close-modal" onclick="closeModal('forgotModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
             <h3 style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
             <div class="input-group" style="margin-top: 20px;"><i class="fa-solid fa-envelope field-icon"></i><input type="email" id="resetEmail" class="input-field" placeholder="Registered Email"></div>
-            <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
+            <div class="input-group"><i class="fa-solid fa-lock field-icon"></i><input type="password" id="newPassword" class="input-field" placeholder="New Password (Min 6)"><i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i></div>
             <button type="button" class="action-btn" onclick="executePasswordReset()">UPDATE PASSWORD</button>
         </div>
     </div>
@@ -538,3 +538,4 @@
     </script>
 </body>
 </html>
+
