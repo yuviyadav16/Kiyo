@@ -2,143 +2,319 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiyo AI - Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiyo AI - Educating Bharat</title>
+    <!-- Latest FontAwesome CDN for X (Twitter) Icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* PREMIUM LIGHT EDUCATIONAL THEME */
         :root {
-            /* PREMIUM LIGHT THEME (Matches your screenshot) */
-            --primary-dark: #1e1b4b; /* Deep Blue for "Welcome to" */
-            --kiyo-green: #10b981; /* Emerald Green for "Kiyo AI" */
-            --bg-gradient: linear-gradient(180deg, #f3f0ff 0%, #f8fafc 50%, #ffffff 100%);
+            --play-state: running; /* Controls pause/play of animations */
+            --primary: #6366f1; /* Indigo */
+            --primary-dark: #1e1b4b; /* Deep Dark Blue for Text */
+            --kiyo-green: #10b981; /* Emerald Green for KIYO AI */
+            --bg-gradient: linear-gradient(180deg, #ede9fe 0%, #f8fafc 40%, #ffffff 100%);
             --text-muted: #64748b;
         }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             background: var(--bg-gradient);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            overflow: hidden; /* STRICTLY 1 SCREEN - NO SCROLL */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            overflow: hidden; transition: opacity 0.8s ease-in-out;
             -webkit-tap-highlight-color: transparent;
         }
 
-        .main-wrapper {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%; height: 100%; text-align: center;
-            animation: fadeIn 1s ease-in-out;
+        /* Center Main UI */
+        .main-ui {
+            display: flex; flex-direction: column; align-items: center;
+            transform: translateY(-20px); /* Slightly raised to balance footer */
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: scale(0.95); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        /* BULB LOGO CONTAINER */
-        .logo-container {
-            width: 110px; height: 110px; margin-bottom: 25px;
-            border-radius: 50%; background: #ffffff;
-            box-shadow: 0px 10px 30px rgba(99, 102, 241, 0.2);
+        /* Logo & Progress Ring Container */
+        .kiyo-logo-container {
+            position: relative; 
+            width: 120px; height: 120px;
             display: flex; justify-content: center; align-items: center;
-            position: relative;
-        }
-        
-        /* Spinner animation around logo */
-        .logo-spinner {
-            position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px;
-            border-radius: 50%; border: 3px solid transparent;
-            border-top-color: var(--kiyo-green); border-right-color: var(--primary-dark);
-            animation: spin 2s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .logo-img { width: 75px; height: 75px; object-fit: contain; z-index: 2; }
-
-        /* TYPOGRAPHY */
-        .welcome-text {
-            font-size: 32px; font-weight: 900; color: var(--primary-dark); 
-            margin: 0; line-height: 1.1; letter-spacing: -0.5px;
-        }
-        .brand-text {
-            font-size: 38px; font-weight: 900; color: var(--kiyo-green); 
-            margin: 0; letter-spacing: -0.5px;
-        }
-        .sub-text {
-            font-size: 13px; color: var(--text-muted); font-weight: 600; 
-            margin-top: 10px; letter-spacing: 0.5px;
+            margin-bottom: 25px;
         }
 
-        /* FOOTER (Bottom Fixed) */
-        .app-footer {
-            position: absolute; bottom: 30px; width: 100%; text-align: center;
-            animation: slideUp 1s ease-in-out;
+        /* Soft Indigo Glow */
+        .kiyo-logo-container::before {
+            content: ''; position: absolute; width: 90px; height: 90px;
+            background: var(--primary); border-radius: 50%; filter: blur(30px); opacity: 0.3; z-index: 0;
         }
 
-        @keyframes slideUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+        /* Main Circular Logo */
+        .kiyo-logo {
+            width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+            position: relative; z-index: 1; background-color: #ffffff;
+            box-shadow: 0px 8px 20px rgba(99, 102, 241, 0.25); 
         }
 
-        .powered-by { font-size: 9px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; }
-        
-        .ticbull-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: #ffffff; border: 1px solid #e2e8f0; 
-            padding: 8px 20px; border-radius: 30px; 
+        /* SVG Circular Progress Ring */
+        .progress-ring-svg {
+            position: absolute; top: 0; left: 0;
+            width: 120px; height: 120px;
+            transform: rotate(-90deg); /* Starts animation from top (12 o'clock) */
+            z-index: 2; pointer-events: none;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: url(#ringGrad); /* Premium Gradient Stroke (Indigo to Green) */
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 352; /* Circumference of the circle */
+            stroke-dashoffset: 352; /* Hide initially */
+            animation: fillRing 10s linear forwards;
+            animation-play-state: var(--play-state);
+        }
+
+        @keyframes fillRing {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* Smooth Typewriter Effect for KIYO AI */
+        .welcome-heading {
+            color: var(--primary-dark); font-size: 28px; font-weight: 900; 
+            margin: 0 0 5px 0; letter-spacing: -0.5px; line-height: 1;
+        }
+
+        .kiyo-title-wrapper {
+            display: inline-flex; align-items: center; height: 45px;
+        }
+
+        .kiyo-title {
+            color: var(--kiyo-green); font-size: 38px; font-weight: 900; letter-spacing: 2px;
+            margin: 0; text-transform: uppercase;
+            overflow: hidden; white-space: nowrap;
+            border-right: 3px solid var(--primary-dark); /* Blinking Cursor */
+            padding-right: 8px;
+            /* Smooth width transition */
+            animation: typing 1.5s ease-out forwards, blinkCursor 0.8s step-end infinite;
+            max-width: 0;
+        }
+
+        .kiyo-subtitle {
+            color: var(--text-muted); font-size: 13px; letter-spacing: 1px; margin-top: 8px;
+            font-weight: 600; text-transform: uppercase; opacity: 0;
+            animation: fadeInSub 1s forwards 1.5s; /* Appears after typing finishes */
+        }
+
+        @keyframes typing {
+            from { max-width: 0; }
+            to { max-width: 250px; } /* Adjust if text cuts off */
+        }
+
+        @keyframes blinkCursor {
+            50% { border-color: transparent; }
+        }
+
+        @keyframes fadeInSub {
+            to { opacity: 1; }
+        }
+
+        /* Footer Branding & Socials */
+        .footer-wrapper {
+            position: absolute; bottom: 30px; display: flex; flex-direction: column; align-items: center;
+            opacity: 0; animation: fadeInBrand 1.5s forwards 2s; 
+        }
+
+        .powered-text {
+            color: var(--text-muted); font-size: 10px; letter-spacing: 2.5px; margin-bottom: 8px;
+            text-transform: uppercase; font-weight: 800;
+        }
+
+        .ticbull-container {
+            display: flex; align-items: center; gap: 10px; background: #ffffff;
+            padding: 8px 20px; border-radius: 30px; border: 1px solid #e2e8f0;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;
         }
-        .ticbull-badge img { width: 20px; height: 20px; object-fit: contain; } 
-        .ticbull-badge span { font-size: 14px; font-weight: 900; color: #0f172a; letter-spacing: 1px;}
 
-        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; }
-        .user-socials a { color: #94a3b8; font-size: 18px; text-decoration: none; transition: 0.3s; }
-        
-        .policy-links { font-size: 11px; color: #94a3b8; font-weight: 600; }
+        .ticbull-container:hover {
+            transform: scale(1.05); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
+        }
+
+        .ticbull-circle {
+            width: 22px; height: 22px; border-radius: 50%; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; background: #ffffff;
+        }
+
+        .ticbull-circle img { width: 100%; height: auto; object-fit: contain; }
+
+        .ticbull-name { color: #0f172a; font-size: 15px; font-weight: 900; letter-spacing: 1.5px; }
+
+        /* Social Icons Row */
+        .social-icons {
+            display: flex; gap: 18px; margin-top: 15px;
+        }
+
+        .social-icons a {
+            color: #94a3b8; font-size: 18px; text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary); transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Premium Popup Modal (Light Theme) */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(5px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 100;
+        }
+
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: #ffffff; padding: 30px; border-radius: 24px; width: 80%; max-width: 320px;
+            text-align: center; border: 1px solid #f1f5f9;
+            transform: translateY(20px) scale(0.95); transition: transform 0.4s ease;
+            box-shadow: 0px 20px 40px rgba(0,0,0,0.15); position: relative;
+        }
+
+        .modal-overlay.active .modal-box { transform: translateY(0) scale(1); }
+
+        .close-btn {
+            position: absolute; top: 15px; right: 20px; color: #94a3b8;
+            font-size: 24px; cursor: pointer; transition: color 0.3s;
+        }
+        .close-btn:hover { color: var(--danger); }
+
+        .modal-box h3 { color: #0f172a; margin-top: 0; font-size: 20px; margin-bottom: 20px; font-weight: 800;}
+
+        .support-link {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 14px 0; margin-bottom: 12px; border-radius: 14px;
+            text-decoration: none; font-weight: 700; font-size: 14px;
+            color: #fff; transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .support-link:active { transform: scale(0.98); }
+        .bg-telegram { background: #0088cc; }
+        .bg-telegram:hover { background: #0077b5; }
+        .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .bg-email { background: #ea4335; }
+        .bg-email:hover { background: #d33828; }
+
+        @keyframes fadeInBrand { to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <!-- Logo Section -->
-        <div class="logo-container">
-            <div class="logo-spinner"></div>
-            <!-- Update this src with your actual bulb logo file name if different -->
-            <img src="15026_2.png" alt="Kiyo Bulb" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3203/3203071.png'">
+    <div class="main-ui">
+        <div class="kiyo-logo-container">
+            <!-- Loading Ring SVG (Indigo to Emerald Green Gradient) -->
+            <svg class="progress-ring-svg">
+                <defs>
+                    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#6366f1" />
+                        <stop offset="100%" stop-color="#10b981" />
+                    </linearGradient>
+                </defs>
+                <circle class="progress-circle" cx="60" cy="60" r="56" />
+            </svg>
+            <!-- Logo -->
+            <img src="15026_2.png" alt="Kiyo AI Core" class="kiyo-logo">
         </div>
-
-        <!-- Typography Section exactly like your screenshot -->
-        <h1 class="welcome-text">Welcome to</h1>
-        <h1 class="brand-text">Kiyo AI</h1>
-        <p class="sub-text">Your Intelligent Learning Guide</p>
+        
+        <!-- Smooth Typing Title with Welcome text -->
+        <h2 class="welcome-heading">Welcome to</h2>
+        <div class="kiyo-title-wrapper">
+            <h1 class="kiyo-title">Kiyo AI</h1>
+        </div>
+        <div class="kiyo-subtitle">Your Intelligent Learning Guide</div>
     </div>
 
-    <!-- Footer Section -->
-    <div class="app-footer">
-        <div class="powered-by">POWERED BY</div>
-        <div class="ticbull-badge">
-            <img src="14882.jpg" alt="TicBull"> 
-            <span>TICBULL</span>
+    <!-- Footer Area -->
+    <div class="footer-wrapper">
+        <div class="powered-text">POWERED BY</div>
+        
+        <div class="ticbull-container" onclick="openSupport()">
+            <div class="ticbull-circle">
+                <img src="14882.jpg" alt="TicBull">
+            </div>
+            <div class="ticbull-name">TICBULL</div>
         </div>
 
-        <div class="user-socials">
-            <a href="https://youtube.com/@mryuviyadav"><i class="fa-brands fa-youtube"></i></a>
-            <a href="https://www.instagram.com/mryuvi_yadav"><i class="fa-brands fa-instagram"></i></a>
-            <a href="https://facebook.com/mryuviyadav"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="https://x.com/mryuviyadav"><i class="fa-brands fa-x-twitter"></i></a>
-            <a href="https://t.me/mryuviyadav"><i class="fa-brands fa-telegram"></i></a>
+        <!-- Personal Social Icons -->
+        <div class="social-icons">
+            <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
         </div>
+    </div>
 
-        <div class="policy-links">
-            Terms of Service &bull; Privacy Policy
+    <!-- Help & Support Popup (Light Theme) -->
+    <div class="modal-overlay" id="supportModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeSupport()">&times;</span>
+            <h3>Help & Support</h3>
+            <a href="https://t.me/ticbullteam" target="_blank" class="support-link bg-telegram">
+                <i class="fa-brands fa-telegram"></i> Join Telegram
+            </a>
+            <a href="https://www.instagram.com/ticbull" target="_blank" class="support-link bg-insta">
+                <i class="fa-brands fa-instagram"></i> Follow Instagram
+            </a>
+            <a href="mailto:ticbull.support@gmail.com" class="support-link bg-email">
+                <i class="fa-solid fa-envelope"></i> Email Support
+            </a>
         </div>
     </div>
 
     <script>
-        // Auto redirect to login page after 3.5 seconds
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 3500);
+        let remainingTime = 10000; // 10 seconds total
+        let timerId;
+        let lastStartTime;
+
+        // Function to handle the 10 sec redirect
+        function startTimer() {
+            document.documentElement.style.setProperty('--play-state', 'running');
+            lastStartTime = Date.now();
+            
+            timerId = setTimeout(() => {
+                triggerRedirect();
+            }, remainingTime);
+        }
+
+        // Pause timer when popup opens
+        function pauseTimer() {
+            document.documentElement.style.setProperty('--play-state', 'paused');
+            clearTimeout(timerId);
+            // Calculate how much time is left
+            remainingTime -= (Date.now() - lastStartTime);
+        }
+
+        function triggerRedirect() {
+            document.body.style.opacity = '0'; 
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 800);
+        }
+
+        // Run timer on load
+        document.addEventListener("DOMContentLoaded", () => {
+            startTimer();
+        });
+
+        // Open Popup & Pause
+        function openSupport() {
+            document.getElementById('supportModal').classList.add('active');
+            pauseTimer(); 
+        }
+
+        // Close Popup & Resume
+        function closeSupport() {
+            document.getElementById('supportModal').classList.remove('active');
+            startTimer(); 
+        }
     </script>
 </body>
 </html>
