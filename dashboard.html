@@ -4,499 +4,354 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kiyo AI - Student Dashboard</title>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* LIGHT & DARK THEME VARIABLES */
         :root {
-            /* Dynamic Theme Variables */
-            --primary: #7c3aed;
-            --primary-light: rgba(124, 58, 237, 0.15);
-            --bg-color: #0b1120;
-            --surface-color: #1e293b;
-            --card-bg: rgba(15, 23, 42, 0.85);
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.08);
-            --danger: #ef4444;
-            --success: #22c55e;
-        }
-
-        /* Light Mode Variables */
-        body.light-mode {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
             --bg-color: #f8fafc;
             --surface-color: #ffffff;
-            --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border-color: rgba(0, 0, 0, 0.1);
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
+        }
+
+        .dark-theme {
+            --bg-color: #0B101E;
+            --surface-color: #121826;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255,255,255,0.1);
         }
 
         body, html {
-            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: var(--bg-color); color: var(--text-main);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow-x: hidden; transition: background-color 0.3s, color 0.3s;
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden; transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Toast Notifications */
-        .toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: var(--surface-color); backdrop-filter: blur(10px); color: var(--text-main); padding: 12px 20px; border-radius: 50px; box-shadow: 0px 10px 30px rgba(0,0,0,0.3); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-color); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
-        .toast.hide { animation: slideUp 0.4s forwards; }
-        .toast i { font-size: 18px; }
-        .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
-        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
-
-        /* Top App Bar */
-        .app-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; background: var(--surface-color);
-            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        /* TOP APP BAR */
+        .top-navbar {
+            background: var(--surface-color); padding: 15px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50;
         }
-        .menu-btn { background: transparent; border: none; color: var(--text-main); font-size: 22px; cursor: pointer; transition: 0.2s; }
-        .menu-btn:hover { color: var(--primary); }
-        .app-title { font-size: 18px; font-weight: 800; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
-        .app-title img { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--primary); }
-        .top-dp { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); cursor: pointer; }
+        .dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
+        .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
-        /* Sidebar Drawer */
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .sidebar-overlay.active { opacity: 1; pointer-events: all; }
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); z-index: 101; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 25px rgba(0,0,0,0.5); display: flex; flex-direction: column; overflow-y: auto; }
+        /* MAIN CONTENT AREA */
+        .main-content { padding: 20px; padding-bottom: 80px; }
+
+        /* 16:9 PROFILE CARD */
+        .profile-card {
+            width: 100%; aspect-ratio: 16 / 9;
+            background: var(--card-gradient); border-radius: 20px;
+            padding: 20px; box-sizing: border-box; color: #fff;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative;
+        }
+        
+        .profile-top { display: flex; align-items: center; gap: 15px; }
+        .profile-pic-container {
+            width: 65px; height: 65px; border-radius: 50%; background: #fff;
+            border: 3px solid rgba(255,255,255,0.5); position: relative;
+        }
+        .profile-pic-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .camera-btn {
+            position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff;
+            width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 11px; cursor: pointer; border: 2px solid #fff;
+        }
+        #fileInput { display: none; }
+
+        .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; }
+        .student-info p { margin: 2px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
+
+        .profile-bottom { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); }
+        .profile-bottom p { margin: 0; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
+        .profile-bottom span { color: #10b981; }
+
+        /* SIDEBAR MENU */
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+            transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column;
+        }
+        .dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
         .sidebar.active { left: 0; }
-        
-        /* Sidebar Profile Edit Section */
-        .sidebar-profile { padding: 30px 20px 20px 20px; background: linear-gradient(135deg, var(--primary-light), transparent); border-bottom: 1px solid var(--border-color); text-align: center; position: relative; }
-        .close-sidebar { position: absolute; top: 15px; right: 15px; font-size: 20px; color: var(--text-muted); cursor: pointer; }
-        .dp-wrapper { position: relative; width: 90px; height: 90px; margin: 0 auto 15px auto; }
-        .sidebar-dp { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); box-shadow: 0 0 15px var(--primary-light); background: #fff; }
-        .edit-dp-btn { position: absolute; bottom: 0; right: 0; background: var(--primary); color: #fff; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .profile-name { font-size: 18px; font-weight: 700; margin: 0 0 5px 0; color: var(--text-main); display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .profile-dob { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .edit-profile-icon { color: var(--primary); cursor: pointer; font-size: 14px; }
-
-        /* Sidebar Menu Links */
-        .sidebar-menu { padding: 15px 0; flex: 1; }
-        .menu-item { padding: 14px 20px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 500; transition: 0.2s; cursor: pointer; border-left: 3px solid transparent; }
-        .menu-item:hover { background: var(--primary-light); border-left-color: var(--primary); }
-        .menu-item i { font-size: 18px; width: 22px; text-align: center; color: var(--primary); }
-        .menu-divider { height: 1px; background: var(--border-color); margin: 10px 20px; }
-
-        /* Theme Toggle in Sidebar */
-        .theme-toggle-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        
-        /* Sidebar Footer (Socials) */
-        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
-        .social-row { display: flex; justify-content: center; gap: 15px; margin-top: 10px; }
-        .social-row a { color: var(--text-muted); font-size: 18px; transition: 0.3s; }
-        .social-row a:hover { color: var(--primary); transform: translateY(-2px); }
-
-        /* Main Dashboard Content */
-        .dashboard-container { padding: 20px; max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-        
-        /* 16:9 Banner Carousel */
-        .banner-container { width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
-        .banner-scroll { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
-        .banner-scroll::-webkit-scrollbar { display: none; } /* Hide scrollbar */
-        .banner-slide { min-width: 100%; height: 100%; scroll-snap-align: start; display: flex; justify-content: center; align-items: center; background-size: cover; background-position: center; position: relative; }
-        
-        /* Dummy Banner Gradients (Replace with real images later) */
-        .banner-1 { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
-        .banner-2 { background: linear-gradient(135deg, #0ea5e9, #2563eb); }
-        .banner-3 { background: linear-gradient(135deg, #f59e0b, #ea580c); }
-        
-        .banner-content { text-align: center; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); padding: 20px; }
-        .banner-content h2 { margin: 0 0 10px 0; font-size: 22px; font-weight: 800; }
-        .banner-content p { margin: 0; font-size: 13px; opacity: 0.9; }
-
-        .banner-indicators { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
-        .indicator { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: 0.3s; }
-        .indicator.active { background: #fff; width: 20px; border-radius: 10px; }
-
-        /* Ask Teacher Button */
-        .ask-teacher-btn {
-            width: 100%; padding: 20px; background: linear-gradient(135deg, var(--primary), #4f46e5);
-            color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 800;
-            cursor: pointer; letter-spacing: 1px; box-shadow: 0px 8px 25px var(--primary-light);
-            display: flex; justify-content: center; align-items: center; gap: 12px; text-decoration: none;
-            transition: transform 0.2s;
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: 0.4s;
         }
-        .ask-teacher-btn:active { transform: scale(0.97); }
-        .ask-teacher-btn i { font-size: 24px; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .sidebar-overlay.active { opacity: 1; pointer-events: all; }
 
-        /* Modals & Bottom Sheets */
-        .modal-overlay-inner { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
-        .modal-overlay-inner.active { opacity: 1; pointer-events: all; }
-        .bottom-sheet { background: var(--surface-color); width: 100%; max-width: 500px; border-radius: 25px 25px 0 0; border-top: 1px solid var(--border-color); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; max-height: 85vh; overflow-y: auto; }
-        .modal-overlay-inner.active .bottom-sheet { transform: translateY(0); }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); }
-        .sheet-header h3 { margin: 0; font-size: 16px; color: var(--text-main); font-weight: 700; }
-        
-        .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; color: var(--text-main); }
-        .setting-item:hover { background: var(--primary-light); }
-        .setting-left { display: flex; align-items: center; gap: 15px; font-size: 14px; font-weight: 500; }
-        .setting-left i { font-size: 18px; color: var(--primary); width: 20px; text-align: center; }
-        .danger-item { color: var(--danger); } .danger-item .setting-left i { color: var(--danger); }
-        
-        /* Theme Colors */
-        .color-picker { display: flex; gap: 12px; }
-        .color-circle { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-circle.active { border-color: var(--text-main); transform: scale(1.1); box-shadow: 0 0 10px currentColor; }
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header h3 { margin: 0; font-size: 20px; color: var(--primary); font-weight: 900;}
+        .close-sidebar { font-size: 24px; color: var(--text-muted); cursor: pointer; }
 
-        /* Center Modals */
-        .center-modal { background: var(--surface-color); padding: 25px; border-radius: 20px; width: 85%; max-width: 320px; border: 1px solid var(--border-color); text-align: center; transform: scale(0.9); transition: 0.3s; }
-        .modal-overlay-inner.center-align { align-items: center; }
-        .modal-overlay-inner.active .center-modal { transform: scale(1); }
-        
-        /* Inputs inside modals */
-        .input-group { position: relative; width: 100%; margin-bottom: 15px; margin-top: 15px;}
-        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; }
-        .input-field { width: 100%; padding: 12px 15px 12px 42px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; }
-        .input-field:focus { border-color: var(--primary); }
-        .action-btn { width: 100%; padding: 14px 0; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; margin-top: 5px; }
+        .menu-items { padding: 15px 0; flex: 1; overflow-y: auto; }
+        .menu-item {
+            padding: 15px 25px; display: flex; align-items: center; gap: 15px;
+            color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s;
+        }
+        .menu-item:hover { background: var(--border-color); color: var(--primary); }
+        .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
+        .menu-item:hover i { color: var(--primary); }
 
+        /* Theme Toggle */
+        .theme-toggle-box { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; border-bottom: 1px solid var(--border-color); }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
+        .social-row { display: flex; justify-content: center; gap: 18px; margin-bottom: 10px; }
+        .social-row a { color: var(--text-muted); font-size: 18px; transition: 0.2s; }
+        .social-row a:hover { color: var(--primary); }
+        .powered-by { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; }
+
+        /* SETTINGS & MODALS */
+        .modal-sheet {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color);
+            z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column;
+        }
+        .modal-sheet.active { transform: translateX(0); }
+        
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
+        .modal-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
+        .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
+
+        .settings-content { padding: 20px; }
+        .danger-zone { margin-top: 30px; border: 1px solid var(--danger); border-radius: 16px; padding: 20px; background: var(--danger-bg); }
+        .danger-title { color: var(--danger); font-weight: 800; margin-bottom: 10px; font-size: 16px;}
+        .danger-text { font-size: 13px; color: var(--text-main); margin-bottom: 15px; opacity: 0.8; }
+        
+        .btn-logout { width: 100%; padding: 14px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
+        .btn-delete { width: 100%; padding: 14px; background: var(--danger); border: none; color: #fff; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; }
+
+        /* DELETE WARNING MODAL */
+        .delete-warning-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+            z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .delete-warning-modal.active { opacity: 1; pointer-events: all; }
+        .warning-box { background: var(--surface-color); padding: 30px 20px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; border: 1px solid var(--danger);}
+        .warning-box i { font-size: 40px; color: var(--danger); margin-bottom: 15px; }
+        .warning-box h3 { margin: 0 0 10px 0; color: var(--text-main); }
+        .warning-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+        .btn-row { display: flex; gap: 10px; }
+        .btn-cancel { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--border-color); color: var(--text-main); font-weight: 700; cursor: pointer; }
+        .btn-confirm-delete { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--danger); color: #fff; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="toast-container" id="toastBox"></div>
+    <!-- TOP NAVBAR -->
+    <div class="top-navbar">
+        <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
+        <h1 class="nav-title">Kiyo AI</h1>
+        <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted);"></i>
+    </div>
 
-    <!-- Top App Bar -->
-    <header class="app-bar">
-        <button class="menu-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
-        <div class="app-title"><img src="15026_2.png" alt="Logo"> Kiyo AI</div>
-        <img src="https://ui-avatars.com/api/?name=User&background=7c3aed&color=fff" id="topDp" class="top-dp" alt="Profile" onclick="toggleSidebar()">
-    </header>
-
-    <!-- Sidebar / Hamburger Menu -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-profile">
-            <i class="fa-solid fa-xmark close-sidebar" onclick="toggleSidebar()"></i>
-            <div class="dp-wrapper">
-                <img src="https://ui-avatars.com/api/?name=User&background=7c3aed&color=fff" id="sidebarDp" class="sidebar-dp" alt="Profile">
-                <button class="edit-dp-btn" onclick="document.getElementById('dpUpload').click()"><i class="fa-solid fa-camera"></i></button>
-                <input type="file" id="dpUpload" accept="image/*" style="display: none;" onchange="previewDP(event)">
-            </div>
-            <h3 class="profile-name"><span id="sidebarName">Student User</span> <i class="fa-solid fa-pen edit-profile-icon" onclick="openModal('editProfileModal')"></i></h3>
-            <div class="profile-dob"><i class="fa-solid fa-cake-candles"></i> <span id="sidebarDob">15 Aug 2026</span></div>
-        </div>
-
-        <div class="sidebar-menu">
-            <a class="menu-item" href="classroom.html"><i class="fa-solid fa-chalkboard-user"></i> Enter Classroom</a>
-            <div class="menu-divider"></div>
-            <a class="menu-item" href="https://ticbull.com" target="_blank"><i class="fa-solid fa-globe"></i> TicBull Website</a>
-            <a class="menu-item" href="#"><i class="fa-solid fa-circle-info"></i> About Kiyo AI</a>
-            <a class="menu-item" href="mailto:ticbull.support@gmail.com"><i class="fa-solid fa-headset"></i> Contact Support</a>
-            
-            <div class="menu-divider"></div>
-            <!-- Dark / Light Mode Toggle -->
-            <div class="menu-item" onclick="toggleMode()">
-                <div class="theme-toggle-container">
-                    <div style="display:flex; align-items:center; gap:15px;"><i class="fa-solid fa-moon" id="modeIcon"></i> <span id="modeText">Dark Mode</span></div>
-                    <i class="fa-solid fa-toggle-off" id="modeToggle" style="font-size:24px; color:var(--text-muted)"></i>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- 16:9 PROFILE CARD -->
+        <div class="profile-card">
+            <div class="profile-top">
+                <div class="profile-pic-container">
+                    <img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                    <label for="fileInput" class="camera-btn"><i class="fa-solid fa-camera"></i></label>
+                    <input type="file" id="fileInput" accept="image/*" onchange="updateProfilePic(event)">
+                </div>
+                <div class="student-info">
+                    <h2 id="studentName">Student Name</h2>
+                    <p id="studentLocation">City, State</p>
                 </div>
             </div>
-            
-            <div class="menu-item" onclick="openSheet('settingsSheet')"><i class="fa-solid fa-gear"></i> App Settings</div>
+            <div class="profile-bottom">
+                <p>Goal: <span id="studentGoal">Target Exam</span></p>
+                <p style="margin-top:5px; font-size: 11px; opacity:0.8; font-weight:500;">Email: <span style="color:#fff;" id="studentEmail">email@example.com</span></p>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 30px; font-size: 18px; color: var(--text-main);">Quick Actions</h3>
+        <!-- You can add App features grid here later (Chat, Syllabus, etc) -->
+        <div style="padding: 20px; background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); text-align: center; color: var(--text-muted); font-size: 14px;">
+            <i class="fa-solid fa-robot" style="font-size: 30px; color: var(--primary); margin-bottom: 10px; display: block;"></i>
+            Start chatting with Kiyo AI
+        </div>
+
+    </div>
+
+    <!-- SIDEBAR OVERLAY & MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <i class="fa-solid fa-xmark close-sidebar" onclick="toggleSidebar()"></i>
+        </div>
+
+        <div class="theme-toggle-box">
+            <span>Dark Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle" onchange="switchTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="menu-items">
+            <a href="#" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
+            <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
+            <a href="#" class="menu-item" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
+            <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
         </div>
 
         <div class="sidebar-footer">
-            <span style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px;">TicBull & Mr. Yuvi Yadav</span>
             <div class="social-row">
-                <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+                <a href="https://youtube.com/@mryuviyadav"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.instagram.com/mryuvi_yadav"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/mryuviyadav"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://facebook.com/mryuviyadav"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://t.me/mryuviyadav"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+            <div class="powered-by">POWERED BY TICBULL</div>
+        </div>
+    </div>
+
+    <!-- SETTINGS PAGE (2ND SCREEN) -->
+    <div class="modal-sheet" id="settingsPage">
+        <div class="modal-header">
+            <i class="fa-solid fa-arrow-left" onclick="closeSettings()"></i>
+            <h2>App Settings</h2>
+        </div>
+        <div class="settings-content">
+            <button class="btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+
+            <div class="danger-zone">
+                <div class="danger-title"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+                <div class="danger-text">Permanently deleting your account will erase all your progress, saved notes, and profile data. This action cannot be undone.</div>
+                <button class="btn-delete" onclick="openDeleteWarning()">Delete Account</button>
             </div>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <main class="dashboard-container">
-        
-        <!-- 16:9 Batch Banner Carousel -->
-        <div class="banner-container" id="bannerContainer">
-            <div class="banner-scroll" id="bannerScroll">
-                <!-- Banner 1 -->
-                <div class="banner-slide banner-1">
-                    <div class="banner-content">
-                        <h2>Arjuna NEET 2026</h2>
-                        <p>Class 11th Complete Batch. Enroll Now!</p>
-                    </div>
-                </div>
-                <!-- Banner 2 -->
-                <div class="banner-slide banner-2">
-                    <div class="banner-content">
-                        <h2>Lakshya JEE 2026</h2>
-                        <p>Class 12th Masterclass. Start your journey.</p>
-                    </div>
-                </div>
-                <!-- Banner 3 -->
-                <div class="banner-slide banner-3">
-                    <div class="banner-content">
-                        <h2>Yakeen Dropper</h2>
-                        <p>Ultimate revision & test series for selection.</p>
-                    </div>
-                </div>
+    <!-- DELETE ACCOUNT WARNING & OTP MODAL -->
+    <div class="delete-warning-modal" id="deleteModal">
+        <div class="warning-box">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <h3>Are you sure?</h3>
+            <p>An OTP will be sent to your registered email to verify account deletion.</p>
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeDeleteWarning()">Cancel</button>
+                <button class="btn-confirm-delete" onclick="sendDeleteOTP()">Send OTP</button>
             </div>
-            <div class="banner-indicators">
-                <div class="indicator active"></div><div class="indicator"></div><div class="indicator"></div>
-            </div>
-        </div>
-
-        <!-- Ask Teacher Button -->
-        <a href="classroom.html" class="ask-teacher-btn">
-            <i class="fa-solid fa-robot"></i> ASK TEACHER (AI)
-        </a>
-
-    </main>
-
-    <!-- ================= MODALS & SHEETS ================= -->
-
-    <!-- Settings Bottom Sheet -->
-    <div class="modal-overlay-inner" id="settingsSheet">
-        <div class="bottom-sheet">
-            <div class="sheet-header">
-                <h3><i class="fa-solid fa-gear" style="color:var(--primary)"></i> Professional Settings</h3>
-                <i class="fa-solid fa-xmark close-sheet" onclick="closeSheet('settingsSheet')"></i>
-            </div>
-            
-            <div class="setting-item">
-                <div class="setting-left"><i class="fa-solid fa-palette"></i> App Theme Color</div>
-                <div class="color-picker">
-                    <div class="color-circle active" style="background:#7c3aed;" onclick="changeTheme('#7c3aed', this)"></div>
-                    <div class="color-circle" style="background:#2563eb;" onclick="changeTheme('#2563eb', this)"></div>
-                    <div class="color-circle" style="background:#16a34a;" onclick="changeTheme('#16a34a', this)"></div>
-                    <div class="color-circle" style="background:#dc2626;" onclick="changeTheme('#dc2626', this)"></div>
-                </div>
-            </div>
-            <div class="setting-item" onclick="openModal('emailChangeModal')">
-                <div class="setting-left"><i class="fa-solid fa-envelope"></i> Change Email ID</div>
-                <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i>
-            </div>
-            <div class="setting-item" onclick="openModal('passwordChangeModal')">
-                <div class="setting-left"><i class="fa-solid fa-lock"></i> Change Password</div>
-                <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i>
-            </div>
-            <div class="setting-item" onclick="logOutUser()">
-                <div class="setting-left"><i class="fa-solid fa-right-from-bracket"></i> Log Out</div>
-            </div>
-            
-            <!-- Permanent Delete (Danger Zone) -->
-            <div style="margin-top:15px; border-top:1px dashed rgba(239,68,68,0.3);">
-                <div class="setting-item danger-item" onclick="openModal('deleteAccountModal')">
-                    <div class="setting-left"><i class="fa-solid fa-user-xmark"></i> Permanent Delete Account</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Profile Modal -->
-    <div class="modal-overlay-inner center-align" id="editProfileModal">
-        <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('editProfileModal')" style="position:absolute; top:15px; right:15px;"><i class="fa-solid fa-xmark"></i></span>
-            <h3 style="margin-top:0; font-size:18px;">Edit Profile</h3>
-            <div class="input-group">
-                <i class="fa-solid fa-user field-icon"></i>
-                <input type="text" id="editName" class="input-field" placeholder="Full Name">
-            </div>
-            <div class="input-group">
-                <i class="fa-solid fa-calendar field-icon"></i>
-                <input type="date" id="editDob" class="input-field">
-            </div>
-            <button class="action-btn" onclick="saveProfile()">SAVE CHANGES</button>
-        </div>
-    </div>
-
-    <!-- Delete Account Warning Modal -->
-    <div class="modal-overlay-inner center-align" id="deleteAccountModal">
-        <div class="center-modal" style="border-color: var(--danger);">
-            <i class="fa-solid fa-triangle-exclamation" style="font-size:40px; color:var(--danger); margin-bottom:15px;"></i>
-            <h3 style="margin:0 0 10px 0; font-size:18px; color:var(--danger);">Permanent Data Loss!</h3>
-            <p style="font-size:12px; color:var(--text-muted); margin-bottom:20px; line-height:1.5;">Are you sure you want to permanently delete your Kiyo AI account? This action cannot be undone. An OTP will be sent to your email to confirm.</p>
-            <div style="display:flex; gap:10px;">
-                <button class="action-btn" style="background:rgba(255,255,255,0.1); color:var(--text-main);" onclick="closeModal('deleteAccountModal')">Cancel</button>
-                <button class="action-btn" style="background:var(--danger);" onclick="triggerDeleteOTP()">Send OTP</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- OTP Modal for Security Actions -->
-    <div class="modal-overlay-inner center-align" id="securityOtpModal">
-        <div class="center-modal">
-            <span class="close-modal" onclick="closeModal('securityOtpModal')" style="position:absolute; top:15px; right:15px;"><i class="fa-solid fa-xmark"></i></span>
-            <h3 style="margin-top:0; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary)"></i> Verify Action</h3>
-            <p style="font-size:12px; color:var(--text-muted);">Enter the 6-digit OTP sent to your email to confirm this security change.</p>
-            <div class="input-group">
-                <i class="fa-solid fa-key field-icon"></i>
-                <input type="text" id="secOtpInput" class="input-field" placeholder="6-Digit OTP" maxlength="6" style="padding-left:42px; text-align:center; letter-spacing:5px;">
-            </div>
-            <button type="button" class="action-btn" onclick="verifySecurityAction()">CONFIRM ACTION</button>
         </div>
     </div>
 
     <script>
-        // Data Loading
+        // Load User Data from Local Storage (Saved during signup)
         window.onload = function() {
-            // Load from LocalStorage
-            let savedName = localStorage.getItem('kiyo_user_name') || "Student User";
-            let savedDob = localStorage.getItem('kiyo_user_dob') || "2026-08-15"; // Default from context
+            const name = localStorage.getItem('kiyo_user_name') || "Student";
+            const city = localStorage.getItem('kiyo_user_city') || "City";
+            const state = localStorage.getItem('kiyo_user_state') || "State";
+            const email = localStorage.getItem('kiyo_user_email') || "student@example.com";
+            const path = localStorage.getItem('kiyo_user_path');
             
-            document.getElementById('sidebarName').innerText = savedName;
-            document.getElementById('editName').value = savedName;
-            document.getElementById('sidebarDob').innerText = savedDob;
-            document.getElementById('editDob').value = savedDob;
-            
-            // Set DP Initials if no image
-            let dpUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(savedName)}&background=7c3aed&color=fff`;
-            document.getElementById('topDp').src = dpUrl;
-            document.getElementById('sidebarDp').src = dpUrl;
-            
-            // Start Auto Carousel
-            startCarousel();
-        }
+            let goal = "Learning Guide";
+            if(path === 'board') goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_board');
+            else if(path === 'exam') goal = localStorage.getItem('kiyo_exam');
+            else if(path === 'skill') goal = localStorage.getItem('kiyo_skill');
 
-        // Professional Toast
-        function showToast(message, type = 'info') {
-            const toastBox = document.getElementById('toastBox');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            let icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-circle-xmark' : 'fa-circle-info');
-            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
-            toastBox.appendChild(toast);
-            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
-        }
+            document.getElementById('studentName').innerText = name;
+            document.getElementById('studentLocation').innerText = city + ", " + state;
+            document.getElementById('studentEmail').innerText = email;
+            document.getElementById('studentGoal').innerText = goal || "Explorer";
 
-        // Sidebar Logic
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
+            // Load Saved Profile Picture
+            const savedPic = localStorage.getItem('kiyo_profile_pic');
+            if(savedPic) { document.getElementById('profileImg').src = savedPic; }
 
-        // Dark / Light Mode Logic
-        let isLightMode = false;
-        function toggleMode() {
-            isLightMode = !isLightMode;
-            document.body.classList.toggle('light-mode', isLightMode);
-            const icon = document.getElementById('modeIcon');
-            const text = document.getElementById('modeText');
-            const toggle = document.getElementById('modeToggle');
-            
-            if(isLightMode) {
-                icon.className = 'fa-solid fa-sun'; text.innerText = 'Light Mode';
-                toggle.className = 'fa-solid fa-toggle-on'; toggle.style.color = 'var(--primary)';
-            } else {
-                icon.className = 'fa-solid fa-moon'; text.innerText = 'Dark Mode';
-                toggle.className = 'fa-solid fa-toggle-off'; toggle.style.color = 'var(--text-muted)';
+            // Load Theme Preference
+            if(localStorage.getItem('kiyo_theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').checked = true;
             }
-        }
+        };
 
-        // Theme Colors
-        function changeTheme(color, element) {
-            document.documentElement.style.setProperty('--primary', color);
-            document.documentElement.style.setProperty('--primary-light', color + '26'); // Add transparency hex
-            document.querySelectorAll('.color-circle').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            showToast('Theme color updated!', 'success');
-        }
-
-        // Modals & Sheets Logic
-        function openSheet(id) { toggleSidebar(); document.getElementById(id).classList.add('active'); }
-        function closeSheet(id) { document.getElementById(id).classList.remove('active'); }
-        function openModal(id) { 
-            // Close setting sheet if open
-            document.querySelectorAll('.modal-overlay-inner').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); 
-        }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        // Profile Edit
-        function saveProfile() {
-            let n = document.getElementById('editName').value.trim();
-            let d = document.getElementById('editDob').value;
-            if(!n || !d) return showToast('Fill all details', 'error');
-            
-            localStorage.setItem('kiyo_user_name', n);
-            localStorage.setItem('kiyo_user_dob', d);
-            document.getElementById('sidebarName').innerText = n;
-            document.getElementById('sidebarDob').innerText = d;
-            
-            closeModal('editProfileModal');
-            showToast('Profile Updated Successfully', 'success');
-        }
-
-        // DP Change (Gallery)
-        function previewDP(event) {
+        // Profile Picture Upload (Saved locally)
+        function updateProfilePic(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('sidebarDp').src = e.target.result;
-                    document.getElementById('topDp').src = e.target.result;
-                    showToast('Profile picture updated!', 'success');
-                }
+                    const imgData = e.target.result;
+                    document.getElementById('profileImg').src = imgData;
+                    localStorage.setItem('kiyo_profile_pic', imgData); // Permanent Save
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        // Security Actions (Delete Account)
-        let pendingAction = '';
-        function triggerDeleteOTP() {
-            closeModal('deleteAccountModal');
-            pendingAction = 'delete';
-            // Simulate sending email logic here
-            showToast('Warning email and OTP sent securely!', 'error');
-            setTimeout(() => { openModal('securityOtpModal'); }, 1000);
+        // Sidebar Controls
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
         }
 
-        function verifySecurityAction() {
-            const otp = document.getElementById('secOtpInput').value;
-            if(otp.length !== 6) return showToast('Enter 6-digit OTP', 'error');
-            
-            closeModal('securityOtpModal');
-            if(pendingAction === 'delete') {
-                localStorage.clear();
-                showToast('Account Deleted Permanently.', 'success');
-                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+        // Theme Toggle (Dark/Light)
+        function switchTheme() {
+            const isDark = document.getElementById('themeToggle').checked;
+            if(isDark) {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('kiyo_theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('kiyo_theme', 'light');
             }
         }
 
-        function logOutUser() {
-            localStorage.removeItem('kiyo_user_email');
-            showToast('Logging out safely...', 'info');
-            setTimeout(() => { window.location.href = 'login.html'; }, 1000);
+        // Settings Page Controls
+        function openSettings() {
+            toggleSidebar(); // Close sidebar first
+            document.getElementById('settingsPage').classList.add('active');
+        }
+        function closeSettings() {
+            document.getElementById('settingsPage').classList.remove('active');
         }
 
-        // 16:9 Banner Carousel Auto-Scroll Logic
-        function startCarousel() {
-            const scrollBox = document.getElementById('bannerScroll');
-            const indicators = document.querySelectorAll('.indicator');
-            let currentIndex = 0;
-            const totalSlides = 3;
+        // Logout
+        function logout() {
+            localStorage.removeItem('kiyo_user_email');
+            window.location.href = "login.html";
+        }
 
-            // Auto slide every 3.5 seconds
-            setInterval(() => {
-                currentIndex = (currentIndex + 1) % totalSlides;
-                let scrollAmount = currentIndex * scrollBox.clientWidth;
-                scrollBox.scrollTo({ left: scrollAmount, behavior: 'smooth' });
-                
-                // Update indicators
-                indicators.forEach((ind, i) => {
-                    ind.classList.toggle('active', i === currentIndex);
-                });
-            }, 3500);
-
-            // Update on manual swipe
-            scrollBox.addEventListener('scroll', () => {
-                let index = Math.round(scrollBox.scrollLeft / scrollBox.clientWidth);
-                indicators.forEach((ind, i) => ind.classList.toggle('active', i === index));
-                currentIndex = index;
-            });
+        // Delete Account Modals
+        function openDeleteWarning() {
+            document.getElementById('deleteModal').classList.add('active');
+        }
+        function closeDeleteWarning() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+        function sendDeleteOTP() {
+            alert("Verification OTP sent to your registered Email ID.");
+            // Here you will link your Python Backend API to send OTP for deletion
+            closeDeleteWarning();
         }
     </script>
 </body>
