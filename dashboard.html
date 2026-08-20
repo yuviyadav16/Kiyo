@@ -3,96 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kiyo AI Dashboard</title>
+    <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root { --primary: #6366f1; --accent-green: #10b981; --bg: #f8fafc; --text: #0f172a; }
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+        /* LIGHT & DARK THEME VARIABLES */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
+        }
+
+        .dark-theme {
+            --bg-color: #0B101E;
+            --surface-color: #121826;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255,255,255,0.1);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden; transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* TOP APP BAR */
+        .top-navbar {
+            background: var(--surface-color); padding: 15px 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50;
+        }
+        .dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
+        .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
+
+        /* MAIN CONTENT AREA */
+        .main-content { padding: 20px; padding-bottom: 80px; }
+
+        /* 16:9 PROFILE CARD */
+        .profile-card {
+            width: 100%; aspect-ratio: 16 / 9;
+            background: var(--card-gradient); border-radius: 20px;
+            padding: 20px; box-sizing: border-box; color: #fff;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative;
+        }
         
-        /* Navbar */
-        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .profile-top { display: flex; align-items: center; gap: 15px; }
+        .profile-pic-container {
+            width: 65px; height: 65px; border-radius: 50%; background: #fff;
+            border: 3px solid rgba(255,255,255,0.5); position: relative;
+        }
+        .profile-pic-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .camera-btn {
+            position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff;
+            width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 11px; cursor: pointer; border: 2px solid #fff;
+        }
+        #fileInput { display: none; }
+
+        .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; }
+        .student-info p { margin: 2px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
+
+        .profile-bottom { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); }
+        .profile-bottom p { margin: 0; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
+        .profile-bottom span { color: #10b981; }
+
+        /* DASHBOARD GRID & QUICK ACTIONS */
+        .quick-action-header { margin-top: 25px; font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 15px;}
         
-        /* 16:9 Profile Card */
-        .profile-card { background: linear-gradient(135deg, #6366f1, #4f46e5); margin: 20px; padding: 25px; border-radius: 20px; color: #fff; position: relative; }
-        .profile-card h2 { margin: 0; font-size: 22px; }
-        .profile-card p { opacity: 0.8; margin: 5px 0; font-size: 14px; }
+        .chat-btn-container {
+            background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color);
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; gap: 15px;
+        }
+        .chat-btn-container:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.1); border-color: var(--primary);}
+        .chat-icon-bg { background: rgba(99, 102, 241, 0.1); width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; }
+        .chat-btn-container i { font-size: 24px; color: var(--primary); }
+        .chat-btn-text { font-size: 16px; font-weight: 700; color: var(--text-main); }
 
-        /* Dashboard Grid */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
-        .menu-box { background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
-        .menu-box:active { transform: scale(0.95); }
-        .menu-box i { font-size: 28px; color: var(--primary); margin-bottom: 10px; }
+        .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .grid-item { 
+            background: var(--surface-color); padding: 15px; border-radius: 14px; text-align: center; 
+            border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .grid-item:hover { transform: scale(0.98); border-color: var(--primary); }
+        .grid-item i { font-size: 22px; color: var(--text-muted); margin-bottom: 8px; transition: 0.2s;}
+        .grid-item:hover i { color: var(--primary); }
+        .grid-item span { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); }
 
-        /* Side Menu */
-        .side-menu { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: #fff; z-index: 1000; transition: 0.3s; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
-        .side-menu.active { left: 0; }
-        .menu-item { padding: 20px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        /* SIDEBAR MENU */
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+            transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column;
+        }
+        .dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        .sidebar.active { left: 0; }
+        .sidebar-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: 0.4s;
+        }
+        .sidebar-overlay.active { opacity: 1; pointer-events: all; }
 
-        /* Modals */
-        .popup { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; z-index: 2000; }
-        .popup.active { display: flex; }
-        .box { background: #fff; padding: 30px; border-radius: 20px; width: 80%; text-align: center; }
+        .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar-header h3 { margin: 0; font-size: 20px; color: var(--primary); font-weight: 900;}
+        .close-sidebar { font-size: 24px; color: var(--text-muted); cursor: pointer; }
+
+        .menu-items { padding: 15px 0; flex: 1; overflow-y: auto; }
+        .menu-item {
+            padding: 15px 25px; display: flex; align-items: center; gap: 15px;
+            color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s;
+        }
+        .menu-item:hover { background: var(--border-color); color: var(--primary); }
+        .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
+        .menu-item:hover i { color: var(--primary); }
+
+        /* Theme Toggle */
+        .theme-toggle-box { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; border-bottom: 1px solid var(--border-color); }
+        .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(22px); }
+
+        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
+        .social-row { display: flex; justify-content: center; gap: 18px; margin-bottom: 10px; }
+        .social-row a { color: var(--text-muted); font-size: 18px; transition: 0.2s; }
+        .social-row a:hover { color: var(--primary); }
+        .powered-by { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; }
+
+        /* SETTINGS PAGE (2ND SCREEN) */
+        .modal-sheet {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color);
+            z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column;
+        }
+        .modal-sheet.active { transform: translateX(0); }
+        
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
+        .modal-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
+        .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
+
+        .settings-content { padding: 20px; flex: 1; overflow-y: auto;}
+        
+        .settings-btn { width: 100%; padding: 16px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;}
+        .settings-btn:hover { border-color: var(--primary); }
+        .settings-btn i.fa-chevron-right { color: var(--text-muted); font-size: 12px;}
+        
+        .danger-zone { margin-top: 30px; border: 1px solid var(--danger); border-radius: 16px; padding: 20px; background: var(--danger-bg); }
+        .danger-title { color: var(--danger); font-weight: 800; margin-bottom: 10px; font-size: 16px;}
+        .danger-text { font-size: 13px; color: var(--text-main); margin-bottom: 15px; opacity: 0.8; }
+        
+        .btn-delete { width: 100%; padding: 14px; background: var(--danger); border: none; color: #fff; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; }
+        .btn-logout-main { width: 100%; padding: 16px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 20px; }
+
+        /* TOAST NOTIFICATION */
+        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 18px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast.hide { animation: slideUp 0.4s forwards; }
+        .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; }
+        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
+
+        /* CUSTOM MODALS FOR EDIT/DELETE (Replaces browser alerts/prompts) */
+        .custom-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
+            z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .custom-modal-overlay.active { opacity: 1; pointer-events: all; }
+        
+        .custom-modal-box { background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s;}
+        .custom-modal-overlay.active .custom-modal-box { transform: scale(1); }
+        
+        .custom-modal-box h3 { margin: 0 0 15px 0; color: var(--text-main); font-size: 18px;}
+        .custom-modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+        
+        .modal-input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; text-align: center; font-weight: bold;}
+        .modal-input:focus { border-color: var(--primary); }
+        
+        .btn-row { display: flex; gap: 10px; }
+        .btn-cancel { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--bg-color); color: var(--text-main); font-weight: 700; cursor: pointer; }
+        .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
+        .btn-danger { background: var(--danger); }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <i class="fa-solid fa-bars" onclick="document.getElementById('sideMenu').classList.add('active')"></i>
-        <div style="font-weight:900; font-size: 18px;">KIYO AI</div>
-        <i class="fa-solid fa-bell"></i>
+    <div class="toast-container" id="toastBox"></div>
+
+    <!-- TOP NAVBAR -->
+    <div class="top-navbar">
+        <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
+        <h1 class="nav-title">Kiyo AI</h1>
+        <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted);"></i>
     </div>
 
-    <div class="profile-card">
-        <h2 id="nameDisplay">Dad King</h2>
-        <p id="cityDisplay">Siwan, Bihar</p>
-        <p style="margin-top:10px; font-weight:bold;">Goal: <span id="goalDisplay">NEET</span></p>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- 16:9 PROFILE CARD -->
+        <div class="profile-card">
+            <div class="profile-top">
+                <div class="profile-pic-container">
+                    <img id="profileImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+                    <label for="fileInput" class="camera-btn"><i class="fa-solid fa-camera"></i></label>
+                    <input type="file" id="fileInput" accept="image/*" onchange="updateProfilePic(event)">
+                </div>
+                <div class="student-info">
+                    <h2 id="studentName">Student Name</h2>
+                    <p id="studentLocation">City, State</p>
+                </div>
+            </div>
+            <div class="profile-bottom">
+                <p>Goal: <span id="studentGoal">Target Exam</span></p>
+                <p style="margin-top:5px; font-size: 11px; opacity:0.8; font-weight:500;">Email: <span style="color:#fff;" id="studentEmail">email@example.com</span></p>
+            </div>
+        </div>
+
+        <h3 class="quick-action-header">Learning Hub</h3>
+        
+        <!-- Premium Chat Button -->
+        <div class="chat-btn-container">
+            <div class="chat-icon-bg"><i class="fa-solid fa-robot"></i></div>
+            <div class="chat-btn-text">Chat with Kiyo AI</div>
+        </div>
+
+        <!-- App Features Grid -->
+        <div class="dashboard-grid">
+            <div class="grid-item"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
+            <div class="grid-item"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
+            <div class="grid-item"><i class="fa-solid fa-stopwatch"></i><span>Mock Tests</span></div>
+            <div class="grid-item"><i class="fa-solid fa-chart-line"></i><span>Performance</span></div>
+            <div class="grid-item"><i class="fa-solid fa-bookmark"></i><span>Saved Notes</span></div>
+            <div class="grid-item"><i class="fa-solid fa-circle-question"></i><span>Ask Doubts</span></div>
+        </div>
     </div>
 
-    <div class="dashboard-grid">
-        <div class="menu-box"><i class="fa-solid fa-comments"></i><br>AI Chat</div>
-        <div class="menu-box"><i class="fa-solid fa-book-open"></i><br>Syllabus</div>
-        <div class="menu-box"><i class="fa-solid fa-file-pen"></i><br>PYQs</div>
-        <div class="menu-box"><i class="fa-solid fa-clock"></i><br>Test</div>
-        <div class="menu-box"><i class="fa-solid fa-chart-line"></i><br>Result</div>
-        <div class="menu-box"><i class="fa-solid fa-circle-play"></i><br>Lectures</div>
+    <!-- SIDEBAR OVERLAY & MENU -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <i class="fa-solid fa-xmark close-sidebar" onclick="toggleSidebar()"></i>
+        </div>
+
+        <div class="theme-toggle-box">
+            <span>Dark Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="themeToggle" onchange="switchTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="menu-items">
+            <a href="#" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
+            <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
+            <a href="#" class="menu-item" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
+            <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
+            <a href="#" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="social-row">
+                <a href="https://youtube.com/@mryuviyadav"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.instagram.com/mryuvi_yadav"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://x.com/mryuviyadav"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://facebook.com/mryuviyadav"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://t.me/mryuviyadav"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+            <div class="powered-by">POWERED BY TICBULL</div>
+        </div>
     </div>
 
-    <!-- Sidebar -->
-    <div class="side-menu" id="sideMenu">
-        <div style="padding: 20px; background: var(--primary); color: #fff;"><h3>Menu</h3></div>
-        <div class="menu-item" onclick="openPopup('settingsPopup')"><i class="fa-solid fa-gear"></i> Settings</div>
-        <div class="menu-item"><i class="fa-solid fa-user"></i> Profile</div>
-        <div class="menu-item"><i class="fa-solid fa-shield"></i> Privacy Policy</div>
-        <div class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</div>
-        <div class="menu-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
-        <i class="fa-solid fa-xmark" style="padding:20px; cursor:pointer;" onclick="document.getElementById('sideMenu').classList.remove('active')"></i>
+    <!-- SETTINGS PAGE (2ND SCREEN) -->
+    <div class="modal-sheet" id="settingsPage">
+        <div class="modal-header">
+            <i class="fa-solid fa-arrow-left" onclick="closeSettings()"></i>
+            <h2>App Settings</h2>
+        </div>
+        <div class="settings-content">
+            
+            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 10px; margin-top: 0;">Account Preferences</h3>
+            <button class="settings-btn" onclick="openEditProfile()">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-user-pen" style="color:var(--primary);"></i> Edit Profile Details</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+            <button class="settings-btn">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bullseye" style="color:var(--primary);"></i> Change Learning Goal</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+            <button class="settings-btn">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bell" style="color:var(--primary);"></i> Notifications</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <button class="btn-logout-main" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+
+            <div class="danger-zone">
+                <div class="danger-title"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
+                <div class="danger-text">Permanently deleting your account will erase all your progress, saved notes, and profile data. This action cannot be undone.</div>
+                <button class="btn-delete" onclick="openDeleteWarning()">Delete Account</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Settings Popup -->
-    <div class="popup" id="settingsPopup">
-        <div class="box">
-            <h3>App Settings</h3>
-            <button onclick="editProfile()">✏️ Edit Profile</button>
-            <button onclick="deleteAccountTrigger()" style="background:red; color:#fff; border:none; padding:10px; width:100%;">Permanently Delete Account</button>
-            <button onclick="closePopups()">Close</button>
+    <!-- CUSTOM MODAL: Edit Profile -->
+    <div class="custom-modal-overlay" id="editProfileModal">
+        <div class="custom-modal-box">
+            <h3>Edit Profile</h3>
+            <input type="text" id="editNameInput" class="modal-input" placeholder="Full Name">
+            <input type="text" id="editCityInput" class="modal-input" placeholder="City">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('editProfileModal')">Cancel</button>
+                <button class="btn-confirm" onclick="saveProfileEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Delete Warning -->
+    <div class="custom-modal-overlay" id="deleteWarningModal">
+        <div class="custom-modal-box" style="border: 1px solid var(--danger);">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 35px; color: var(--danger); margin-bottom: 10px;"></i>
+            <h3>Are you sure?</h3>
+            <p>We will send a 6-digit OTP to your registered email to verify deletion.</p>
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('deleteWarningModal')">Cancel</button>
+                <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Enter Delete OTP -->
+    <div class="custom-modal-overlay" id="deleteOtpModal">
+        <div class="custom-modal-box">
+            <h3>Verify Deletion</h3>
+            <p>Enter the 6-digit OTP sent to your email.</p>
+            <input type="text" id="deleteOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('deleteOtpModal')">Cancel</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteAccount()">Delete Forever</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function openPopup(id) { document.getElementById(id).classList.add('active'); }
-        function closePopups() { document.querySelectorAll('.popup').forEach(p => p.classList.remove('active')); }
-        
-        function deleteAccountTrigger() {
-            if(confirm("WARNING: This will delete all data permanently! Send OTP?")) {
-                alert("OTP Sent for account deletion verification.");
-                // Add your delete API call here
+        function showToast(message, type = 'error') {
+            const toastBox = document.getElementById('toastBox');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
+        }
+
+        // Load User Data
+        window.onload = function() {
+            const email = localStorage.getItem('kiyo_user_email');
+            if(!email) window.location.href = "login.html";
+
+            document.getElementById('studentName').innerText = localStorage.getItem('kiyo_user_name') || "Student";
+            document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
+            document.getElementById('studentEmail').innerText = email;
+            
+            let goal = "Learning Guide";
+            if(localStorage.getItem('kiyo_user_path') === 'board') goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_board');
+            else if(localStorage.getItem('kiyo_user_path') === 'exam') goal = localStorage.getItem('kiyo_exam');
+            else if(localStorage.getItem('kiyo_user_path') === 'skill') goal = localStorage.getItem('kiyo_skill');
+            document.getElementById('studentGoal').innerText = goal || "Explorer";
+
+            const savedPic = localStorage.getItem('kiyo_profile_pic');
+            if(savedPic) { document.getElementById('profileImg').src = savedPic; }
+
+            if(localStorage.getItem('kiyo_theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').checked = true;
+            }
+        };
+
+        // Profile Picture Upload
+        function updateProfilePic(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgData = e.target.result;
+                    document.getElementById('profileImg').src = imgData;
+                    localStorage.setItem('kiyo_profile_pic', imgData); 
+                };
+                reader.readAsDataURL(file);
             }
         }
+
+        // Sidebar Controls
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        // Theme Toggle (Dark/Light)
+        function switchTheme() {
+            const isDark = document.getElementById('themeToggle').checked;
+            if(isDark) {
+                document.body.classList.add('dark-theme');
+                localStorage.setItem('kiyo_theme', 'dark');
+            } else {
+                document.body.classList.remove('dark-theme');
+                localStorage.setItem('kiyo_theme', 'light');
+            }
+        }
+
+        // Settings Page
+        function openSettings() {
+            toggleSidebar();
+            document.getElementById('settingsPage').classList.add('active');
+        }
+        function closeSettings() {
+            document.getElementById('settingsPage').classList.remove('active');
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        // Custom Modal Controls
+        function openCustomModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeCustomModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // Edit Profile Logic
+        function openEditProfile() {
+            document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
+            document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "";
+            openCustomModal('editProfileModal');
+        }
+
+        async function saveProfileEdit() {
+            const newName = document.getElementById('editNameInput').value.trim();
+            const newCity = document.getElementById('editCityInput').value.trim();
+            if(!newName || !newCity) { return showToast("Fields cannot be empty."); }
+
+            const email = localStorage.getItem('kiyo_user_email');
+            showToast("Saving...", "success");
+            closeCustomModal('editProfileModal');
+
+            try {
+                const res = await fetch('/api/update-profile', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, fullName: newName, city: newCity })
+                });
+                if(res.ok) {
+                    localStorage.setItem('kiyo_user_name', newName);
+                    localStorage.setItem('kiyo_user_city', newCity);
+                    document.getElementById('studentName').innerText = newName;
+                    document.getElementById('studentLocation').innerText = newCity + ", " + localStorage.getItem('kiyo_user_state');
+                    showToast("Profile Updated!", "success");
+                } else { showToast("Failed to update."); }
+            } catch(e) { showToast("Network Error."); }
+        }
+
+        // Delete Account Logic
+        function openDeleteWarning() { openCustomModal('deleteWarningModal'); }
         
-        function logout() { localStorage.clear(); window.location.href = "login.html"; }
-        function editProfile() {
-            let n = prompt("New Name:");
-            if(n) { document.getElementById('nameDisplay').innerText = n; localStorage.setItem('kiyo_user_name', n); }
+        async function sendDeleteOTP() {
+            closeCustomModal('deleteWarningModal');
+            showToast("Sending OTP...", "success");
+            const email = localStorage.getItem('kiyo_user_email');
+            
+            try {
+                const res = await fetch('/api/send-delete-otp', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                if(res.ok) {
+                    document.getElementById('deleteOtpInput').value = "";
+                    openCustomModal('deleteOtpModal');
+                    showToast("OTP Sent to Email", "success");
+                } else { showToast("Failed to send OTP."); }
+            } catch(e) { showToast("Network Error."); }
+        }
+
+        async function verifyDeleteAccount() {
+            const otp = document.getElementById('deleteOtpInput').value.trim();
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP.");
+            
+            const email = localStorage.getItem('kiyo_user_email');
+            try {
+                const res = await fetch('/api/delete-account', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, otp: otp })
+                });
+                if(res.ok) {
+                    closeCustomModal('deleteOtpModal');
+                    showToast("Account Deleted", "success");
+                    setTimeout(() => {
+                        localStorage.clear();
+                        window.location.href = "login.html";
+                    }, 1500);
+                } else { showToast("Invalid OTP."); }
+            } catch(e) { showToast("Network Error."); }
         }
     </script>
 </body>
