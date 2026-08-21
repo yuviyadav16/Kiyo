@@ -6,7 +6,7 @@
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 1-SEC GLITCH FIX -->
+    <!-- 1-SEC GLITCH FIX & THEME SYNC -->
     <script>
         if(!localStorage.getItem('kiyo_user_email')) {
             window.location.replace("login.html");
@@ -17,49 +17,92 @@
     </script>
 
     <style>
-        /* LIGHT & DARK THEME VARIABLES */
+        /* ================= LIGHT & DARK THEME VARIABLES ================= */
         :root {
-            --primary: #6366f1; --primary-dark: #4338ca; --bg-color: #f8fafc; --surface-color: #ffffff;
-            --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.1); --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
+            --primary: #6366f1;
+            --primary-dark: #4338ca;
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
         }
 
         html.dark-theme {
-            --bg-color: #0B101E; --surface-color: #121826; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1);
+            --bg-color: #0B101E;
+            --surface-color: #121826;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255,255,255,0.1);
         }
 
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--bg-color); color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden; transition: background 0.3s, color 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        /* TOP APP BAR */
-        .top-navbar { background: var(--surface-color); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
+        /* ================= TOP APP BAR ================= */
+        .top-navbar {
+            background: var(--surface-color); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50;
+        }
         html.dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
         .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
-        /* REAL NOTIFICATION DRAWER */
-        .notif-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        /* ================= REAL NOTIFICATION DRAWER ================= */
+        .notif-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;
+            opacity: 0; pointer-events: none; transition: 0.3s;
+        }
         .notif-overlay.active { opacity: 1; pointer-events: all; }
-        .notification-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--bg-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        .notification-drawer {
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--surface-color);
+            z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+        }
         .notification-drawer.active { right: 0; }
-        .notif-header-drawer { padding: 20px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; color: var(--text-main); }
-        .notif-body { padding: 15px; flex: 1; overflow-y: auto; }
-        .notif-card { background: var(--surface-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: flex-start; }
-        .notif-icon { background: rgba(99, 102, 241, 0.1); color: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;}
+        .notif-header-drawer {
+            padding: 20px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); display: flex;
+            justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; color: var(--text-main);
+        }
+        .notif-body { padding: 15px; flex: 1; overflow-y: auto; background: var(--bg-color); }
+        .notif-card {
+            background: var(--surface-color); padding: 15px; border-radius: 12px; margin-bottom: 15px;
+            border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: flex-start;
+        }
+        .notif-icon {
+            background: rgba(99, 102, 241, 0.1); color: var(--primary); width: 40px; height: 40px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+        }
         .notif-text h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--text-main); }
         .notif-text p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
 
-        /* MAIN CONTENT & PROFILE CARD */
+        /* ================= MAIN CONTENT & PROFILE CARD ================= */
         .main-content { padding: 20px; padding-bottom: 80px; }
-        .profile-card { width: 100%; background: var(--card-gradient); border-radius: 20px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative; }
+        .profile-card {
+            width: 100%; background: var(--card-gradient); border-radius: 20px; padding: 20px; box-sizing: border-box;
+            color: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative;
+        }
         .profile-top { display: flex; align-items: center; gap: 15px; }
-        .profile-pic-container { width: 65px; height: 65px; border-radius: 50%; background: #fff; border: 3px solid rgba(255,255,255,0.5); position: relative; }
+        .profile-pic-container {
+            width: 65px; height: 65px; border-radius: 50%; background: #fff; border: 3px solid rgba(255,255,255,0.5); position: relative;
+        }
         .profile-pic-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .camera-btn { position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; cursor: pointer; border: 2px solid #fff; }
+        .camera-btn {
+            position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff; width: 24px; height: 24px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; cursor: pointer; border: 2px solid #fff;
+        }
         #fileInput { display: none; }
         .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; display: flex; align-items: center; gap: 10px; }
         .student-info p { margin: 2px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
-        .profile-bottom { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 15px; backdrop-filter: blur(5px); }
         
+        .profile-bottom { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 15px; backdrop-filter: blur(5px); }
         .profile-stats-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 10px; }
         .stat-item { display: flex; flex-direction: column; gap: 4px; flex: 1; text-align: center;}
         .stat-item:first-child { text-align: left; }
@@ -68,19 +111,29 @@
         .stat-value { font-size: 13px; font-weight: 800; color: #10b981; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .email-display { font-size: 11px; opacity: 0.8; font-weight: 500; margin:0;}
 
-        /* DASHBOARD GRID */
+        /* ================= DASHBOARD GRID ================= */
         .quick-action-header { margin-top: 25px; font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 15px;}
-        .chat-btn-container { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .chat-btn-container {
+            background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; text-align: center;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; gap: 15px;
+        }
         .chat-icon-bg { background: rgba(99, 102, 241, 0.1); width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; }
         .chat-btn-container i { font-size: 24px; color: var(--primary); }
         .chat-btn-text { font-size: 16px; font-weight: 700; color: var(--text-main); }
+        
         .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .grid-item { background: var(--surface-color); padding: 15px; border-radius: 14px; text-align: center; border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .grid-item {
+            background: var(--surface-color); padding: 15px; border-radius: 14px; text-align: center;
+            border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
         .grid-item i { font-size: 22px; color: var(--text-muted); margin-bottom: 8px;}
         .grid-item span { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); }
 
-        /* SIDEBAR MENU */
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1); transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column; }
+        /* ================= SIDEBAR MENU ================= */
+        .sidebar {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color);
+            box-shadow: 5px 0 25px rgba(0,0,0,0.1); transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column;
+        }
         html.dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
         .sidebar.active { left: 0; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: 0.4s; }
@@ -88,6 +141,7 @@
         .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .sidebar-header h3 { margin: 0; font-size: 20px; color: var(--primary); font-weight: 900;}
         .close-sidebar { font-size: 24px; color: var(--text-muted); cursor: pointer; }
+        
         .menu-items { padding: 15px 0; flex: 1; overflow-y: auto; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s; }
         .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
@@ -106,30 +160,46 @@
         .social-row a { color: var(--text-muted); font-size: 18px; transition: 0.2s; }
         .powered-by { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; }
 
-        /* SETTINGS PAGE (2ND SCREEN) */
-        .modal-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
+        /* ================= SETTINGS PAGE (2ND SCREEN) ================= */
+        .modal-sheet {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color);
+            z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;
+        }
         .modal-sheet.active { transform: translateX(0); }
         .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; position: sticky; top:0; background:var(--surface-color); z-index: 10;}
         .modal-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
         .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
+        
         .settings-content { padding: 20px; flex: 1; }
         .settings-btn { width: 100%; padding: 16px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        
         .danger-zone { margin-top: 30px; border: 1px solid var(--danger); border-radius: 16px; padding: 20px; background: var(--danger-bg); }
         .danger-title { color: var(--danger); font-weight: 800; margin-bottom: 10px; font-size: 16px;}
         .danger-text { font-size: 13px; color: var(--text-main); margin-bottom: 15px; opacity: 0.8; }
         .btn-delete { width: 100%; padding: 14px; background: var(--danger); border: none; color: #fff; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; }
         .btn-logout-main { width: 100%; padding: 16px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 20px; }
 
-        /* TOAST NOTIFICATION */
+        /* ================= TOAST NOTIFICATION ================= */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
-        .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 18px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast {
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 18px; border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards;
+        }
         .toast.hide { animation: slideUp 0.4s forwards; }
-        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
+        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* CUSTOM MODALS */
-        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
+        /* ================= CUSTOM MODALS (Forms, OTPs, Z+ Security) ================= */
+        .custom-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
+            z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
         .custom-modal-overlay.active { opacity: 1; pointer-events: all; }
-        .custom-modal-box { background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s; max-height: 85vh; overflow-y: auto;}
+        .custom-modal-box {
+            background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 340px; text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s; max-height: 85vh; overflow-y: auto;
+        }
         .custom-modal-overlay.active .custom-modal-box { transform: scale(1); }
         .custom-modal-box h3 { margin: 0 0 15px 0; color: var(--text-main); font-size: 18px;}
         .custom-modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
@@ -151,7 +221,7 @@
         .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
         .btn-danger { background: var(--danger); }
 
-        /* SEARCHABLE NATIVE APP SELECTION LIST */
+        /* ================= SEARCHABLE NATIVE APP SELECTION LIST ================= */
         .selection-list-box { padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh !important; }
         .selection-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--surface-color); }
         .selection-search-bar { padding: 10px 20px; background: var(--bg-color); border-bottom: 1px solid var(--border-color); }
@@ -166,14 +236,14 @@
 
     <div class="toast-container" id="toastBox"></div>
 
-    <!-- TOP NAVBAR -->
+    <!-- ================= TOP NAVBAR ================= -->
     <div class="top-navbar">
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="nav-title">Kiyo AI</h1>
         <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted); cursor: pointer;" onclick="toggleNotifications()"></i>
     </div>
 
-    <!-- REAL NOTIFICATION DRAWER -->
+    <!-- ================= REAL NOTIFICATION DRAWER ================= -->
     <div class="notif-overlay" id="notifOverlay" onclick="toggleNotifications()"></div>
     <div class="notification-drawer" id="notifPanel">
         <div class="notif-header-drawer">
@@ -197,7 +267,7 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
+    <!-- ================= MAIN CONTENT ================= -->
     <div class="main-content">
         <!-- 16:9 PROFILE CARD WITH EXTENDED STATS -->
         <div class="profile-card">
@@ -249,7 +319,7 @@
         </div>
     </div>
 
-    <!-- SIDEBAR OVERLAY & MENU -->
+    <!-- ================= SIDEBAR OVERLAY & MENU ================= -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -289,7 +359,7 @@
         </div>
     </div>
 
-    <!-- SETTINGS PAGE (2ND SCREEN) -->
+    <!-- ================= SETTINGS PAGE (2ND SCREEN) ================= -->
     <div class="modal-sheet" id="settingsPage">
         <div class="modal-header">
             <i class="fa-solid fa-arrow-left" onclick="closeSettings()"></i>
@@ -301,6 +371,10 @@
             
             <button class="settings-btn" onclick="openCustomModal('passwordModal')">
                 <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Change Password (Z+ Security)</span>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+            <button class="settings-btn" onclick="openCustomModal('emailUpdateModal')">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-envelope-circle-check" style="color:var(--primary);"></i> Update Email ID</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
             <button class="settings-btn" onclick="toggleNotifications(); closeSettings();">
@@ -318,7 +392,7 @@
         </div>
     </div>
 
-    <!-- CUSTOM MODAL: Full Edit Profile -->
+    <!-- ================= CUSTOM MODAL: Full Edit Profile ================= -->
     <div class="custom-modal-overlay" id="editProfileModal">
         <div class="custom-modal-box" style="padding-top: 15px;">
             <h3 style="margin-bottom: 10px;">Edit Full Profile</h3>
@@ -367,7 +441,7 @@
         </div>
     </div>
 
-    <!-- SEARCHABLE CUSTOM SELECTION LIST -->
+    <!-- ================= SEARCHABLE CUSTOM SELECTION LIST ================= -->
     <div class="custom-modal-overlay" id="selectionSheetModal" style="z-index: 400;">
         <div class="custom-modal-box selection-list-box">
             <div class="selection-header">
@@ -383,7 +457,9 @@
         </div>
     </div>
 
-    <!-- CUSTOM MODAL: Change Password (Z+) -->
+    <!-- ================= Z+ SECURITY MODALS ================= -->
+    
+    <!-- CUSTOM MODAL: Change Password -->
     <div class="custom-modal-overlay" id="passwordModal">
         <div class="custom-modal-box">
             <h3 style="color:var(--text-main);">Change Password</h3>
@@ -419,6 +495,36 @@
         </div>
     </div>
 
+    <!-- CUSTOM MODAL: Update Email -->
+    <div class="custom-modal-overlay" id="emailUpdateModal">
+        <div class="custom-modal-box">
+            <h3 style="color:var(--text-main);">Update Email ID</h3>
+            <p style="color:var(--text-muted); font-size:12px; margin-bottom: 5px;">Current Email:</p>
+            <p style="color:var(--text-main); font-size:14px; font-weight:bold; margin-top: 0; margin-bottom: 20px; background:var(--bg-color); padding:10px; border-radius:8px;" id="currentEmailDisplay">loading...</p>
+            
+            <span class="input-label">New Email Address</span>
+            <input type="email" id="newEmailInput" class="modal-input" placeholder="Enter New Email ID">
+            
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('emailUpdateModal')">Cancel</button>
+                <button class="btn-confirm" onclick="initiateEmailChange()">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Email Update OTP -->
+    <div class="custom-modal-overlay" id="emailOtpModal">
+        <div class="custom-modal-box">
+            <h3 style="color:var(--text-main);">Verify New Email</h3>
+            <p style="color:var(--text-muted); font-size:12px;">Enter the 6-digit OTP sent to your NEW email.</p>
+            <input type="text" id="emailOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('emailOtpModal')">Cancel</button>
+                <button class="btn-confirm" onclick="verifyEmailChange()">Verify & Update</button>
+            </div>
+        </div>
+    </div>
+
     <!-- CUSTOM MODAL: Delete Warning -->
     <div class="custom-modal-overlay" id="deleteWarningModal">
         <div class="custom-modal-box" style="border: 1px solid var(--danger);">
@@ -446,7 +552,7 @@
     </div>
 
     <script>
-        // MASSIVE LISTS FOR NATIVE APP-LIKE SELECTOR
+        // ================= MASSIVE LISTS FOR NATIVE APP-LIKE SELECTOR =================
         const boardOptions = [
             {id: 'CBSE', name: 'CBSE Board'}, {id: 'BSEB', name: 'Bihar Board (BSEB)'},
             {id: 'ICSE', name: 'ICSE / ISC'}, {id: 'UPMSP', name: 'UP Board'},
@@ -476,6 +582,7 @@
 
         let currentSelectTarget = '';
 
+        // ================= UTILITIES =================
         function showToast(message, type = 'success') {
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
@@ -485,13 +592,11 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
-        // Notification Toggle
         function toggleNotifications() {
             document.getElementById('notifPanel').classList.toggle('active');
             document.getElementById('notifOverlay').classList.toggle('active');
         }
 
-        // Toggle Password Visibility
         function togglePass(fieldId, iconId) {
             const pass = document.getElementById(fieldId); 
             const icon = document.getElementById(iconId);
@@ -502,17 +607,16 @@
             }
         }
 
-        // Load User Data - LOGOUT GLITCH FIX
+        // ================= LOAD USER DATA & LOGOUT FIX =================
         window.onload = function() {
             const email = localStorage.getItem('kiyo_user_email');
             
-            // Default profile loading
             document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
             document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
             
             document.getElementById('studentEmail').innerText = email;
+            document.getElementById('currentEmailDisplay').innerText = email; 
             
-            // Set Extended Stats
             let goalId = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
             let cId = localStorage.getItem('kiyo_class') || "11";
             let bId = localStorage.getItem('kiyo_board') || "CBSE";
@@ -531,7 +635,6 @@
             }
         };
 
-        // Profile Picture Upload
         function updateProfilePic(event) {
             const file = event.target.files[0];
             if (file) {
@@ -545,13 +648,12 @@
             }
         }
 
-        // Sidebar Controls
+        // ================= UI CONTROLS =================
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
         }
 
-        // Theme Toggle (Dark/Light)
         function switchTheme() {
             const isDark = document.getElementById('themeToggle').checked;
             if(isDark) {
@@ -563,18 +665,15 @@
             }
         }
 
-        // Settings Page
         function openSettings() { toggleSidebar(); document.getElementById('settingsPage').classList.add('active'); }
         function closeSettings() { document.getElementById('settingsPage').classList.remove('active'); }
         
-        // 100% LOGOUT FIX (Clears Local & Session Storage)
         function logout() { 
             localStorage.clear(); 
             sessionStorage.clear();
             window.location.replace("login.html"); 
         }
 
-        // Custom Modal Controls
         function openCustomModal(id) { 
             if(id === 'editProfileModal') {
                 document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
@@ -602,7 +701,7 @@
         }
         function closeCustomModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // SEARCHABLE NATIVE APP-LIKE SELECTION LOGIC
+        // ================= SEARCHABLE NATIVE SELECTION LOGIC =================
         function openSelection(type) {
             currentSelectTarget = type;
             const listContainer = document.getElementById('selectionList');
@@ -610,7 +709,7 @@
             const searchBar = document.getElementById('searchSelection');
             
             listContainer.innerHTML = '';
-            searchBar.value = ''; // Reset search
+            searchBar.value = ''; 
             
             let options = [];
             if(type === 'board') { options = boardOptions; title.innerText = "Select Board"; }
@@ -624,16 +723,12 @@
             openCustomModal('selectionSheetModal');
         }
 
-        // Live Search Filter logic
         function filterSelection() {
             let val = document.getElementById('searchSelection').value.toLowerCase();
             let items = document.querySelectorAll('.select-item');
             items.forEach(item => {
-                if(item.innerText.toLowerCase().includes(val)) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
+                if(item.innerText.toLowerCase().includes(val)) { item.style.display = 'block'; } 
+                else { item.style.display = 'none'; }
             });
         }
 
@@ -654,7 +749,7 @@
             closeCustomModal('selectionSheetModal');
         }
 
-        // API LOGIC - EDIT PROFILE
+        // ================= API LOGIC - EDIT PROFILE =================
         async function saveProfileEdit() {
             const newName = document.getElementById('editNameInput').value.trim();
             const newDob = document.getElementById('editDobInput').value;
@@ -697,7 +792,7 @@
             } catch (e) { showToast("Network Error", "error"); }
         }
 
-        // API LOGIC - Z+ SECURITY PASSWORD CHANGE
+        // ================= API LOGIC - Z+ SECURITY PASSWORD CHANGE =================
         async function initiatePasswordChange() {
             const newPass = document.getElementById('newPasswordInput').value;
             const confirmPass = document.getElementById('confirmPasswordInput').value;
@@ -743,7 +838,56 @@
             } catch(e) { showToast("Network Error", "error"); }
         }
 
-        // API LOGIC - DELETE ACCOUNT
+        // ================= API LOGIC - Z+ SECURITY EMAIL UPDATE =================
+        async function initiateEmailChange() {
+            const newEmail = document.getElementById('newEmailInput').value.trim();
+            const oldEmail = localStorage.getItem('kiyo_user_email');
+            
+            if(!newEmail) return showToast("Enter new email", "error");
+            if(newEmail === oldEmail) return showToast("Enter a different email", "error");
+
+            showToast("Sending OTP to new email...", "success");
+
+            try {
+                const res = await fetch('/api/send-email-change-otp', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({oldEmail: oldEmail, newEmail: newEmail})
+                });
+                const data = await res.json();
+                
+                if(data.status === 'exists') {
+                    showToast(data.message, "error");
+                } else if(res.ok) {
+                    closeCustomModal('emailUpdateModal');
+                    openCustomModal('emailOtpModal');
+                    showToast("OTP Sent to " + newEmail, "success");
+                } else { showToast("Failed to send OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        async function verifyEmailChange() {
+            const otp = document.getElementById('emailOtpInput').value.trim();
+            const oldEmail = localStorage.getItem('kiyo_user_email');
+
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP", "error");
+
+            try {
+                const res = await fetch('/api/verify-email-change', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({oldEmail: oldEmail, otp: otp})
+                });
+                const data = await res.json();
+                
+                if(res.ok) {
+                    localStorage.setItem('kiyo_user_email', data.newEmail);
+                    closeCustomModal('emailOtpModal');
+                    showToast("Email Updated Successfully!", "success");
+                    setTimeout(() => location.reload(), 1500);
+                } else { showToast("Invalid OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        // ================= API LOGIC - DELETE ACCOUNT =================
         function openDeleteWarning() { openCustomModal('deleteWarningModal'); }
         
         async function sendDeleteOTP() {
@@ -787,3 +931,4 @@
     </script>
 </body>
 </html>
+
