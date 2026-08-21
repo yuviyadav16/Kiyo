@@ -7,112 +7,690 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1; --primary-dark: #4338ca; --primary-light: rgba(99, 102, 241, 0.1);
-            --accent-green: #10b981; --accent-green-hover: #059669;
+            /* PREMIUM EDUCATIONAL LIGHT THEME */
+            --primary: #6366f1; /* Indigo */
+            --primary-dark: #4338ca;
+            --primary-light: rgba(99, 102, 241, 0.1);
+            --accent-green: #10b981; /* Emerald Green for Action Button */
+            --accent-green-hover: #059669;
             --bg-gradient: linear-gradient(180deg, #ede9fe 0%, #f8fafc 40%, #ffffff 100%);
-            --danger: #ef4444; --success: #10b981;
-            --text-main: #0f172a; --text-muted: #64748b;
-            --input-border: #e2e8f0; --input-bg: #ffffff;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text-main: #0f172a; /* Deep Slate */
+            --text-muted: #64748b;
+            --input-border: #e2e8f0;
+            --input-bg: #ffffff;
         }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; background: var(--bg-gradient); font-family: system-ui, sans-serif; color: var(--text-main); overflow: hidden; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        .main-wrapper { width: 100%; max-width: 400px; margin: 0 auto; height: 100%; padding: 25px 20px 15px 20px; box-sizing: border-box; display: flex; flex-direction: column; }
-        .header-section { text-align: center; margin-bottom: 25px; margin-top: 10px; flex-shrink: 0; }
-        .header-section h1 { font-size: 32px; font-weight: 900; margin: 0; color: #1e1b4b; }
+
+        /* STRICTLY 1 SCREEN (100dvh) - NO SCROLLING */
+        body, html {
+            margin: 0; padding: 0; width: 100%; 
+            height: 100%; height: 100dvh; 
+            background: var(--bg-gradient);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden; 
+            box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+        }
+
+        .main-wrapper { 
+            width: 100%; max-width: 400px; margin: 0 auto;
+            height: 100%; padding: 25px 20px 15px 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; 
+        }
+
+        /* MODERN HEADER */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+        .header-section h1 {
+            font-size: 32px; font-weight: 900; letter-spacing: -0.5px; 
+            margin: 0; color: #1e1b4b; line-height: 1.1;
+        }
         .brand-highlight { color: var(--accent-green); }
-        .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 14px; padding: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px 0; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; }
+        .header-section p {
+            font-size: 13px; color: var(--text-muted); font-weight: 600; 
+            letter-spacing: 0.5px; margin: 8px 0 0 0;
+        }
+
+        /* FORM CONTAINER */
+        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
+
+        /* TAB SWITCHER */
+        .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 14px; padding: 5px; margin-bottom: 20px; flex-shrink: 0;}
+        .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: #ffffff; color: var(--primary-dark); box-shadow: 0px 4px 10px rgba(0,0,0,0.05); }
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
-        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; font-size: 14px; font-weight: 600; box-sizing: border-box; outline: none; }
-        .action-btn { width: 100%; padding: 16px; background: var(--accent-green); color: white; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; margin-top: 10px; }
-        .custom-select-btn { width: 100%; padding: 14px 15px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-muted); cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
+
+        /* PREMIUM CLEAN INPUTS */
+        .input-group { position: relative; width: 100%; margin-bottom: 12px; flex-shrink: 0;}
+        .input-row { display: flex; gap: 10px; margin-bottom: 12px; flex-shrink: 0;}
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 14px; }
+        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-main); font-size: 14px; font-weight: 600; box-sizing: border-box; outline: none; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .input-field::placeholder { color: #94a3b8; font-weight: 500; }
+        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
+        .input-no-icon { padding-left: 15px; }
+
+        /* DROPDOWNS */
+        .custom-select-btn { width: 100%; padding: 14px 15px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-muted); font-size: 14px; font-weight: 600; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .custom-select-btn.selected { color: var(--primary-dark); border-color: var(--primary); background: #f8fafc; }
+
+        /* PATH SELECTORS */
+        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
+        .path-btn { flex: 1; background: #f1f5f9; border: 1px solid #e2e8f0; color: var(--text-muted); padding: 10px 5px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
+        .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 12px var(--primary-light);}
+
+        /* GREEN ACTION BUTTON */
+        .action-btn { width: 100%; padding: 16px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
+        .action-btn:active { transform: scale(0.97); }
+
+        .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 700; flex-shrink: 0;}
+        
+        /* FOOTER */
+        .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 15px; }
+        
+        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 15px; }
+        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;}
+        .ticbull-badge { background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s;}
+        .ticbull-badge img { width: 18px; height: 18px; object-fit: contain; } 
+        .ticbull-badge span { font-size: 13px; font-weight: 900; color: #0f172a; letter-spacing: 1px;}
+        
+        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; }
+        .user-socials a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
+        .user-socials a:hover { color: var(--primary); transform: translateY(-2px); }
+
+        .policy-links { font-size: 11px; color: var(--text-muted); }
+        .policy-links a { color: #64748b; text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 600; }
+        .policy-links a:hover { color: #0f172a; }
+
+        /* Toasts & Modals */
+        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast.hide { animation: slideUp 0.4s forwards; }
+        .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
+        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .bottom-sheet { background: white; width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; padding: 20px; transform: translateY(100%); transition: 0.3s; }
+        .bottom-sheet { background: #ffffff; width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
         .modal-overlay.active .bottom-sheet { transform: translateY(0); }
-        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 15px; border-radius: 10px; z-index: 9999; display: none; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #f1f5f9; }
+        .sheet-header h3 { margin: 0; font-size: 16px; color: #0f172a; font-weight: 800; }
+        .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
+        
+        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .list-item { padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; color: #334155; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
+        .list-item.selected { background: var(--primary-light); border: 1px solid var(--primary); color: var(--primary-dark); }
+        .list-item.selected i { opacity: 1; transform: scale(1); }
+
+        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 14px 15px; text-decoration: none; color: #0f172a; border-bottom: 1px solid #f1f5f9; transition: 0.2s;}
+        .ticbull-link-item i { font-size: 20px; color: var(--primary); width: 25px; text-align: center;}
+        .ticbull-link-item span { font-size: 14px; font-weight: 600; }
+
+        .center-modal { background: #ffffff; padding: 25px; border-radius: 24px; width: 85%; max-width: 320px; text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); }
+        .modal-overlay.center-align { align-items: center; }
+        .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
 </head>
 <body>
-    <div id="toastBox" class="toast"></div>
+
+    <div class="toast-container" id="toastBox"></div>
+
     <div class="main-wrapper">
-        <div class="header-section"><h1>Welcome to<br><span class="brand-highlight">Kiyo AI</span></h1></div>
+        
+        <div class="header-section">
+            <h1>Welcome to<br><span class="brand-highlight">Kiyo AI</span></h1>
+            <p>Your Intelligent Learning Guide</p>
+        </div>
+
         <div class="form-container">
             <div class="tab-switcher">
                 <button class="tab-btn active" id="signinTabBtn" onclick="switchTab('signin')">Sign In</button>
                 <button class="tab-btn" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
             </div>
-            <form id="authForm" onsubmit="handleSubmit(event)">
-                <div id="step1Fields" style="display:none;">
-                    <input type="text" id="fullName" class="input-field" placeholder="Full Name">
-                    <input type="date" id="dob" class="input-field">
+
+            <form id="authForm" onsubmit="handleSubmit(event)" style="display:flex; flex-direction:column; flex:1;">
+                
+                <div id="step1Fields" style="display: none;">
+                    <div class="input-group">
+                        <i class="fa-solid fa-user field-icon"></i>
+                        <input type="text" id="fullName" class="input-field" placeholder="Full Name">
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-calendar field-icon"></i>
+                        <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
+                    </div>
+                    <div class="input-row">
+                        <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State">
+                        <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
+                    </div>
                 </div>
+
                 <div id="commonFields">
-                    <input type="email" id="email" class="input-field" placeholder="Email ID">
-                    <input type="password" id="password" class="input-field" placeholder="Password">
+                    <div class="input-group">
+                        <i class="fa-solid fa-envelope field-icon"></i>
+                        <input type="email" id="email" class="input-field" placeholder="Email ID" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock field-icon"></i>
+                        <input type="password" id="password" class="input-field" placeholder="Password" required>
+                        <i class="fa-solid fa-eye toggle-password" id="eyeIcon" onclick="togglePass('password', 'eyeIcon')"></i>
+                    </div>
                 </div>
-                <div id="step2Fields" style="display:none;">
-                    <div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span><i class="fa-solid fa-chevron-right"></i></div>
+
+                <div id="step2Fields" style="display: none;">
+                    <div class="path-selector">
+                        <div class="path-btn active" onclick="setPath('board', this)">Board</div>
+                        <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
+                        <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
+                    </div>
+
+                    <!-- THese buttons now redirect to your 4 separate HTML files -->
+                    <div id="pathBoardUI">
+                        <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                        
+                        <!-- SMART LOGIC FIELDS: Only shows if 11th, 12th or Dropper is selected -->
+                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+
+                        <div class="input-group" id="boardGroup"><div class="custom-select-btn" id="btnBoard" onclick="saveTempAndGo('board.html')"><span id="lblBoard">Select Board...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                    </div>
                     
-                    <!-- DYNAMIC FIELDS -->
-                    <div id="streamGroup" style="display:none; margin-top:10px;"><div class="custom-select-btn" onclick="openSelection('stream')"><span id="lblStream">Select Stream...</span></div></div>
-                    <div id="dreamGroup" style="display:none; margin-top:10px;"><div class="custom-select-btn" onclick="openSelection('dream')"><span id="lblDream">Target Goal...</span></div></div>
-                    <div id="boardGroup" style="margin-top:10px;"><div class="custom-select-btn" id="btnBoard" onclick="saveTempAndGo('board.html')"><span id="lblBoard">Select Board...</span></div></div>
+                    <div id="pathExamUI" style="display:none;">
+                        <div class="input-group"><div class="custom-select-btn" id="btnExam" onclick="saveTempAndGo('exam.html')"><span id="lblExam">Select Exam...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                    </div>
+                    
+                    <div id="pathSkillUI" style="display:none;">
+                        <div class="input-group"><div class="custom-select-btn" id="btnSkill" onclick="saveTempAndGo('skills.html')"><span id="lblSkill">Select Skill...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                    </div>
                 </div>
-                <button type="button" id="nextBtn" class="action-btn" onclick="goToStep2()" style="display:none;">NEXT</button>
-                <button type="submit" id="submitBtn" class="action-btn">SIGN IN</button>
+
+                <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
+                
+                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="goToStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
             </form>
+        </div>
+
+        <div class="app-footer">
+            <div class="ticbull-trigger" onclick="openModal('ticbullSupportModal')">
+                <span class="powered">POWERED BY</span>
+                <div class="ticbull-badge">
+                    <img src="14882.jpg" alt="TicBull"> 
+                    <span>TICBULL</span>
+                </div>
+            </div>
+
+            <div class="user-socials">
+                <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+
+            <div class="policy-links">
+                <a href="terms.html">Terms of Service</a> &bull; <a href="privacy.html">Privacy Policy</a>
+            </div>
         </div>
     </div>
 
-    <!-- Modals for Stream/Dream Selection -->
+    <!-- Modals -->
+    <div class="modal-overlay" id="ticbullSupportModal">
+        <div class="bottom-sheet">
+            <div class="sheet-header">
+                <h3>TicBull Support</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeModal('ticbullSupportModal')"></i>
+            </div>
+            <div style="padding: 10px 20px;">
+                <a href="mailto:ticbull.support@gmail.com" class="ticbull-link-item">
+                    <i class="fa-solid fa-envelope"></i> <span>Email Support</span>
+                </a>
+                <a href="https://www.instagram.com/ticbull" target="_blank" class="ticbull-link-item">
+                    <i class="fa-brands fa-instagram"></i> <span>Instagram @ticbull</span>
+                </a>
+                <a href="https://t.me/ticbullteam" target="_blank" class="ticbull-link-item" style="border:none;">
+                    <i class="fa-brands fa-telegram"></i> <span>Telegram Channel</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internal List Modal for Stream & Dream -->
     <div class="modal-overlay" id="listModal">
         <div class="bottom-sheet">
-            <h3 id="listTitle">Select Option</h3>
-            <div id="listContent"></div>
+            <div class="sheet-header">
+                <h3 id="listTitle">Select Option</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
+            </div>
+            <div class="custom-list-container" id="listContent"></div>
+        </div>
+    </div>
+
+    <!-- OTP Modal for Signup Verification -->
+    <div class="modal-overlay center-align" id="otpModal">
+        <div class="center-modal">
+            <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
+            <h3 style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
+            <p style="font-size:12px; color:#64748b; margin-bottom:20px;">Enter the 6-digit OTP sent to your email.</p>
+            <div class="input-group">
+                <i class="fa-solid fa-key field-icon"></i>
+                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:16px;">
+            </div>
+            <button type="button" class="action-btn" onclick="verifyOtp()">COMPLETE SIGN UP</button>
+        </div>
+    </div>
+
+    <!-- SECURE FORGOT PASSWORD MODAL WITH OTP -->
+    <div class="modal-overlay center-align" id="forgotModal">
+        <div class="center-modal">
+            <span class="close-modal" onclick="resetForgotFlow()" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
+            <h3 id="resetTitle" style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
+            
+            <div id="resetStep1">
+                <div class="input-group" style="margin-top: 20px;">
+                    <i class="fa-solid fa-envelope field-icon"></i>
+                    <input type="email" id="resetEmail" class="input-field" placeholder="Registered Email">
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock field-icon"></i>
+                    <input type="password" id="newPassword" class="input-field" placeholder="New Password (Min 6)">
+                    <i class="fa-solid fa-eye toggle-password" id="resetEyeIcon" onclick="togglePass('newPassword', 'resetEyeIcon')"></i>
+                </div>
+                <button type="button" class="action-btn" onclick="sendResetOtp()">SEND OTP</button>
+            </div>
+
+            <div id="resetStep2" style="display:none; margin-top: 20px;">
+                <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Enter the 6-digit OTP sent to your email to confirm the reset.</p>
+                <div class="input-group">
+                    <i class="fa-solid fa-key field-icon"></i>
+                    <input type="text" id="resetOtpInput" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:16px;">
+                </div>
+                <button type="button" class="action-btn" onclick="verifyAndResetPassword()">VERIFY & RESET</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // LOGIC FOR DROPPER / STREAM / GOAL
-        function checkClassLogic(className) {
-            const streamGroup = document.getElementById('streamGroup');
-            const dreamGroup = document.getElementById('dreamGroup');
-            const boardGroup = document.getElementById('boardGroup');
+        let currentMode = 'signin';
+        let currentPath = 'board';
 
-            if (className.toLowerCase().includes('11') || className.toLowerCase().includes('12') || className.toLowerCase().includes('dropper')) {
-                streamGroup.style.display = 'block';
-                dreamGroup.style.display = 'block';
-                // Agar Dropper hai toh Board hide kar do
-                boardGroup.style.display = className.toLowerCase().includes('dropper') ? 'none' : 'block';
+        // Internal Data Lists for Stream & Goal
+        const dataLists = {
+            stream: [ {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'}, {id: 'pcmb', name: 'PCMB (Math & Bio)'}, {id: 'commerce', name: 'Commerce (Accounts)'}, {id: 'arts', name: 'Arts / Humanities'} ],
+            dream: [ {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE)'}, {id: 'upsc', name: 'IAS / IPS (UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'}, {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'}, {id: 'board_topper', name: 'Only Board Topper 95%+'} ]
+        };
+
+        // Helper function for logic visibility
+        function applyClassLogic(className) {
+            const streamGrp = document.getElementById('streamGroup');
+            const dreamGrp = document.getElementById('dreamGroup');
+            const boardGrp = document.getElementById('boardGroup');
+            
+            if(!className) return;
+
+            const nameLow = className.toLowerCase();
+            if (nameLow.includes('11') || nameLow.includes('12') || nameLow.includes('dropper')) {
+                streamGrp.style.display = 'block';
+                dreamGrp.style.display = 'block';
+                // Hide Board if Dropper
+                if (nameLow.includes('dropper')) {
+                    boardGrp.style.display = 'none';
+                } else {
+                    boardGrp.style.display = 'block';
+                }
             } else {
-                streamGroup.style.display = 'none';
-                dreamGroup.style.display = 'none';
-                boardGroup.style.display = 'block';
+                streamGrp.style.display = 'none';
+                dreamGrp.style.display = 'none';
+                boardGrp.style.display = 'block';
             }
         }
 
-        // Window Load (Ecosystem Restore)
+        // ================= SMART DATA RESTORE SYSTEM =================
         window.onload = function() {
+            if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
+
+            // Restore Temporary Form Data
+            if(sessionStorage.getItem('temp_name')) document.getElementById('fullName').value = sessionStorage.getItem('temp_name');
+            if(sessionStorage.getItem('temp_dob')) document.getElementById('dob').value = sessionStorage.getItem('temp_dob');
+            if(sessionStorage.getItem('temp_state')) document.getElementById('stateInput').value = sessionStorage.getItem('temp_state');
+            if(sessionStorage.getItem('temp_city')) document.getElementById('cityInput').value = sessionStorage.getItem('temp_city');
+            if(sessionStorage.getItem('temp_email')) document.getElementById('email').value = sessionStorage.getItem('temp_email');
+            if(sessionStorage.getItem('temp_pass')) document.getElementById('password').value = sessionStorage.getItem('temp_pass');
+
+            // Restore Main Options
+            if(localStorage.getItem('kiyo_board')) {
+                document.getElementById('lblBoard').innerText = localStorage.getItem('kiyo_board');
+                document.getElementById('btnBoard').classList.add('selected');
+            }
+            if(localStorage.getItem('kiyo_exam')) {
+                document.getElementById('lblExam').innerText = localStorage.getItem('kiyo_exam');
+                document.getElementById('btnExam').classList.add('selected');
+            }
+            if(localStorage.getItem('kiyo_skill')) {
+                document.getElementById('lblSkill').innerText = localStorage.getItem('kiyo_skill');
+                document.getElementById('btnSkill').classList.add('selected');
+            }
+
+            // Restore Class & Check if Stream/Goal should show
             const savedClass = localStorage.getItem('kiyo_class');
             if(savedClass) {
                 document.getElementById('lblClass').innerText = savedClass;
-                checkClassLogic(savedClass);
+                document.getElementById('btnClass').classList.add('selected');
+                applyClassLogic(savedClass);
             }
-            // ... (baki functions wahi hain jo humne security ke liye banaye the)
+
+            // Restore Internal Options (Stream & Dream)
+            if(localStorage.getItem('kiyo_stream')) {
+                document.getElementById('lblStream').innerText = localStorage.getItem('kiyo_stream');
+                document.getElementById('btnStream').classList.add('selected');
+            }
+            if(localStorage.getItem('kiyo_dream')) {
+                document.getElementById('lblDream').innerText = localStorage.getItem('kiyo_dream');
+                document.getElementById('btnDream').classList.add('selected');
+            }
+
+            // Auto-open Step 2 if returning
+            if(sessionStorage.getItem('temp_step') === '2') {
+                switchTab('signup');
+                goToStep2(true);
+                if(sessionStorage.getItem('temp_path')) {
+                    const btn = document.querySelector(`.path-btn[onclick*="${sessionStorage.getItem('temp_path')}"]`);
+                    if(btn) setPath(sessionStorage.getItem('temp_path'), btn);
+                }
+            }
         };
 
         function saveTempAndGo(url) {
             sessionStorage.setItem('temp_name', document.getElementById('fullName').value);
+            sessionStorage.setItem('temp_dob', document.getElementById('dob').value);
+            sessionStorage.setItem('temp_state', document.getElementById('stateInput').value);
+            sessionStorage.setItem('temp_city', document.getElementById('cityInput').value);
+            sessionStorage.setItem('temp_email', document.getElementById('email').value);
+            sessionStorage.setItem('temp_pass', document.getElementById('password').value);
+            sessionStorage.setItem('temp_step', '2'); 
+            sessionStorage.setItem('temp_path', currentPath);
             window.location.href = url;
+        }
+
+        function showToast(message, type = 'error') {
+            const toastBox = document.getElementById('toastBox');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
         function switchTab(mode) {
             currentMode = mode;
-            // ... (Tab logic wahi hai)
+            document.getElementById('signinTabBtn').classList.toggle('active', mode === 'signin');
+            document.getElementById('signupTabBtn').classList.toggle('active', mode === 'signup');
+            
+            document.getElementById('step1Fields').style.display = mode === 'signup' ? 'block' : 'none';
+            document.getElementById('step2Fields').style.display = 'none';
+            document.getElementById('commonFields').style.display = 'block';
+            document.getElementById('forgotLink').style.display = mode === 'signin' ? 'block' : 'none';
+            
+            if(mode === 'signup') {
+                document.getElementById('submitBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'block';
+            } else {
+                document.getElementById('submitBtn').style.display = 'block';
+                document.getElementById('submitBtn').innerText = "SIGN IN";
+                document.getElementById('nextBtn').style.display = 'none';
+            }
         }
-        
-        // ... (OTP, Security, API calls logic wahi purana secure wala)
+
+        function getAge(dateString) {
+            let today = new Date(); let birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+            return age;
+        }
+
+        function togglePass(fieldId, iconId) {
+            const pass = document.getElementById(fieldId); const icon = document.getElementById(iconId);
+            const isText = pass.type === 'text';
+            pass.type = isText ? 'password' : 'text';
+            icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
+        }
+
+        function goToStep2(isRestore = false) {
+            if(!isRestore) {
+                const name = document.getElementById('fullName').value.trim();
+                const dob = document.getElementById('dob').value;
+                const state = document.getElementById('stateInput').value.trim();
+                const city = document.getElementById('cityInput').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const pass = document.getElementById('password').value;
+
+                if(!name || !dob || !state || !city || !email || !pass) { return showToast("Please fill all details."); }
+                if(pass.length < 6) { return showToast("Password min 6 chars."); }
+                if(getAge(dob) < 13) { return showToast("13+ age required."); }
+            }
+
+            document.getElementById('step1Fields').style.display = 'none';
+            document.getElementById('commonFields').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('step2Fields').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'block';
+            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
+        }
+
+        function setPath(path, btnElement) {
+            currentPath = path;
+            document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            
+            document.getElementById('pathBoardUI').style.display = path === 'board' ? 'block' : 'none';
+            document.getElementById('pathExamUI').style.display = path === 'exam' ? 'block' : 'none';
+            document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
+        }
+
+        // Internal List Modal for Stream & Dream
+        function openSelectionList(type) {
+            const contentBox = document.getElementById('listContent');
+            const titles = { stream: "Select Streams / Subjects", dream: "Select Your Goal" };
+            document.getElementById('listTitle').innerText = titles[type];
+            contentBox.innerHTML = '';
+
+            const currentVal = localStorage.getItem('kiyo_' + type);
+
+            dataLists[type].forEach(item => {
+                const isSelected = currentVal === item.name;
+                contentBox.innerHTML += `
+                    <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.name}')">
+                        <span>${item.name}</span>
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>`;
+            });
+            document.getElementById('listModal').classList.add('active');
+        }
+
+        function selectListItem(type, name) {
+            const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
+            btn.classList.add('selected');
+            document.getElementById('lbl' + type.charAt(0).toUpperCase() + type.slice(1)).innerText = name;
+            
+            // Save immediately to local storage so it survives page reloads
+            localStorage.setItem('kiyo_' + type, name); 
+            closeListModal();
+        }
+
+        function closeListModal() { document.getElementById('listModal').classList.remove('active'); }
+        function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if(currentMode === 'signup') {
+                if(currentPath === 'board') {
+                    const selClass = localStorage.getItem('kiyo_class');
+                    
+                    if(!selClass) return showToast("Select Class");
+                    
+                    const nameLow = selClass.toLowerCase();
+                    const isDropper = nameLow.includes('dropper');
+                    
+                    // Normal student needs board, dropper doesn't
+                    if(!isDropper && !localStorage.getItem('kiyo_board')) { 
+                        return showToast("Select Board"); 
+                    }
+                    
+                    // Validate Stream and Dream if Class is 11, 12 or Dropper
+                    if (nameLow.includes('11') || nameLow.includes('12') || isDropper) {
+                        if(!localStorage.getItem('kiyo_stream') || !localStorage.getItem('kiyo_dream')) {
+                            return showToast("Select Stream & Target Goal");
+                        }
+                    }
+                } else if (currentPath === 'exam') {
+                    if(!localStorage.getItem('kiyo_exam')) { return showToast("Select an Exam"); }
+                } else {
+                    if(!localStorage.getItem('kiyo_skill')) { return showToast("Select a Skill"); }
+                }
+            } else if(password.length < 6) {
+                return showToast("Password min 6 chars");
+            }
+
+            try {
+                const res = await fetch('/api/check-user', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, mode: currentMode })
+                });
+                const data = await res.json();
+
+                if (currentMode === 'signup') {
+                    if (data.status === 'exists') { showToast(data.message); return switchTab('signin'); }
+                    
+                    showToast("Sending OTP...", 'success');
+                    
+                    const otpRes = await fetch('/api/send-otp', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password, fullName: document.getElementById('fullName').value, dob: document.getElementById('dob').value })
+                    });
+                    
+                    if(otpRes.ok) { setTimeout(() => { document.getElementById('otpModal').classList.add('active'); }, 1000); } 
+                    else { showToast("Failed to send OTP"); }
+
+                } else {
+                    if (data.status === 'not_found' || data.status === 'wrong_password') { 
+                        showToast(data.message); 
+                    } else if (data.status === 'success') {
+                        localStorage.setItem('kiyo_user_email', email);
+                        showToast("Login Successful!", 'success');
+                        setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+                    }
+                }
+            } catch (err) { showToast("Server connection error"); }
+        }
+
+        async function verifyOtp() {
+            const email = document.getElementById('email').value.trim();
+            const otp = document.getElementById('otpInput').value.trim();
+            if (otp.length !== 6) { return showToast("Enter 6-digit OTP"); }
+
+            const res = await fetch('/api/verify-otp', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, otp })
+            });
+
+            if (res.ok) {
+                localStorage.setItem('kiyo_user_email', email);
+                localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
+                localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
+                localStorage.setItem('kiyo_user_state', document.getElementById('stateInput').value.trim());
+                localStorage.setItem('kiyo_user_city', document.getElementById('cityInput').value.trim());
+                localStorage.setItem('kiyo_user_path', currentPath);
+                
+                // Note: Board, Class, Exam, Skill are already saved in localStorage from the 4 files
+                
+                // Clear temporary session data
+                sessionStorage.clear();
+
+                showToast("Account Created!", 'success');
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+            } else { showToast("Invalid OTP!"); }
+        }
+
+        // ================= SECURE FORGOT PASSWORD LOGIC WITH OTP =================
+        function resetForgotFlow() {
+            closeModal('forgotModal');
+            document.getElementById('resetStep1').style.display = 'block';
+            document.getElementById('resetStep2').style.display = 'none';
+            document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password';
+            document.getElementById('resetEmail').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('resetOtpInput').value = '';
+        }
+
+        async function sendResetOtp() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            
+            if(!email) return showToast("Enter Registered Email");
+            if(newPassword.length < 6) return showToast("New Password Min 6 Chars");
+
+            showToast("Verifying Email...", "success");
+
+            try {
+                // SECURITY FIX: Check if email exists
+                const checkRes = await fetch('/api/check-user', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
+                });
+                const checkData = await checkRes.json();
+
+                if (checkData.status === 'not_found') {
+                    return showToast("Account not found! Please check email.");
+                }
+
+                // If account exists, send the OTP
+                const res = await fetch('/api/send-pass-change-otp', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email})
+                });
+
+                if(res.ok) {
+                    document.getElementById('resetStep1').style.display = 'none';
+                    document.getElementById('resetStep2').style.display = 'block';
+                    document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Enter OTP';
+                    showToast("OTP Sent to Email!", "success");
+                } else {
+                    showToast("Failed to send OTP");
+                }
+            } catch(e) { showToast("Network Error"); }
+        }
+
+        async function verifyAndResetPassword() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const otp = document.getElementById('resetOtpInput').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP");
+
+            try {
+                const res = await fetch('/api/verify-pass-change', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email, otp: otp, newPassword: newPassword})
+                });
+
+                if(res.ok) {
+                    showToast("Password Reset Successful!", "success");
+                    resetForgotFlow(); 
+                    switchTab('signin'); 
+                } else {
+                    showToast("Invalid OTP!");
+                }
+            } catch(e) { showToast("Network Error"); }
+        }
     </script>
 </body>
 </html>
