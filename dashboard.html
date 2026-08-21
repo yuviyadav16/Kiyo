@@ -6,140 +6,80 @@
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 1-SEC GLITCH FIX: Ye code page load hone se pehle execute hoga, isse blink nahi hoga -->
+    <!-- 1-SEC GLITCH FIX -->
     <script>
         if(!localStorage.getItem('kiyo_user_email')) {
             window.location.replace("login.html");
-        }
-        // Theme Sync
-        if(localStorage.getItem('kiyo_theme') === 'dark') {
-            document.documentElement.classList.add('dark-theme');
         }
     </script>
 
     <style>
         /* LIGHT & DARK THEME VARIABLES */
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4338ca;
-            --bg-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #e2e8f0;
-            --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.1);
-            --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
+            --primary: #6366f1; --primary-dark: #4338ca; --bg-color: #f8fafc; --surface-color: #ffffff;
+            --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1); --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
         }
 
-        html.dark-theme {
-            --bg-color: #0B101E;
-            --surface-color: #121826;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255,255,255,0.1);
+        .dark-theme {
+            --bg-color: #0B101E; --surface-color: #121826; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1);
         }
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--bg-color); color: var(--text-main);
-            font-family: system-ui, -apple-system, sans-serif;
-            overflow-x: hidden; transition: background 0.3s, color 0.3s;
-            -webkit-tap-highlight-color: transparent;
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: var(--bg-color); color: var(--text-main); font-family: system-ui, -apple-system, sans-serif; overflow-x: hidden; transition: background 0.3s, color 0.3s; -webkit-tap-highlight-color: transparent; }
 
         /* TOP APP BAR */
-        .top-navbar {
-            background: var(--surface-color); padding: 15px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50;
-        }
-        html.dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .top-navbar { background: var(--surface-color); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
+        .dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
         .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
-        /* MAIN CONTENT AREA */
+        /* NOTIFICATION PANEL */
+        .notification-panel { position: fixed; top: 60px; right: -320px; width: 300px; max-height: 400px; background: var(--surface-color); box-shadow: -5px 5px 25px rgba(0,0,0,0.1); border-radius: 0 0 0 16px; z-index: 100; transition: right 0.3s ease; overflow-y: auto; border: 1px solid var(--border-color); }
+        .notification-panel.active { right: 0; }
+        .notif-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 16px; display: flex; justify-content: space-between; align-items: center;}
+        .notif-item { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; gap: 15px; }
+        .notif-icon { background: rgba(99, 102, 241, 0.1); color: var(--primary); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;}
+        .notif-text h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--text-main); }
+        .notif-text p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+        /* MAIN CONTENT & PROFILE CARD */
         .main-content { padding: 20px; padding-bottom: 80px; }
-
-        /* 16:9 PROFILE CARD */
-        .profile-card {
-            width: 100%; aspect-ratio: 16 / 9;
-            background: var(--card-gradient); border-radius: 20px;
-            padding: 20px; box-sizing: border-box; color: #fff;
-            display: flex; flex-direction: column; justify-content: space-between;
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative;
-        }
-        
+        .profile-card { width: 100%; background: var(--card-gradient); border-radius: 20px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative; }
         .profile-top { display: flex; align-items: center; gap: 15px; }
-        .profile-pic-container {
-            width: 65px; height: 65px; border-radius: 50%; background: #fff;
-            border: 3px solid rgba(255,255,255,0.5); position: relative;
-        }
+        .profile-pic-container { width: 65px; height: 65px; border-radius: 50%; background: #fff; border: 3px solid rgba(255,255,255,0.5); position: relative; }
         .profile-pic-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .camera-btn {
-            position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff;
-            width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-            font-size: 11px; cursor: pointer; border: 2px solid #fff;
-        }
+        .camera-btn { position: absolute; bottom: 0; right: -5px; background: #10b981; color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; cursor: pointer; border: 2px solid #fff; }
         #fileInput { display: none; }
-
         .student-info h2 { margin: 0; font-size: 20px; font-weight: 800; text-transform: capitalize; display: flex; align-items: center; gap: 10px; }
         .student-info p { margin: 2px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
-
-        .profile-bottom { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); }
+        .profile-bottom { background: rgba(0,0,0,0.2); padding: 10px 15px; border-radius: 12px; margin-top: 15px; backdrop-filter: blur(5px); }
         .profile-bottom p { margin: 0; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; }
         .profile-bottom span { color: #10b981; }
 
-        /* DASHBOARD GRID & QUICK ACTIONS */
+        /* DASHBOARD GRID */
         .quick-action-header { margin-top: 25px; font-size: 16px; font-weight: 800; color: var(--text-main); margin-bottom: 15px;}
-        
-        .chat-btn-container {
-            background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color);
-            padding: 20px; text-align: center; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; gap: 15px;
-        }
-        .chat-btn-container:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.1); border-color: var(--primary);}
+        .chat-btn-container { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; gap: 15px; }
         .chat-icon-bg { background: rgba(99, 102, 241, 0.1); width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; }
         .chat-btn-container i { font-size: 24px; color: var(--primary); }
         .chat-btn-text { font-size: 16px; font-weight: 700; color: var(--text-main); }
-
         .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .grid-item { 
-            background: var(--surface-color); padding: 15px; border-radius: 14px; text-align: center; 
-            border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
-        .grid-item:hover { transform: scale(0.98); border-color: var(--primary); }
-        .grid-item i { font-size: 22px; color: var(--text-muted); margin-bottom: 8px; transition: 0.2s;}
-        .grid-item:hover i { color: var(--primary); }
+        .grid-item { background: var(--surface-color); padding: 15px; border-radius: 14px; text-align: center; border: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .grid-item i { font-size: 22px; color: var(--text-muted); margin-bottom: 8px;}
         .grid-item span { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); }
 
         /* SIDEBAR MENU */
-        .sidebar {
-            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
-            background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1);
-            transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column;
-        }
-        html.dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1); transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column; }
+        .dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
         .sidebar.active { left: 0; }
-        .sidebar-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: 0.4s;
-        }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 99; opacity: 0; pointer-events: none; transition: 0.4s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: all; }
-
         .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .sidebar-header h3 { margin: 0; font-size: 20px; color: var(--primary); font-weight: 900;}
         .close-sidebar { font-size: 24px; color: var(--text-muted); cursor: pointer; }
-
         .menu-items { padding: 15px 0; flex: 1; overflow-y: auto; }
-        .menu-item {
-            padding: 15px 25px; display: flex; align-items: center; gap: 15px;
-            color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s;
-        }
-        .menu-item:hover { background: var(--border-color); color: var(--primary); }
+        .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; transition: 0.2s; }
         .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
-        .menu-item:hover i { color: var(--primary); }
-
+        
         /* Theme Toggle */
         .theme-toggle-box { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; border-bottom: 1px solid var(--border-color); }
         .switch { position: relative; display: inline-block; width: 46px; height: 24px; }
@@ -152,30 +92,19 @@
         .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
         .social-row { display: flex; justify-content: center; gap: 18px; margin-bottom: 10px; }
         .social-row a { color: var(--text-muted); font-size: 18px; transition: 0.2s; }
-        .social-row a:hover { color: var(--primary); }
         .powered-by { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; }
 
         /* SETTINGS PAGE (2ND SCREEN) */
-        .modal-sheet {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color);
-            z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column;
-        }
+        .modal-sheet { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
         .modal-sheet.active { transform: translateX(0); }
-        
-        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; }
+        .modal-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 15px; position: sticky; top:0; background:var(--surface-color); z-index: 10;}
         .modal-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
         .modal-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
-
-        .settings-content { padding: 20px; flex: 1; overflow-y: auto;}
-        
-        .settings-btn { width: 100%; padding: 16px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;}
-        .settings-btn:hover { border-color: var(--primary); }
-        .settings-btn i.fa-chevron-right { color: var(--text-muted); font-size: 12px;}
-        
+        .settings-content { padding: 20px; flex: 1; }
+        .settings-btn { width: 100%; padding: 16px; background: var(--surface-color); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .danger-zone { margin-top: 30px; border: 1px solid var(--danger); border-radius: 16px; padding: 20px; background: var(--danger-bg); }
         .danger-title { color: var(--danger); font-weight: 800; margin-bottom: 10px; font-size: 16px;}
         .danger-text { font-size: 13px; color: var(--text-main); margin-bottom: 15px; opacity: 0.8; }
-        
         .btn-delete { width: 100%; padding: 14px; background: var(--danger); border: none; color: #fff; border-radius: 12px; font-weight: 800; font-size: 15px; cursor: pointer; }
         .btn-logout-main { width: 100%; padding: 16px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; margin-top: 20px; }
 
@@ -183,32 +112,30 @@
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: #fff; padding: 12px 18px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid rgba(255,255,255,0.1); transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
-        .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* CUSTOM MODALS FOR EDIT/DELETE/SECURITY */
-        .custom-modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
-            z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
-        }
+        /* CUSTOM MODALS */
+        .custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; }
         .custom-modal-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .custom-modal-box { background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s;}
+        .custom-modal-box { background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 340px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); transition: 0.3s; max-height: 80vh; overflow-y: auto;}
         .custom-modal-overlay.active .custom-modal-box { transform: scale(1); }
-        
         .custom-modal-box h3 { margin: 0 0 15px 0; color: var(--text-main); font-size: 18px;}
         .custom-modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
         
-        .modal-input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; font-weight: bold;}
+        .input-label { display: block; text-align: left; font-size: 12px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px; margin-left: 5px; }
+        .modal-input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; font-weight: 600;}
         .modal-input:focus { border-color: var(--primary); }
+        .modal-select { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; font-weight: 600; appearance: none; }
         
-        .btn-row { display: flex; gap: 10px; }
+        /* PASSWORD INPUT GROUP WITH EYE ICON */
+        .password-group { position: relative; width: 100%; margin-bottom: 15px; }
+        .password-group .modal-input { margin-bottom: 0; padding-right: 40px; }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 10px;}
         .btn-cancel { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--bg-color); color: var(--text-main); font-weight: 700; cursor: pointer; }
         .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
         .btn-danger { background: var(--danger); }
-        
-        /* Specific input alignment for full edit profile */
-        .input-label { display: block; text-align: left; font-size: 12px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px; margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -219,12 +146,32 @@
     <div class="top-navbar">
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="nav-title">Kiyo AI</h1>
-        <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted);"></i>
+        <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted); cursor: pointer;" onclick="toggleNotifications()"></i>
+    </div>
+
+    <!-- NOTIFICATION PANEL -->
+    <div class="notification-panel" id="notifPanel">
+        <div class="notif-header">
+            Notifications <i class="fa-solid fa-xmark" style="cursor: pointer; color: var(--text-muted);" onclick="toggleNotifications()"></i>
+        </div>
+        <div class="notif-item">
+            <div class="notif-icon"><i class="fa-solid fa-rocket"></i></div>
+            <div class="notif-text">
+                <h4>Welcome to Kiyo AI!</h4>
+                <p>Start your intelligent learning journey today. Complete your profile for better AI responses.</p>
+            </div>
+        </div>
+        <div class="notif-item">
+            <div class="notif-icon" style="color: #10b981; background: rgba(16, 185, 129, 0.1);"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="notif-text">
+                <h4>Security Update</h4>
+                <p>Z+ Security features including OTP verification are now active for your account safety.</p>
+            </div>
+        </div>
     </div>
 
     <!-- MAIN CONTENT -->
     <div class="main-content">
-        
         <!-- 16:9 PROFILE CARD -->
         <div class="profile-card">
             <div class="profile-top">
@@ -234,7 +181,6 @@
                     <input type="file" id="fileInput" accept="image/*" onchange="updateProfilePic(event)">
                 </div>
                 <div class="student-info">
-                    <!-- PENCIL ICON ADDED FOR FULL PROFILE EDIT -->
                     <h2 id="studentName">
                         Student Name <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal('editProfileModal')"></i>
                     </h2>
@@ -249,13 +195,11 @@
 
         <h3 class="quick-action-header">Learning Hub</h3>
         
-        <!-- Premium Chat Button (Linked to Coming Soon) -->
         <div class="chat-btn-container" onclick="window.location.href='coming-soon.html?feature=AI%20Chat'">
             <div class="chat-icon-bg"><i class="fa-solid fa-robot"></i></div>
             <div class="chat-btn-text">Chat with Kiyo AI</div>
         </div>
 
-        <!-- App Features Grid (Ask Doubts Removed, Links go to coming-soon) -->
         <div class="dashboard-grid">
             <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=My%20Syllabus'"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
             <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=PYQs'"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
@@ -305,7 +249,7 @@
         </div>
     </div>
 
-    <!-- SETTINGS PAGE (2ND SCREEN - CLEANED UP FOR Z+ SECURITY) -->
+    <!-- SETTINGS PAGE (2ND SCREEN - Z+ SECURITY) -->
     <div class="modal-sheet" id="settingsPage">
         <div class="modal-header">
             <i class="fa-solid fa-arrow-left" onclick="closeSettings()"></i>
@@ -323,7 +267,7 @@
                 <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-envelope-circle-check" style="color:var(--primary);"></i> Update Email ID</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
-            <button class="settings-btn">
+            <button class="settings-btn" onclick="toggleNotifications(); closeSettings();">
                 <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bell" style="color:var(--primary);"></i> Notifications</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
@@ -333,7 +277,7 @@
             <div class="danger-zone">
                 <div class="danger-title"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</div>
                 <div class="danger-text">Permanently deleting your account will erase all your progress, saved notes, and profile data. This action cannot be undone.</div>
-                <button class="btn-delete" onclick="openDeleteWarning()">Delete Account</button>
+                <button class="btn-delete" onclick="openCustomModal('deleteWarningModal')">Delete Account</button>
             </div>
         </div>
     </div>
@@ -349,11 +293,28 @@
             <span class="input-label">Date of Birth</span>
             <input type="date" id="editDobInput" class="modal-input" placeholder="DOB">
             
-            <span class="input-label">Class (e.g. 11th, 12th)</span>
-            <input type="text" id="editClassInput" class="modal-input" placeholder="Class">
+            <span class="input-label">Educational Board</span>
+            <select id="editBoardInput" class="modal-select">
+                <option value="CBSE">CBSE Board</option>
+                <option value="BSEB">Bihar Board (BSEB)</option>
+                <option value="ICSE">ICSE / ISC</option>
+                <option value="State">Other State Board</option>
+            </select>
 
-            <span class="input-label">Target Goal</span>
+            <span class="input-label">Class</span>
+            <select id="editClassInput" class="modal-select">
+                <option value="9">Class 9</option>
+                <option value="10">Class 10</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+                <option value="Dropper">Dropper</option>
+            </select>
+
+            <span class="input-label">Target Exam / Goal</span>
             <input type="text" id="editGoalInput" class="modal-input" placeholder="e.g. NEET, JEE">
+
+            <span class="input-label">Skills / Interests</span>
+            <input type="text" id="editSkillInput" class="modal-input" placeholder="e.g. Coding, Design">
             
             <span class="input-label">City</span>
             <input type="text" id="editCityInput" class="modal-input" placeholder="City">
@@ -368,9 +329,19 @@
     <!-- CUSTOM MODAL: Change Password (Z+) -->
     <div class="custom-modal-overlay" id="passwordModal">
         <div class="custom-modal-box">
-            <h3>Change Password</h3>
-            <p>Verification OTP will be sent to your email.</p>
-            <input type="password" id="newPasswordInput" class="modal-input" placeholder="New Password">
+            <h3 style="color:var(--text-main);">Change Password</h3>
+            <p style="color:var(--text-muted); font-size:12px;">Verification OTP will be sent to your email.</p>
+            
+            <div class="password-group">
+                <input type="password" id="newPasswordInput" class="modal-input" placeholder="New Password">
+                <i class="fa-solid fa-eye toggle-password" id="eyeIcon1" onclick="togglePass('newPasswordInput', 'eyeIcon1')"></i>
+            </div>
+            
+            <div class="password-group">
+                <input type="password" id="confirmPasswordInput" class="modal-input" placeholder="Confirm Password">
+                <i class="fa-solid fa-eye toggle-password" id="eyeIcon2" onclick="togglePass('confirmPasswordInput', 'eyeIcon2')"></i>
+            </div>
+
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('passwordModal')">Cancel</button>
                 <button class="btn-confirm" onclick="triggerAction('Verification OTP sent for Password change!')">Send OTP</button>
@@ -381,9 +352,13 @@
     <!-- CUSTOM MODAL: Update Email -->
     <div class="custom-modal-overlay" id="emailUpdateModal">
         <div class="custom-modal-box">
-            <h3>Update Email ID</h3>
-            <p>We will verify your new email address.</p>
-            <input type="email" id="newEmailInput" class="modal-input" placeholder="New Email ID">
+            <h3 style="color:var(--text-main);">Update Email ID</h3>
+            <p style="color:var(--text-muted); font-size:12px; margin-bottom: 5px;">Current Email:</p>
+            <p style="color:var(--text-main); font-size:14px; font-weight:bold; margin-top: 0; margin-bottom: 20px; background:var(--bg-color); padding:10px; border-radius:8px;" id="currentEmailDisplay">loading...</p>
+            
+            <span class="input-label">New Email Address</span>
+            <input type="email" id="newEmailInput" class="modal-input" placeholder="Enter New Email ID">
+            
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('emailUpdateModal')">Cancel</button>
                 <button class="btn-confirm" onclick="triggerAction('Verification OTP sent to new Email!')">Verify Email</button>
@@ -395,52 +370,58 @@
     <div class="custom-modal-overlay" id="deleteWarningModal">
         <div class="custom-modal-box" style="border: 1px solid var(--danger);">
             <i class="fa-solid fa-circle-exclamation" style="font-size: 35px; color: var(--danger); margin-bottom: 10px;"></i>
-            <h3>Are you sure?</h3>
-            <p>We will send a 6-digit OTP to your registered email to verify deletion.</p>
+            <h3 style="color:var(--text-main);">Are you sure?</h3>
+            <p style="color:var(--text-muted); font-size:12px;">We will send a 6-digit OTP to your registered email to verify deletion.</p>
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('deleteWarningModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CUSTOM MODAL: Enter Delete OTP -->
-    <div class="custom-modal-overlay" id="deleteOtpModal">
-        <div class="custom-modal-box">
-            <h3>Verify Deletion</h3>
-            <p>Enter the 6-digit OTP sent to your email.</p>
-            <input type="text" id="deleteOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCustomModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteAccount()">Delete Forever</button>
+                <button class="btn-confirm btn-danger" onclick="triggerAction('Delete OTP Sent!')">Send OTP</button>
             </div>
         </div>
     </div>
 
     <script>
-        function showToast(message, type = 'error') {
+        function showToast(message, type = 'success') {
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> <span>${message}</span>`;
             toastBox.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
         function triggerAction(msg) {
-            showToast(msg, 'success');
+            showToast(msg);
             document.querySelectorAll('.custom-modal-overlay').forEach(m => m.classList.remove('active'));
+        }
+
+        // Notification Toggle
+        function toggleNotifications() {
+            document.getElementById('notifPanel').classList.toggle('active');
+        }
+
+        // Toggle Password Visibility
+        function togglePass(fieldId, iconId) {
+            const pass = document.getElementById(fieldId); 
+            const icon = document.getElementById(iconId);
+            if(pass.type === 'password') {
+                pass.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash toggle-password';
+            } else {
+                pass.type = 'password';
+                icon.className = 'fa-solid fa-eye toggle-password';
+            }
         }
 
         // Load User Data
         window.onload = function() {
-            // WE DON'T DO REDIRECT LOGIC HERE ANYMORE. (Moved to HEAD to fix 1-sec glitch)
-            
             document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
-            document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
-            document.getElementById('studentEmail').innerText = localStorage.getItem('kiyo_user_email');
+            document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "Siwan") + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
             
-            let goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || localStorage.getItem('kiyo_skill') || "Learning Guide";
+            const email = localStorage.getItem('kiyo_user_email');
+            document.getElementById('studentEmail').innerText = email;
+            document.getElementById('currentEmailDisplay').innerText = email; // For email update modal
+            
+            let goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
             document.getElementById('studentGoal').innerText = goal;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
@@ -504,9 +485,13 @@
             if(id === 'editProfileModal') {
                 document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
                 document.getElementById('editDobInput').value = localStorage.getItem('kiyo_user_dob') || "";
-                document.getElementById('editClassInput').value = localStorage.getItem('kiyo_class') || "";
-                document.getElementById('editGoalInput').value = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "";
-                document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "";
+                document.getElementById('editClassInput').value = localStorage.getItem('kiyo_class') || "11";
+                document.getElementById('editGoalInput').value = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
+                document.getElementById('editSkillInput').value = localStorage.getItem('kiyo_skill') || "";
+                document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "Siwan";
+                
+                let board = localStorage.getItem('kiyo_board');
+                if(board) document.getElementById('editBoardInput').value = board;
             }
             document.getElementById(id).classList.add('active'); 
         }
@@ -515,66 +500,28 @@
         async function saveProfileEdit() {
             const newName = document.getElementById('editNameInput').value.trim();
             const newDob = document.getElementById('editDobInput').value;
-            const newClass = document.getElementById('editClassInput').value.trim();
+            const newClass = document.getElementById('editClassInput').value;
+            const newBoard = document.getElementById('editBoardInput').value;
             const newGoal = document.getElementById('editGoalInput').value.trim();
+            const newSkill = document.getElementById('editSkillInput').value.trim();
             const newCity = document.getElementById('editCityInput').value.trim();
             
-            if(!newName || !newCity) { return showToast("Name and City cannot be empty."); }
+            if(!newName || !newCity) { return showToast("Name and City are required", "error"); }
 
             localStorage.setItem('kiyo_user_name', newName);
             localStorage.setItem('kiyo_user_dob', newDob);
             localStorage.setItem('kiyo_class', newClass);
+            localStorage.setItem('kiyo_board', newBoard);
             localStorage.setItem('kiyo_dream', newGoal);
+            localStorage.setItem('kiyo_skill', newSkill);
             localStorage.setItem('kiyo_user_city', newCity);
 
             document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
-            document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "State");
-            document.getElementById('studentGoal').innerText = newGoal || "Explorer";
+            document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
+            document.getElementById('studentGoal').innerText = newGoal || "NEET";
 
-            showToast("Profile Updated Successfully!", "success");
+            showToast("Profile Updated Successfully!");
             closeCustomModal('editProfileModal');
-        }
-
-        // Delete Account Logic
-        function openDeleteWarning() { openCustomModal('deleteWarningModal'); }
-        
-        async function sendDeleteOTP() {
-            closeCustomModal('deleteWarningModal');
-            showToast("Sending OTP...", "success");
-            const email = localStorage.getItem('kiyo_user_email');
-            
-            try {
-                const res = await fetch('/api/send-delete-otp', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email })
-                });
-                if(res.ok) {
-                    document.getElementById('deleteOtpInput').value = "";
-                    openCustomModal('deleteOtpModal');
-                    showToast("OTP Sent to Email", "success");
-                } else { showToast("Failed to send OTP."); }
-            } catch(e) { showToast("Network Error."); }
-        }
-
-        async function verifyDeleteAccount() {
-            const otp = document.getElementById('deleteOtpInput').value.trim();
-            if(otp.length !== 6) return showToast("Enter 6-digit OTP.");
-            
-            const email = localStorage.getItem('kiyo_user_email');
-            try {
-                const res = await fetch('/api/delete-account', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, otp: otp })
-                });
-                if(res.ok) {
-                    closeCustomModal('deleteOtpModal');
-                    showToast("Account Deleted", "success");
-                    setTimeout(() => {
-                        localStorage.clear();
-                        window.location.replace("login.html");
-                    }, 1500);
-                } else { showToast("Invalid OTP."); }
-            } catch(e) { showToast("Network Error."); }
         }
     </script>
 </body>
