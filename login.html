@@ -7,36 +7,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --primary: #6366f1; --primary-dark: #4338ca; --primary-light: rgba(99, 102, 241, 0.1);
-            --accent-green: #10b981; --accent-green-hover: #059669;
+            /* PREMIUM EDUCATIONAL LIGHT THEME */
+            --primary: #6366f1; /* Indigo */
+            --primary-dark: #4338ca;
+            --primary-light: rgba(99, 102, 241, 0.1);
+            --accent-green: #10b981; /* Emerald Green for Action Button */
+            --accent-green-hover: #059669;
             --bg-gradient: linear-gradient(180deg, #ede9fe 0%, #f8fafc 40%, #ffffff 100%);
-            --danger: #ef4444; --success: #10b981;
-            --text-main: #0f172a; --text-muted: #64748b;
-            --input-border: #e2e8f0; --input-bg: #ffffff;
+            --danger: #ef4444;
+            --success: #10b981;
+            --text-main: #0f172a; /* Deep Slate */
+            --text-muted: #64748b;
+            --input-border: #e2e8f0;
+            --input-bg: #ffffff;
         }
 
+        /* STRICTLY 1 SCREEN (100dvh) - NO SCROLLING */
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
-            background: var(--bg-gradient); font-family: system-ui, sans-serif;
-            color: var(--text-main); overflow: hidden; box-sizing: border-box; -webkit-tap-highlight-color: transparent;
+            margin: 0; padding: 0; width: 100%; 
+            height: 100%; height: 100dvh; 
+            background: var(--bg-gradient);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-main);
+            overflow: hidden; 
+            box-sizing: border-box; -webkit-tap-highlight-color: transparent;
         }
 
         .main-wrapper { 
-            width: 100%; max-width: 400px; margin: 0 auto; height: 100%; 
-            padding: 25px 20px 15px 20px; box-sizing: border-box; display: flex; flex-direction: column; 
+            width: 100%; max-width: 400px; margin: 0 auto;
+            height: 100%; padding: 25px 20px 15px 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; 
         }
 
-        .header-section { text-align: center; margin-bottom: 25px; margin-top: 10px; flex-shrink: 0; }
-        .header-section h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; margin: 0; color: #1e1b4b; line-height: 1.1; }
+        /* MODERN HEADER */
+        .header-section {
+            text-align: center;
+            margin-bottom: 25px;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+        .header-section h1 {
+            font-size: 32px; font-weight: 900; letter-spacing: -0.5px; 
+            margin: 0; color: #1e1b4b; line-height: 1.1;
+        }
         .brand-highlight { color: var(--accent-green); }
-        .header-section p { font-size: 13px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; margin: 8px 0 0 0; }
+        .header-section p {
+            font-size: 13px; color: var(--text-muted); font-weight: 600; 
+            letter-spacing: 0.5px; margin: 8px 0 0 0;
+        }
 
+        /* FORM CONTAINER */
         .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
 
+        /* TAB SWITCHER */
         .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 14px; padding: 5px; margin-bottom: 20px; flex-shrink: 0;}
         .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: #ffffff; color: var(--primary-dark); box-shadow: 0px 4px 10px rgba(0,0,0,0.05); }
 
+        /* PREMIUM CLEAN INPUTS */
         .input-group { position: relative; width: 100%; margin-bottom: 12px; flex-shrink: 0;}
         .input-row { display: flex; gap: 10px; margin-bottom: 12px; flex-shrink: 0;}
         .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 14px; }
@@ -46,20 +74,24 @@
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
         .input-no-icon { padding-left: 15px; }
 
-        /* BUTTONS TO OPEN 4 DEDICATED HTML FILES */
+        /* DROPDOWNS */
         .custom-select-btn { width: 100%; padding: 14px 15px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-muted); font-size: 14px; font-weight: 600; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .custom-select-btn.selected { color: var(--primary-dark); border-color: var(--primary); background: #f8fafc; }
 
+        /* PATH SELECTORS */
         .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
         .path-btn { flex: 1; background: #f1f5f9; border: 1px solid #e2e8f0; color: var(--text-muted); padding: 10px 5px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
         .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 12px var(--primary-light);}
 
+        /* GREEN ACTION BUTTON */
         .action-btn { width: 100%; padding: 16px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
         .action-btn:active { transform: scale(0.97); }
 
         .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 700; flex-shrink: 0;}
         
+        /* FOOTER */
         .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 15px; }
+        
         .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 15px; }
         .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;}
         .ticbull-badge { background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s;}
@@ -74,6 +106,7 @@
         .policy-links a { color: #64748b; text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 600; }
         .policy-links a:hover { color: #0f172a; }
 
+        /* Toasts & Modals */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
@@ -88,6 +121,12 @@
         .sheet-header h3 { margin: 0; font-size: 16px; color: #0f172a; font-weight: 800; }
         .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
         
+        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .list-item { padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; color: #334155; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
+        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
+        .list-item.selected { background: var(--primary-light); border: 1px solid var(--primary); color: var(--primary-dark); }
+        .list-item.selected i { opacity: 1; transform: scale(1); }
+
         .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 14px 15px; text-decoration: none; color: #0f172a; border-bottom: 1px solid #f1f5f9; transition: 0.2s;}
         .ticbull-link-item i { font-size: 20px; color: var(--primary); width: 25px; text-align: center;}
         .ticbull-link-item span { font-size: 14px; font-weight: 600; }
@@ -489,9 +528,22 @@
             if(!email) return showToast("Enter Registered Email");
             if(newPassword.length < 6) return showToast("New Password Min 6 Chars");
 
-            showToast("Sending OTP...", "success");
+            showToast("Verifying Email...", "success");
 
             try {
+                // SECURITY FIX: CHECK IF EMAIL EXISTS BEFORE SENDING OTP
+                const checkRes = await fetch('/api/check-user', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
+                });
+                const checkData = await checkRes.json();
+
+                // If account is not found, stop the process here!
+                if (checkData.status === 'not_found') {
+                    return showToast("Account not found! Please check email.");
+                }
+
+                // If account exists, send the OTP
                 const res = await fetch('/api/send-pass-change-otp', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: email})
@@ -503,7 +555,7 @@
                     document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Enter OTP';
                     showToast("OTP Sent to Email!", "success");
                 } else {
-                    showToast("Failed to send OTP or Email not registered");
+                    showToast("Failed to send OTP");
                 }
             } catch(e) { showToast("Network Error"); }
         }
@@ -533,3 +585,4 @@
     </script>
 </body>
 </html>
+
