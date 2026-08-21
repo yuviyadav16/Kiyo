@@ -6,7 +6,7 @@
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 1-SEC GLITCH & CACHE FIX -->
+    <!-- 1-SEC GLITCH FIX -->
     <script>
         if(!localStorage.getItem('kiyo_user_email')) {
             window.location.replace("login.html");
@@ -39,10 +39,10 @@
         /* REAL NOTIFICATION DRAWER */
         .notif-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
         .notif-overlay.active { opacity: 1; pointer-events: all; }
-        .notification-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--surface-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        .notification-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--bg-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .notification-drawer.active { right: 0; }
         .notif-header-drawer { padding: 20px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; color: var(--text-main); }
-        .notif-body { padding: 15px; flex: 1; overflow-y: auto; background: var(--bg-color); }
+        .notif-body { padding: 15px; flex: 1; overflow-y: auto; }
         .notif-card { background: var(--surface-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: flex-start; }
         .notif-icon { background: rgba(99, 102, 241, 0.1); color: var(--primary); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;}
         .notif-text h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--text-main); }
@@ -303,10 +303,6 @@
                 <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Change Password (Z+ Security)</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
-            <button class="settings-btn" onclick="openCustomModal('emailUpdateModal')">
-                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-envelope-circle-check" style="color:var(--primary);"></i> Update Email ID</span>
-                <i class="fa-solid fa-chevron-right"></i>
-            </button>
             <button class="settings-btn" onclick="toggleNotifications(); closeSettings();">
                 <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bell" style="color:var(--primary);"></i> Notifications</span>
                 <i class="fa-solid fa-chevron-right"></i>
@@ -322,7 +318,7 @@
         </div>
     </div>
 
-    <!-- CUSTOM MODAL: Full Edit Profile with Native App UI Selectors -->
+    <!-- CUSTOM MODAL: Full Edit Profile -->
     <div class="custom-modal-overlay" id="editProfileModal">
         <div class="custom-modal-box" style="padding-top: 15px;">
             <h3 style="margin-bottom: 10px;">Edit Full Profile</h3>
@@ -423,36 +419,6 @@
         </div>
     </div>
 
-    <!-- CUSTOM MODAL: Update Email -->
-    <div class="custom-modal-overlay" id="emailUpdateModal">
-        <div class="custom-modal-box">
-            <h3 style="color:var(--text-main);">Update Email ID</h3>
-            <p style="color:var(--text-muted); font-size:12px; margin-bottom: 5px;">Current Email:</p>
-            <p style="color:var(--text-main); font-size:14px; font-weight:bold; margin-top: 0; margin-bottom: 20px; background:var(--bg-color); padding:10px; border-radius:8px;" id="currentEmailDisplay">loading...</p>
-            
-            <span class="input-label">New Email Address</span>
-            <input type="email" id="newEmailInput" class="modal-input" placeholder="Enter New Email ID">
-            
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCustomModal('emailUpdateModal')">Cancel</button>
-                <button class="btn-confirm" onclick="initiateEmailChange()">Send OTP</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- CUSTOM MODAL: Email Update OTP -->
-    <div class="custom-modal-overlay" id="emailOtpModal">
-        <div class="custom-modal-box">
-            <h3 style="color:var(--text-main);">Verify New Email</h3>
-            <p style="color:var(--text-muted); font-size:12px;">Enter the 6-digit OTP sent to your NEW email.</p>
-            <input type="text" id="emailOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCustomModal('emailOtpModal')">Cancel</button>
-                <button class="btn-confirm" onclick="verifyEmailChange()">Verify & Update</button>
-            </div>
-        </div>
-    </div>
-
     <!-- CUSTOM MODAL: Delete Warning -->
     <div class="custom-modal-overlay" id="deleteWarningModal">
         <div class="custom-modal-box" style="border: 1px solid var(--danger);">
@@ -540,12 +506,11 @@
         window.onload = function() {
             const email = localStorage.getItem('kiyo_user_email');
             
-            // Default profile loading, safe fallback if cache was cleared
+            // Default profile loading
             document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
             document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
             
             document.getElementById('studentEmail').innerText = email;
-            document.getElementById('currentEmailDisplay').innerText = email; 
             
             // Set Extended Stats
             let goalId = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
@@ -774,55 +739,6 @@
                     document.getElementById('newPasswordInput').value = '';
                     document.getElementById('confirmPasswordInput').value = '';
                     document.getElementById('passOtpInput').value = '';
-                } else { showToast("Invalid OTP", "error"); }
-            } catch(e) { showToast("Network Error", "error"); }
-        }
-
-        // API LOGIC - Z+ SECURITY EMAIL UPDATE
-        async function initiateEmailChange() {
-            const newEmail = document.getElementById('newEmailInput').value.trim();
-            const oldEmail = localStorage.getItem('kiyo_user_email');
-            
-            if(!newEmail) return showToast("Enter new email", "error");
-            if(newEmail === oldEmail) return showToast("Enter a different email", "error");
-
-            showToast("Sending OTP to new email...", "success");
-
-            try {
-                const res = await fetch('/api/send-email-change-otp', {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({oldEmail: oldEmail, newEmail: newEmail})
-                });
-                const data = await res.json();
-                
-                if(data.status === 'exists') {
-                    showToast(data.message, "error");
-                } else if(res.ok) {
-                    closeCustomModal('emailUpdateModal');
-                    openCustomModal('emailOtpModal');
-                    showToast("OTP Sent to " + newEmail, "success");
-                } else { showToast("Failed to send OTP", "error"); }
-            } catch(e) { showToast("Network Error", "error"); }
-        }
-
-        async function verifyEmailChange() {
-            const otp = document.getElementById('emailOtpInput').value.trim();
-            const oldEmail = localStorage.getItem('kiyo_user_email');
-
-            if(otp.length !== 6) return showToast("Enter 6-digit OTP", "error");
-
-            try {
-                const res = await fetch('/api/verify-email-change', {
-                    method: 'POST', headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({oldEmail: oldEmail, otp: otp})
-                });
-                const data = await res.json();
-                
-                if(res.ok) {
-                    localStorage.setItem('kiyo_user_email', data.newEmail);
-                    closeCustomModal('emailOtpModal');
-                    showToast("Email Updated Successfully!", "success");
-                    setTimeout(() => location.reload(), 1500);
                 } else { showToast("Invalid OTP", "error"); }
             } catch(e) { showToast("Network Error", "error"); }
         }
