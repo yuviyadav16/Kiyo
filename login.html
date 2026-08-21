@@ -191,6 +191,11 @@
                     <!-- THese buttons now redirect to your 4 separate HTML files -->
                     <div id="pathBoardUI">
                         <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                        
+                        <!-- SMART LOGIC FIELDS: Only shows if 11th, 12th or Dropper is selected -->
+                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+
                         <div class="input-group"><div class="custom-select-btn" id="btnBoard" onclick="saveTempAndGo('board.html')"><span id="lblBoard">Select Board...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
                     </div>
                     
@@ -218,7 +223,6 @@
                     <span>TICBULL</span>
                 </div>
             </div>
-
             <div class="user-socials">
                 <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
                 <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
@@ -226,7 +230,6 @@
                 <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
                 <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
             </div>
-
             <div class="policy-links">
                 <a href="terms.html">Terms of Service</a> &bull; <a href="privacy.html">Privacy Policy</a>
             </div>
@@ -254,6 +257,18 @@
         </div>
     </div>
 
+    <!-- Internal List Modal for Stream & Dream -->
+    <div class="modal-overlay" id="listModal">
+        <div class="bottom-sheet">
+            <div class="sheet-header">
+                <h3 id="listTitle">Select Option</h3>
+                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
+            </div>
+            <div class="custom-list-container" id="listContent"></div>
+        </div>
+    </div>
+
+    <!-- OTP Modal for Signup Verification -->
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
             <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
@@ -301,11 +316,17 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
+        // Internal Data Lists for Stream & Goal
+        const dataLists = {
+            stream: [ {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'}, {id: 'pcmb', name: 'PCMB (Math & Bio)'}, {id: 'commerce', name: 'Commerce (Accounts)'}, {id: 'arts', name: 'Arts / Humanities'} ],
+            dream: [ {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE)'}, {id: 'upsc', name: 'IAS / IPS (UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'}, {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'}, {id: 'board_topper', name: 'Only Board Topper 95%+'} ]
+        };
+
         // ================= SMART DATA RESTORE SYSTEM =================
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
 
-            // Restore Temporary Form Data if user comes back from board.html / exam.html
+            // Restore Temporary Form Data
             if(sessionStorage.getItem('temp_name')) document.getElementById('fullName').value = sessionStorage.getItem('temp_name');
             if(sessionStorage.getItem('temp_dob')) document.getElementById('dob').value = sessionStorage.getItem('temp_dob');
             if(sessionStorage.getItem('temp_state')) document.getElementById('stateInput').value = sessionStorage.getItem('temp_state');
@@ -313,14 +334,10 @@
             if(sessionStorage.getItem('temp_email')) document.getElementById('email').value = sessionStorage.getItem('temp_email');
             if(sessionStorage.getItem('temp_pass')) document.getElementById('password').value = sessionStorage.getItem('temp_pass');
 
-            // Restore Labels if user selected them in 4 dedicated files
+            // Restore Main Options
             if(localStorage.getItem('kiyo_board')) {
                 document.getElementById('lblBoard').innerText = localStorage.getItem('kiyo_board');
                 document.getElementById('btnBoard').classList.add('selected');
-            }
-            if(localStorage.getItem('kiyo_class')) {
-                document.getElementById('lblClass').innerText = localStorage.getItem('kiyo_class');
-                document.getElementById('btnClass').classList.add('selected');
             }
             if(localStorage.getItem('kiyo_exam')) {
                 document.getElementById('lblExam').innerText = localStorage.getItem('kiyo_exam');
@@ -331,10 +348,33 @@
                 document.getElementById('btnSkill').classList.add('selected');
             }
 
-            // Auto-open Step 2 if they were in the middle of signup
+            // Restore Class & Check if Stream/Goal should show
+            const savedClass = localStorage.getItem('kiyo_class');
+            if(savedClass) {
+                document.getElementById('lblClass').innerText = savedClass;
+                document.getElementById('btnClass').classList.add('selected');
+                
+                // Show Stream and Goal if 11th, 12th or Dropper
+                if (savedClass.includes('11') || savedClass.includes('12') || savedClass.toLowerCase().includes('dropper')) {
+                    document.getElementById('streamGroup').style.display = 'block';
+                    document.getElementById('dreamGroup').style.display = 'block';
+                }
+            }
+
+            // Restore Internal Options (Stream & Dream)
+            if(localStorage.getItem('kiyo_stream')) {
+                document.getElementById('lblStream').innerText = localStorage.getItem('kiyo_stream');
+                document.getElementById('btnStream').classList.add('selected');
+            }
+            if(localStorage.getItem('kiyo_dream')) {
+                document.getElementById('lblDream').innerText = localStorage.getItem('kiyo_dream');
+                document.getElementById('btnDream').classList.add('selected');
+            }
+
+            // Auto-open Step 2 if returning
             if(sessionStorage.getItem('temp_step') === '2') {
                 switchTab('signup');
-                goToStep2(true); // true means skip validation on restore
+                goToStep2(true);
                 if(sessionStorage.getItem('temp_path')) {
                     const btn = document.querySelector(`.path-btn[onclick*="${sessionStorage.getItem('temp_path')}"]`);
                     if(btn) setPath(sessionStorage.getItem('temp_path'), btn);
@@ -342,7 +382,6 @@
             }
         };
 
-        // Redirects to dedicated HTML pages without losing user's typed info
         function saveTempAndGo(url) {
             sessionStorage.setItem('temp_name', document.getElementById('fullName').value);
             sessionStorage.setItem('temp_dob', document.getElementById('dob').value);
@@ -431,6 +470,40 @@
             document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
         }
 
+        // Internal List Modal for Stream & Dream
+        function openSelectionList(type) {
+            const contentBox = document.getElementById('listContent');
+            const titles = { stream: "Select Streams / Subjects", dream: "Select Your Goal" };
+            document.getElementById('listTitle').innerText = titles[type];
+            contentBox.innerHTML = '';
+
+            const currentVal = localStorage.getItem('kiyo_' + type);
+
+            dataLists[type].forEach(item => {
+                const isSelected = currentVal === item.name;
+                contentBox.innerHTML += `
+                    <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.name}')">
+                        <span>${item.name}</span>
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>`;
+            });
+            document.getElementById('listModal').classList.add('active');
+        }
+
+        function selectListItem(type, name) {
+            const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
+            btn.classList.add('selected');
+            document.getElementById('lbl' + type.charAt(0).toUpperCase() + type.slice(1)).innerText = name;
+            
+            // Save immediately to local storage so it survives page reloads
+            localStorage.setItem('kiyo_' + type, name); 
+            closeListModal();
+        }
+
+        function closeListModal() { document.getElementById('listModal').classList.remove('active'); }
+        function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
         async function handleSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('email').value.trim();
@@ -438,7 +511,15 @@
 
             if(currentMode === 'signup') {
                 if(currentPath === 'board') {
-                    if(!localStorage.getItem('kiyo_class') || !localStorage.getItem('kiyo_board')) { return showToast("Select Class & Board"); }
+                    const selClass = localStorage.getItem('kiyo_class');
+                    if(!selClass || !localStorage.getItem('kiyo_board')) { return showToast("Select Class & Board"); }
+                    
+                    // Validate Stream and Dream if Class is 11, 12 or Dropper
+                    if (selClass.includes('11') || selClass.includes('12') || selClass.toLowerCase().includes('dropper')) {
+                        if(!localStorage.getItem('kiyo_stream') || !localStorage.getItem('kiyo_dream')) {
+                            return showToast("Select Stream & Target Goal");
+                        }
+                    }
                 } else if (currentPath === 'exam') {
                     if(!localStorage.getItem('kiyo_exam')) { return showToast("Select an Exam"); }
                 } else {
@@ -480,9 +561,6 @@
             } catch (err) { showToast("Server connection error"); }
         }
 
-        function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
         async function verifyOtp() {
             const email = document.getElementById('email').value.trim();
             const otp = document.getElementById('otpInput').value.trim();
@@ -500,10 +578,7 @@
                 localStorage.setItem('kiyo_user_city', document.getElementById('cityInput').value.trim());
                 localStorage.setItem('kiyo_user_path', currentPath);
                 
-                // Note: Board, Class, Exam, Skill are already saved in localStorage from the 4 files
-                
-                // Clear temporary session data
-                sessionStorage.clear();
+                sessionStorage.clear(); // Clear temp signup data
 
                 showToast("Account Created!", 'success');
                 setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
@@ -531,14 +606,13 @@
             showToast("Verifying Email...", "success");
 
             try {
-                // SECURITY FIX: CHECK IF EMAIL EXISTS BEFORE SENDING OTP
+                // SECURITY FIX: Check if email exists
                 const checkRes = await fetch('/api/check-user', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
                 });
                 const checkData = await checkRes.json();
 
-                // If account is not found, stop the process here!
                 if (checkData.status === 'not_found') {
                     return showToast("Account not found! Please check email.");
                 }
@@ -585,4 +659,3 @@
     </script>
 </body>
 </html>
-
