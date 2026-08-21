@@ -6,7 +6,7 @@
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 1-SEC GLITCH FIX -->
+    <!-- 1-SEC GLITCH & CACHE FIX -->
     <script>
         if(!localStorage.getItem('kiyo_user_email')) {
             window.location.replace("login.html");
@@ -34,15 +34,13 @@
         .top-navbar { background: var(--surface-color); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
         html.dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
-        .nav-title { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
+        .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
-        /* REAL NOTIFICATION DRAWER (FIXED) */
+        /* REAL NOTIFICATION DRAWER */
         .notif-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
         .notif-overlay.active { opacity: 1; pointer-events: all; }
-        
-        .notification-drawer { position: fixed; top: 0; right: -400px; width: 100%; max-width: 320px; height: 100%; background: var(--surface-color); z-index: 1001; transition: right 0.3s ease; display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
+        .notification-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--surface-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
         .notification-drawer.active { right: 0; }
-        
         .notif-header-drawer { padding: 20px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; color: var(--text-main); }
         .notif-body { padding: 15px; flex: 1; overflow-y: auto; background: var(--bg-color); }
         .notif-card { background: var(--surface-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: flex-start; }
@@ -63,9 +61,11 @@
         .profile-bottom { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; margin-top: 15px; backdrop-filter: blur(5px); }
         
         .profile-stats-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; margin-bottom: 10px; }
-        .stat-item { display: flex; flex-direction: column; gap: 4px;}
+        .stat-item { display: flex; flex-direction: column; gap: 4px; flex: 1; text-align: center;}
+        .stat-item:first-child { text-align: left; }
+        .stat-item:last-child { text-align: right; }
         .stat-label { font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;}
-        .stat-value { font-size: 14px; font-weight: 800; color: #10b981;}
+        .stat-value { font-size: 13px; font-weight: 800; color: #10b981; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
         .email-display { font-size: 11px; opacity: 0.8; font-weight: 500; margin:0;}
 
         /* DASHBOARD GRID */
@@ -151,10 +151,12 @@
         .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
         .btn-danger { background: var(--danger); }
 
-        /* SELECTION LIST MODAL */
-        .selection-list-box { padding: 0; overflow: hidden; }
-        .selection-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .selection-items { max-height: 300px; overflow-y: auto; text-align: left; }
+        /* SEARCHABLE NATIVE APP SELECTION LIST */
+        .selection-list-box { padding: 0; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh !important; }
+        .selection-header { padding: 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--surface-color); }
+        .selection-search-bar { padding: 10px 20px; background: var(--bg-color); border-bottom: 1px solid var(--border-color); }
+        .selection-search-bar input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-color); color: var(--text-main); outline: none; }
+        .selection-items { flex: 1; overflow-y: auto; text-align: left; }
         .select-item { padding: 16px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-weight: 600; cursor: pointer; transition: 0.2s; }
         .select-item:active { background: var(--border-color); }
         .select-item:last-child { border-bottom: none; }
@@ -216,18 +218,18 @@
                 <div class="profile-stats-row">
                     <div class="stat-item">
                         <span class="stat-label">Target Goal</span>
-                        <span class="stat-value" id="studentGoal">NEET</span>
+                        <span class="stat-value" id="studentGoal">Loading...</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Class</span>
-                        <span class="stat-value" id="studentClass" style="color:#fff;">11</span>
+                        <span class="stat-value" id="studentClass" style="color:#fff;">Loading...</span>
                     </div>
                     <div class="stat-item" style="text-align: right;">
                         <span class="stat-label">Board</span>
-                        <span class="stat-value" id="studentBoard" style="color:#fff;">CBSE</span>
+                        <span class="stat-value" id="studentBoard" style="color:#fff;">Loading...</span>
                     </div>
                 </div>
-                <p class="email-display">Email: <span style="color:#fff; font-weight:600;" id="studentEmail">email@example.com</span></p>
+                <p class="email-display">Email: <span style="color:#fff; font-weight:600;" id="studentEmail">loading...</span></p>
             </div>
         </div>
 
@@ -322,16 +324,15 @@
 
     <!-- CUSTOM MODAL: Full Edit Profile with Native App UI Selectors -->
     <div class="custom-modal-overlay" id="editProfileModal">
-        <div class="custom-modal-box">
-            <h3>Edit Full Profile</h3>
+        <div class="custom-modal-box" style="padding-top: 15px;">
+            <h3 style="margin-bottom: 10px;">Edit Full Profile</h3>
             
             <span class="input-label">Full Name</span>
             <input type="text" id="editNameInput" class="modal-input" placeholder="Full Name">
             
             <span class="input-label">Date of Birth</span>
-            <input type="date" id="editDobInput" class="modal-input" placeholder="DOB">
+            <input type="date" id="editDobInput" class="modal-input">
             
-            <!-- APP-LIKE CUSTOM DROPDOWN FOR BOARD -->
             <span class="input-label">Educational Board</span>
             <div class="modal-input fake-select" onclick="openSelection('board')">
                 <span id="displayBoard">Select Board</span>
@@ -339,7 +340,6 @@
             </div>
             <input type="hidden" id="editBoardInput">
 
-            <!-- APP-LIKE CUSTOM DROPDOWN FOR CLASS -->
             <span class="input-label">Class</span>
             <div class="modal-input fake-select" onclick="openSelection('class')">
                 <span id="displayClass">Select Class</span>
@@ -348,10 +348,18 @@
             <input type="hidden" id="editClassInput">
 
             <span class="input-label">Target Exam / Goal</span>
-            <input type="text" id="editGoalInput" class="modal-input" placeholder="e.g. NEET, JEE">
+            <div class="modal-input fake-select" onclick="openSelection('exam')">
+                <span id="displayExam">Select Goal</span>
+                <i class="fa-solid fa-chevron-down" style="color:var(--text-muted);"></i>
+            </div>
+            <input type="hidden" id="editGoalInput">
 
             <span class="input-label">Skills / Interests</span>
-            <input type="text" id="editSkillInput" class="modal-input" placeholder="e.g. Coding, Design">
+            <div class="modal-input fake-select" onclick="openSelection('skill')">
+                <span id="displaySkill">Select Skill</span>
+                <i class="fa-solid fa-chevron-down" style="color:var(--text-muted);"></i>
+            </div>
+            <input type="hidden" id="editSkillInput">
             
             <span class="input-label">City</span>
             <input type="text" id="editCityInput" class="modal-input" placeholder="City">
@@ -363,12 +371,15 @@
         </div>
     </div>
 
-    <!-- CUSTOM SELECTION LIST (Replaces ugly <select>) -->
+    <!-- SEARCHABLE CUSTOM SELECTION LIST -->
     <div class="custom-modal-overlay" id="selectionSheetModal" style="z-index: 400;">
         <div class="custom-modal-box selection-list-box">
             <div class="selection-header">
                 <h3 style="margin:0;" id="selectionTitle">Select Option</h3>
                 <i class="fa-solid fa-xmark" style="font-size:20px; color:var(--text-muted); cursor:pointer;" onclick="closeCustomModal('selectionSheetModal')"></i>
+            </div>
+            <div class="selection-search-bar">
+                <input type="text" id="searchSelection" placeholder="Search..." onkeyup="filterSelection()">
             </div>
             <div class="selection-items" id="selectionList">
                 <!-- Items injected by JS -->
@@ -469,14 +480,32 @@
     </div>
 
     <script>
-        // Options for Native App-like Selector
+        // MASSIVE LISTS FOR NATIVE APP-LIKE SELECTOR
         const boardOptions = [
             {id: 'CBSE', name: 'CBSE Board'}, {id: 'BSEB', name: 'Bihar Board (BSEB)'},
-            {id: 'ICSE', name: 'ICSE / ISC'}, {id: 'State', name: 'Other State Board'}
+            {id: 'ICSE', name: 'ICSE / ISC'}, {id: 'UPMSP', name: 'UP Board'},
+            {id: 'RBSE', name: 'Rajasthan Board'}, {id: 'MPBSE', name: 'Maharashtra Board'},
+            {id: 'WBBSE', name: 'West Bengal Board'}, {id: 'State', name: 'Other State Board'}
         ];
         const classOptions = [
             {id: '9', name: 'Class 9'}, {id: '10', name: 'Class 10'},
             {id: '11', name: 'Class 11'}, {id: '12', name: 'Class 12'}, {id: 'Dropper', name: 'Dropper'}
+        ];
+        const examOptions = [
+            {id: 'NEET', name: 'NEET (UG)'}, {id: 'JEE_MAIN', name: 'JEE Main'}, {id: 'JEE_ADV', name: 'JEE Advanced'},
+            {id: 'UPSC_CSE', name: 'UPSC CSE (IAS/IPS)'}, {id: 'SSC_CGL', name: 'SSC CGL'}, {id: 'SSC_CHSL', name: 'SSC CHSL'},
+            {id: 'NDA', name: 'NDA & NA'}, {id: 'CDS', name: 'CDS'}, {id: 'AFCAT', name: 'AFCAT'},
+            {id: 'IBPS_PO', name: 'IBPS PO'}, {id: 'SBI_PO', name: 'SBI PO'}, {id: 'CUET', name: 'CUET (UG)'},
+            {id: 'CLAT', name: 'CLAT (Law)'}, {id: 'CAT', name: 'CAT (Management)'}, {id: 'BPSC', name: 'BPSC (Bihar PSC)'},
+            {id: 'BITSAT', name: 'BITSAT'}, {id: 'VITEEE', name: 'VITEEE'}, {id: 'Other', name: 'Other Exam'}
+        ];
+        const skillOptions = [
+            {id: 'Coding', name: 'Coding / Programming'}, {id: 'WebDev', name: 'Web Development'},
+            {id: 'AppDev', name: 'App Development'}, {id: 'AI_ML', name: 'AI & Machine Learning'},
+            {id: 'UI_UX', name: 'UI/UX Design'}, {id: 'VideoEd', name: 'Video Editing'},
+            {id: 'DataSci', name: 'Data Science'}, {id: 'DigitalMkt', name: 'Digital Marketing'},
+            {id: 'English', name: 'Spoken English'}, {id: 'Graphic', name: 'Graphic Design'},
+            {id: 'Trading', name: 'Stock Market Trading'}, {id: 'Cyber', name: 'Cybersecurity'}
         ];
 
         let currentSelectTarget = '';
@@ -485,7 +514,7 @@
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> <span>${message}</span>`;
             toastBox.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
@@ -507,25 +536,29 @@
             }
         }
 
-        // Load User Data
+        // Load User Data - LOGOUT GLITCH FIX
         window.onload = function() {
-            document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
-            document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "Siwan") + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
-            
             const email = localStorage.getItem('kiyo_user_email');
+            
+            // Default profile loading, safe fallback if cache was cleared
+            document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
+            document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
+            
             document.getElementById('studentEmail').innerText = email;
             document.getElementById('currentEmailDisplay').innerText = email; 
             
             // Set Extended Stats
-            document.getElementById('studentGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
+            let goalId = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
+            let cId = localStorage.getItem('kiyo_class') || "11";
+            let bId = localStorage.getItem('kiyo_board') || "CBSE";
             
-            let c = localStorage.getItem('kiyo_class') || "11";
-            let b = localStorage.getItem('kiyo_board') || "CBSE";
-            document.getElementById('studentClass').innerText = classOptions.find(o=>o.id===c)?.name || c;
-            document.getElementById('studentBoard').innerText = boardOptions.find(o=>o.id===b)?.name || b;
+            document.getElementById('studentGoal').innerText = examOptions.find(o=>o.id===goalId)?.name || goalId;
+            document.getElementById('studentClass').innerText = classOptions.find(o=>o.id===cId)?.name || cId;
+            document.getElementById('studentBoard').innerText = boardOptions.find(o=>o.id===bId)?.name || bId;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
             if(savedPic) { document.getElementById('profileImg').src = savedPic; }
+            else { document.getElementById('profileImg').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"; }
 
             if(localStorage.getItem('kiyo_theme') === 'dark') {
                 document.documentElement.classList.add('dark-theme');
@@ -568,44 +601,75 @@
         // Settings Page
         function openSettings() { toggleSidebar(); document.getElementById('settingsPage').classList.add('active'); }
         function closeSettings() { document.getElementById('settingsPage').classList.remove('active'); }
-        function logout() { localStorage.clear(); window.location.replace("login.html"); }
+        
+        // 100% LOGOUT FIX (Clears Local & Session Storage)
+        function logout() { 
+            localStorage.clear(); 
+            sessionStorage.clear();
+            window.location.replace("login.html"); 
+        }
 
         // Custom Modal Controls
         function openCustomModal(id) { 
             if(id === 'editProfileModal') {
                 document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
                 document.getElementById('editDobInput').value = localStorage.getItem('kiyo_user_dob') || "";
-                document.getElementById('editGoalInput').value = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "";
-                document.getElementById('editSkillInput').value = localStorage.getItem('kiyo_skill') || "";
-                document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "Siwan";
+                document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "";
                 
                 let boardVal = localStorage.getItem('kiyo_board') || "CBSE";
                 let classVal = localStorage.getItem('kiyo_class') || "11";
+                let goalVal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "NEET";
+                let skillVal = localStorage.getItem('kiyo_skill') || "Coding";
                 
                 document.getElementById('editBoardInput').value = boardVal;
                 document.getElementById('displayBoard').innerText = boardOptions.find(o=>o.id===boardVal)?.name || boardVal;
                 
                 document.getElementById('editClassInput').value = classVal;
                 document.getElementById('displayClass').innerText = classOptions.find(o=>o.id===classVal)?.name || classVal;
+
+                document.getElementById('editGoalInput').value = goalVal;
+                document.getElementById('displayExam').innerText = examOptions.find(o=>o.id===goalVal)?.name || goalVal;
+
+                document.getElementById('editSkillInput').value = skillVal;
+                document.getElementById('displaySkill').innerText = skillOptions.find(o=>o.id===skillVal)?.name || skillVal;
             }
             document.getElementById(id).classList.add('active'); 
         }
         function closeCustomModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // NATIVE APP-LIKE SELECTION LOGIC
+        // SEARCHABLE NATIVE APP-LIKE SELECTION LOGIC
         function openSelection(type) {
             currentSelectTarget = type;
             const listContainer = document.getElementById('selectionList');
             const title = document.getElementById('selectionTitle');
-            listContainer.innerHTML = '';
+            const searchBar = document.getElementById('searchSelection');
             
-            let options = type === 'board' ? boardOptions : classOptions;
-            title.innerText = type === 'board' ? "Select Board" : "Select Class";
+            listContainer.innerHTML = '';
+            searchBar.value = ''; // Reset search
+            
+            let options = [];
+            if(type === 'board') { options = boardOptions; title.innerText = "Select Board"; }
+            else if(type === 'class') { options = classOptions; title.innerText = "Select Class"; }
+            else if(type === 'exam') { options = examOptions; title.innerText = "Select Target Exam"; }
+            else if(type === 'skill') { options = skillOptions; title.innerText = "Select Primary Skill"; }
             
             options.forEach(opt => {
                 listContainer.innerHTML += `<div class="select-item" onclick="selectOption('${opt.id}', '${opt.name}')">${opt.name}</div>`;
             });
             openCustomModal('selectionSheetModal');
+        }
+
+        // Live Search Filter logic
+        function filterSelection() {
+            let val = document.getElementById('searchSelection').value.toLowerCase();
+            let items = document.querySelectorAll('.select-item');
+            items.forEach(item => {
+                if(item.innerText.toLowerCase().includes(val)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         }
 
         function selectOption(id, name) {
@@ -615,6 +679,12 @@
             } else if (currentSelectTarget === 'class') {
                 document.getElementById('displayClass').innerText = name;
                 document.getElementById('editClassInput').value = id;
+            } else if (currentSelectTarget === 'exam') {
+                document.getElementById('displayExam').innerText = name;
+                document.getElementById('editGoalInput').value = id;
+            } else if (currentSelectTarget === 'skill') {
+                document.getElementById('displaySkill').innerText = name;
+                document.getElementById('editSkillInput').value = id;
             }
             closeCustomModal('selectionSheetModal');
         }
@@ -652,7 +722,7 @@
                     document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
                     document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
                     
-                    document.getElementById('studentGoal').innerText = newGoal || "NEET";
+                    document.getElementById('studentGoal').innerText = examOptions.find(o=>o.id===newGoal)?.name || newGoal;
                     document.getElementById('studentClass').innerText = classOptions.find(o=>o.id===newClass)?.name || newClass;
                     document.getElementById('studentBoard').innerText = boardOptions.find(o=>o.id===newBoard)?.name || newBoard;
 
@@ -752,7 +822,7 @@
                     localStorage.setItem('kiyo_user_email', data.newEmail);
                     closeCustomModal('emailOtpModal');
                     showToast("Email Updated Successfully!", "success");
-                    setTimeout(() => location.reload(), 1500); // Reload to reflect changes
+                    setTimeout(() => location.reload(), 1500);
                 } else { showToast("Invalid OTP", "error"); }
             } catch(e) { showToast("Network Error", "error"); }
         }
@@ -801,4 +871,3 @@
     </script>
 </body>
 </html>
-
