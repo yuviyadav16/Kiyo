@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Select Class - Kiyo AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- ECOSYSTEM SYNC: Dark Mode Check before page loads -->
+    <script>
+        if(localStorage.getItem('kiyo_theme') === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary: #6366f1; --bg-color: #f8fafc; --surface-color: #ffffff; 
+            --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
+            --danger: #ef4444; --success: #10b981;
+        }
+        html.dark-theme {
+            --bg-color: #0B101E; --surface-color: #121826; 
+            --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1);
+        }
+
+        body { margin: 0; background: var(--bg-color); color: var(--text-main); font-family: system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* App Header */
+        .header { display: flex; align-items: center; padding: 20px; background: var(--surface-color); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .back-btn { font-size: 20px; color: var(--text-main); cursor: pointer; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 18px; font-weight: 800; margin: 0; }
+
+        /* Search Bar */
+        .search-container { padding: 15px 20px; background: var(--bg-color); position: sticky; top: 65px; z-index: 9;}
+        .search-box { display: flex; align-items: center; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; }
+        .search-box i { color: var(--text-muted); font-size: 16px; margin-right: 10px; }
+        .search-box input { border: none; background: transparent; outline: none; width: 100%; color: var(--text-main); font-size: 15px; font-weight: 600; }
+
+        /* List Items */
+        .list-container { padding: 0 20px 20px 20px; }
+        .list-item { background: var(--surface-color); border: 1px solid var(--border-color); padding: 18px; border-radius: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .list-item:active { transform: scale(0.98); border-color: var(--primary); }
+        .list-item.selected { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+        .list-item.selected i { color: var(--primary); }
+        
+        .item-name { font-size: 15px; font-weight: 700; color: var(--text-main); }
+        .check-icon { color: transparent; font-size: 18px; }
+
+        /* Custom Professional Toast (Replaces Ugly Alert) */
+        .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(100px); opacity: 0; animation: slideUp 0.4s forwards; text-align: center;}
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="javascript:goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1 class="title">Select Class</h1>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search your class..." onkeyup="filterList()">
+        </div>
+    </div>
+
+    <div class="list-container" id="dataList">
+        <!-- JS will populate this -->
+    </div>
+
+    <div class="toast-container" id="toastBox"></div>
+
+    <script>
+        // Data for Classes
+        const classesData = [
+            {id: '9', name: 'Class 9'}, 
+            {id: '10', name: 'Class 10'},
+            {id: '11', name: 'Class 11'}, 
+            {id: '12', name: 'Class 12'}, 
+            {id: 'Dropper', name: 'Dropper (12th Pass)'}
+        ];
+
+        const listContainer = document.getElementById('dataList');
+        const currentSelection = localStorage.getItem('kiyo_class');
+
+        // Custom Toast Notification Function (No more alerts!)
+        function showToast(message, type = 'success') {
+            const toastBox = document.getElementById('toastBox');
+            toastBox.innerHTML = ''; // Clear previous
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'fa-spinner fa-spin' : 'fa-circle-xmark';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+        }
+
+        // Render List dynamically
+        function renderList() {
+            listContainer.innerHTML = '';
+            classesData.forEach(item => {
+                const isSelected = item.name === currentSelection ? 'selected' : '';
+                const checkClass = item.name === currentSelection ? 'fa-solid fa-circle-check check-icon' : 'fa-regular fa-circle check-icon';
+                
+                listContainer.innerHTML += `
+                    <div class="list-item ${isSelected}" onclick="saveSelection('${item.name}')">
+                        <span class="item-name">${item.name}</span>
+                        <i class="${checkClass}" style="${item.name === currentSelection ? 'color: var(--primary);' : ''}"></i>
+                    </div>
+                `;
+            });
+        }
+
+        // Live Search Filter
+        function filterList() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.list-item');
+            items.forEach(item => {
+                const text = item.querySelector('.item-name').innerText.toLowerCase();
+                if(text.includes(query)) item.style.display = 'flex';
+                else item.style.display = 'none';
+            });
+        }
+
+        // Smart Back Navigation
+        function goBack() {
+            const isSignup = sessionStorage.getItem('temp_step') === '2';
+            if (isSignup) {
+                window.location.replace("login.html");
+            } else {
+                window.location.replace("dashboard.html");
+            }
+        }
+
+        // Save Selection with Smart Ecosystem Logic
+        async function saveSelection(className) {
+            showToast("Saving...", "success");
+            
+            // Hamesha local storage me pehle save karo ecosystem connect rakhne ke liye
+            localStorage.setItem('kiyo_class', className);
+            
+            // Check current status: Is user doing Signup OR Editing profile from Dashboard?
+            const email = localStorage.getItem('kiyo_user_email');
+            const isSignup = sessionStorage.getItem('temp_step') === '2';
+
+            if (email && !isSignup) {
+                // User is already logged in, update database silently
+                try {
+                    await fetch('/api/update-profile', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email, studentClass: className })
+                    });
+                } catch (e) {
+                    console.log("Offline save success, DB sync failed");
+                }
+            }
+
+            // Redirect back smoothly after 800ms
+            setTimeout(() => { goBack(); }, 800);
+        }
+
+        // Initialize
+        renderList();
+    </script>
+</body>
+</html>
