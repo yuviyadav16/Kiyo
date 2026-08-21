@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Select Skill</title></head>
+<body>
+    <div class="header"><a href="login.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a><h1 class="title">Select Skill</h1></div>
+    <div class="list-container" id="skillList"></div>
+    <script>
+        const skills = ["Python Coding", "Java Programming", "Web Development", "App Development", "AI & Machine Learning", "UI/UX Design", "Video Editing", "Data Science", "Digital Marketing", "Spoken English", "Graphic Design", "Stock Market Trading", "Cybersecurity", "Blockchain"];
+        const container = document.getElementById('skillList');
+        skills.forEach(s => {
+            container.innerHTML += `<div class="list-item" onclick="save('${s}')"><span class="item-name">${s}</span></div>`;
+        });
+        function save(val) { localStorage.setItem('kiyo_skill', val); window.location.replace('login.html'); }
+    </script>
+</body>
+</html>
