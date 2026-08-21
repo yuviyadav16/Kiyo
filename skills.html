@@ -1,16 +1,114 @@
 <!DOCTYPE html>
-<html>
-<head><title>Select Skill</title></head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Select Skill - Kiyo AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');</script>
+    <style>
+        /* SAME UI CSS AS ABOVE */
+        :root { --primary: #6366f1; --bg-color: #f8fafc; --surface-color: #ffffff; --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0; --success: #10b981; }
+        html.dark-theme { --bg-color: #0B101E; --surface-color: #121826; --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1); }
+        body { margin: 0; background: var(--bg-color); color: var(--text-main); font-family: system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .header { display: flex; align-items: center; padding: 20px; background: var(--surface-color); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-color); }
+        .back-btn { font-size: 20px; color: var(--text-main); cursor: pointer; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 18px; font-weight: 800; margin: 0; }
+        .search-container { padding: 15px 20px; background: var(--bg-color); position: sticky; top: 65px; z-index: 9;}
+        .search-box { display: flex; align-items: center; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; }
+        .search-box i { color: var(--text-muted); font-size: 16px; margin-right: 10px; }
+        .search-box input { border: none; background: transparent; outline: none; width: 100%; color: var(--text-main); font-size: 15px; font-weight: 600; }
+        .list-container { padding: 0 20px 20px 20px; }
+        .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 5px; }
+        .list-item { background: var(--surface-color); border: 1px solid var(--border-color); padding: 18px; border-radius: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .list-item.selected { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+        .item-name { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.4;}
+        .check-icon { color: transparent; font-size: 18px; flex-shrink: 0; margin-left: 10px;}
+        .list-item.selected .check-icon { color: var(--primary); }
+        .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(100px); opacity: 0; animation: slideUp 0.4s forwards; text-align: center;}
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
 <body>
-    <div class="header"><a href="login.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a><h1 class="title">Select Skill</h1></div>
-    <div class="list-container" id="skillList"></div>
+    <div class="header">
+        <a href="javascript:goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1 class="title">Select Skill</h1>
+    </div>
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search skills..." onkeyup="filterList()">
+        </div>
+    </div>
+    <div class="list-container" id="dataList"></div>
+    <div class="toast-container" id="toastBox"></div>
+
     <script>
-        const skills = ["Python Coding", "Java Programming", "Web Development", "App Development", "AI & Machine Learning", "UI/UX Design", "Video Editing", "Data Science", "Digital Marketing", "Spoken English", "Graphic Design", "Stock Market Trading", "Cybersecurity", "Blockchain"];
-        const container = document.getElementById('skillList');
-        skills.forEach(s => {
-            container.innerHTML += `<div class="list-item" onclick="save('${s}')"><span class="item-name">${s}</span></div>`;
-        });
-        function save(val) { localStorage.setItem('kiyo_skill', val); window.location.replace('login.html'); }
+        const skillsData = [
+            { type: 'Programming & Development', name: 'Python Programming' }, { type: 'Programming & Development', name: 'Java Programming' }, { type: 'Programming & Development', name: 'C++ Programming' }, { type: 'Programming & Development', name: 'C Programming' },
+            { type: 'Web Development', name: 'Full Stack Web Dev (HTML/CSS/JS)' }, { type: 'Web Development', name: 'React.js' }, { type: 'Web Development', name: 'Node.js' },
+            { type: 'App Development', name: 'Android App Development' }, { type: 'App Development', name: 'iOS App Development' }, { type: 'App Development', name: 'Flutter' },
+            { type: 'AI & Data Science', name: 'Machine Learning' }, { type: 'AI & Data Science', name: 'Artificial Intelligence' }, { type: 'AI & Data Science', name: 'Data Science' },
+            { type: 'Design & Creativity', name: 'UI/UX Design' }, { type: 'Design & Creativity', name: 'Graphic Design (Photoshop/Illustrator)' },
+            { type: 'Video & Media', name: 'Video Editing (Premiere Pro)' }, { type: 'Video & Media', name: 'Animation (After Effects)' },
+            { type: 'Marketing & Business', name: 'Digital Marketing' }, { type: 'Marketing & Business', name: 'SEO & Content Writing' }, { type: 'Marketing & Business', name: 'Social Media Management' },
+            { type: 'Communication', name: 'Spoken English' }, { type: 'Communication', name: 'Public Speaking' },
+            { type: 'Finance', name: 'Stock Market Trading' }, { type: 'Finance', name: 'Investing & Financial Literacy' },
+            { type: 'Tech & Security', name: 'Cybersecurity' }, { type: 'Tech & Security', name: 'Ethical Hacking' }, { type: 'Tech & Security', name: 'Cloud Computing (AWS/Azure)' }, { type: 'Tech & Security', name: 'Blockchain & Web3' }
+        ];
+
+        const listContainer = document.getElementById('dataList');
+        const currentSelection = localStorage.getItem('kiyo_skill');
+
+        function renderList() {
+            listContainer.innerHTML = '';
+            let currentCategory = '';
+            skillsData.forEach(item => {
+                if (item.type !== currentCategory) {
+                    currentCategory = item.type;
+                    listContainer.innerHTML += `<div class="section-title">${currentCategory}</div>`;
+                }
+                const isSelected = item.name === currentSelection ? 'selected' : '';
+                const iconClass = item.name === currentSelection ? 'fa-solid fa-circle-check check-icon' : 'fa-regular fa-circle check-icon';
+                listContainer.innerHTML += `
+                    <div class="list-item ${isSelected}" onclick="saveSelection('${item.name}')">
+                        <span class="item-name">${item.name}</span>
+                        <i class="${iconClass}"></i>
+                    </div>`;
+            });
+        }
+
+        function filterList() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.section-title').forEach(h => h.style.display = query ? 'none' : 'block');
+            document.querySelectorAll('.list-item').forEach(item => {
+                const text = item.querySelector('.item-name').innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function showToast() {
+            const toastBox = document.getElementById('toastBox');
+            toastBox.innerHTML = `<div class="toast success"><i class="fa-solid fa-spinner fa-spin" style="color:var(--success);"></i> <span>Saving...</span></div>`;
+        }
+
+        function goBack() {
+            const isSignup = sessionStorage.getItem('temp_step') === '2';
+            window.location.replace(isSignup ? "login.html" : "dashboard.html");
+        }
+
+        async function saveSelection(val) {
+            showToast();
+            localStorage.setItem('kiyo_skill', val);
+            const email = localStorage.getItem('kiyo_user_email');
+            if (email && sessionStorage.getItem('temp_step') !== '2') {
+                try { await fetch('/api/update-profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, skill: val }) }); } catch (e) {}
+            }
+            setTimeout(() => { goBack(); }, 800);
+        }
+
+        renderList();
     </script>
 </body>
 </html>
