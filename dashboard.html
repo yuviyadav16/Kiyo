@@ -6,10 +6,14 @@
     <title>Kiyo AI - Student Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- 1-SEC GLITCH FIX: Ye code page load hone se pehle execute hoga -->
+    <!-- 1-SEC GLITCH FIX: Ye code page load hone se pehle execute hoga, isse blink nahi hoga -->
     <script>
         if(!localStorage.getItem('kiyo_user_email')) {
             window.location.replace("login.html");
+        }
+        // Theme Sync
+        if(localStorage.getItem('kiyo_theme') === 'dark') {
+            document.documentElement.classList.add('dark-theme');
         }
     </script>
 
@@ -28,7 +32,7 @@
             --card-gradient: linear-gradient(135deg, #6366f1, #10b981);
         }
 
-        .dark-theme {
+        html.dark-theme {
             --bg-color: #0B101E;
             --surface-color: #121826;
             --text-main: #f8fafc;
@@ -50,7 +54,7 @@
             display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50;
         }
-        .dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        html.dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
         .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
@@ -115,7 +119,7 @@
             background: var(--surface-color); box-shadow: 5px 0 25px rgba(0,0,0,0.1);
             transition: 0.4s ease; z-index: 100; display: flex; flex-direction: column;
         }
-        .dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
+        html.dark-theme .sidebar { box-shadow: 5px 0 25px rgba(0,0,0,0.5); }
         .sidebar.active { left: 0; }
         .sidebar-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -182,7 +186,7 @@
         .toast.success i { color: #10b981; } .toast.error i { color: #ef4444; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
 
-        /* CUSTOM MODALS FOR EDIT/DELETE */
+        /* CUSTOM MODALS FOR EDIT/DELETE/SECURITY */
         .custom-modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px);
             z-index: 300; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s;
@@ -195,13 +199,16 @@
         .custom-modal-box h3 { margin: 0 0 15px 0; color: var(--text-main); font-size: 18px;}
         .custom-modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
         
-        .modal-input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; text-align: center; font-weight: bold;}
+        .modal-input { width: 100%; padding: 12px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 15px; font-weight: bold;}
         .modal-input:focus { border-color: var(--primary); }
         
         .btn-row { display: flex; gap: 10px; }
         .btn-cancel { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--bg-color); color: var(--text-main); font-weight: 700; cursor: pointer; }
         .btn-confirm { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary); color: #fff; font-weight: 700; cursor: pointer; }
         .btn-danger { background: var(--danger); }
+        
+        /* Specific input alignment for full edit profile */
+        .input-label { display: block; text-align: left; font-size: 12px; color: var(--text-muted); font-weight: bold; margin-bottom: 5px; margin-left: 5px; }
     </style>
 </head>
 <body>
@@ -227,9 +234,9 @@
                     <input type="file" id="fileInput" accept="image/*" onchange="updateProfilePic(event)">
                 </div>
                 <div class="student-info">
-                    <!-- EDIT PENCIL ICON ADDED NEXT TO NAME -->
+                    <!-- PENCIL ICON ADDED FOR FULL PROFILE EDIT -->
                     <h2 id="studentName">
-                        Student Name <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>
+                        Student Name <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal('editProfileModal')"></i>
                     </h2>
                     <p id="studentLocation">City, State</p>
                 </div>
@@ -242,19 +249,19 @@
 
         <h3 class="quick-action-header">Learning Hub</h3>
         
-        <!-- Premium Chat Button (Linked to chat.html) -->
-        <div class="chat-btn-container" onclick="window.location.href='chat.html'">
+        <!-- Premium Chat Button (Linked to Coming Soon) -->
+        <div class="chat-btn-container" onclick="window.location.href='coming-soon.html?feature=AI%20Chat'">
             <div class="chat-icon-bg"><i class="fa-solid fa-robot"></i></div>
             <div class="chat-btn-text">Chat with Kiyo AI</div>
         </div>
 
-        <!-- App Features Grid (Ask Doubts Removed, Links Added) -->
+        <!-- App Features Grid (Ask Doubts Removed, Links go to coming-soon) -->
         <div class="dashboard-grid">
-            <div class="grid-item" onclick="window.location.href='syllabus.html'"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
-            <div class="grid-item" onclick="window.location.href='pyqs.html'"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
-            <div class="grid-item" onclick="window.location.href='tests.html'"><i class="fa-solid fa-stopwatch"></i><span>Mock Tests</span></div>
-            <div class="grid-item" onclick="window.location.href='performance.html'"><i class="fa-solid fa-chart-line"></i><span>Performance</span></div>
-            <div class="grid-item" onclick="window.location.href='notes.html'"><i class="fa-solid fa-bookmark"></i><span>Saved Notes</span></div>
+            <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=My%20Syllabus'"><i class="fa-solid fa-book-open"></i><span>My Syllabus</span></div>
+            <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=PYQs'"><i class="fa-solid fa-file-pen"></i><span>PYQs</span></div>
+            <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=Mock%20Tests'"><i class="fa-solid fa-stopwatch"></i><span>Mock Tests</span></div>
+            <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=Performance'"><i class="fa-solid fa-chart-line"></i><span>Performance</span></div>
+            <div class="grid-item" onclick="window.location.href='coming-soon.html?feature=Saved%20Notes'"><i class="fa-solid fa-bookmark"></i><span>Saved Notes</span></div>
         </div>
     </div>
 
@@ -276,9 +283,9 @@
 
         <div class="menu-items">
             <a href="dashboard.html" class="menu-item"><i class="fa-solid fa-house"></i> Home</a>
-            <a href="syllabus.html" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
-            <a href="performance.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
-            <a href="notes.html" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
+            <a href="coming-soon.html?feature=My%20Syllabus" class="menu-item"><i class="fa-solid fa-book-open"></i> My Syllabus</a>
+            <a href="coming-soon.html?feature=Performance" class="menu-item"><i class="fa-solid fa-chart-line"></i> Performance</a>
+            <a href="coming-soon.html?feature=Saved%20Notes" class="menu-item"><i class="fa-solid fa-bookmark"></i> Saved Notes</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             <a href="javascript:void(0)" class="menu-item" onclick="openSettings()"><i class="fa-solid fa-gear"></i> Settings</a>
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
@@ -298,7 +305,7 @@
         </div>
     </div>
 
-    <!-- SETTINGS PAGE (2ND SCREEN) -->
+    <!-- SETTINGS PAGE (2ND SCREEN - CLEANED UP FOR Z+ SECURITY) -->
     <div class="modal-sheet" id="settingsPage">
         <div class="modal-header">
             <i class="fa-solid fa-arrow-left" onclick="closeSettings()"></i>
@@ -306,13 +313,14 @@
         </div>
         <div class="settings-content">
             
-            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 10px; margin-top: 0;">Account Preferences</h3>
-            <button class="settings-btn" onclick="openEditProfile()">
-                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-user-pen" style="color:var(--primary);"></i> Edit Profile Details</span>
+            <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 10px; margin-top: 0;">Account Security & Control</h3>
+            
+            <button class="settings-btn" onclick="openCustomModal('passwordModal')">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Change Password (Z+ Security)</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
-            <button class="settings-btn">
-                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-bullseye" style="color:var(--primary);"></i> Change Learning Goal</span>
+            <button class="settings-btn" onclick="openCustomModal('emailUpdateModal')">
+                <span style="display:flex; align-items:center; gap:10px;"><i class="fa-solid fa-envelope-circle-check" style="color:var(--primary);"></i> Update Email ID</span>
                 <i class="fa-solid fa-chevron-right"></i>
             </button>
             <button class="settings-btn">
@@ -330,15 +338,55 @@
         </div>
     </div>
 
-    <!-- CUSTOM MODAL: Edit Profile -->
+    <!-- CUSTOM MODAL: Full Edit Profile -->
     <div class="custom-modal-overlay" id="editProfileModal">
         <div class="custom-modal-box">
-            <h3>Edit Profile</h3>
+            <h3>Edit Full Profile</h3>
+            
+            <span class="input-label">Full Name</span>
             <input type="text" id="editNameInput" class="modal-input" placeholder="Full Name">
+            
+            <span class="input-label">Date of Birth</span>
+            <input type="date" id="editDobInput" class="modal-input" placeholder="DOB">
+            
+            <span class="input-label">Class (e.g. 11th, 12th)</span>
+            <input type="text" id="editClassInput" class="modal-input" placeholder="Class">
+
+            <span class="input-label">Target Goal</span>
+            <input type="text" id="editGoalInput" class="modal-input" placeholder="e.g. NEET, JEE">
+            
+            <span class="input-label">City</span>
             <input type="text" id="editCityInput" class="modal-input" placeholder="City">
+            
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('editProfileModal')">Cancel</button>
                 <button class="btn-confirm" onclick="saveProfileEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Change Password (Z+) -->
+    <div class="custom-modal-overlay" id="passwordModal">
+        <div class="custom-modal-box">
+            <h3>Change Password</h3>
+            <p>Verification OTP will be sent to your email.</p>
+            <input type="password" id="newPasswordInput" class="modal-input" placeholder="New Password">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('passwordModal')">Cancel</button>
+                <button class="btn-confirm" onclick="triggerAction('Verification OTP sent for Password change!')">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Update Email -->
+    <div class="custom-modal-overlay" id="emailUpdateModal">
+        <div class="custom-modal-box">
+            <h3>Update Email ID</h3>
+            <p>We will verify your new email address.</p>
+            <input type="email" id="newEmailInput" class="modal-input" placeholder="New Email ID">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('emailUpdateModal')">Cancel</button>
+                <button class="btn-confirm" onclick="triggerAction('Verification OTP sent to new Email!')">Verify Email</button>
             </div>
         </div>
     </div>
@@ -379,25 +427,27 @@
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
         }
 
+        function triggerAction(msg) {
+            showToast(msg, 'success');
+            document.querySelectorAll('.custom-modal-overlay').forEach(m => m.classList.remove('active'));
+        }
+
         // Load User Data
         window.onload = function() {
             // WE DON'T DO REDIRECT LOGIC HERE ANYMORE. (Moved to HEAD to fix 1-sec glitch)
             
-            document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>';
+            document.getElementById('studentName').innerHTML = (localStorage.getItem('kiyo_user_name') || "Student") + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
             document.getElementById('studentLocation').innerText = (localStorage.getItem('kiyo_user_city') || "City") + ", " + (localStorage.getItem('kiyo_user_state') || "State");
             document.getElementById('studentEmail').innerText = localStorage.getItem('kiyo_user_email');
             
-            let goal = "Learning Guide";
-            if(localStorage.getItem('kiyo_user_path') === 'board') goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_board');
-            else if(localStorage.getItem('kiyo_user_path') === 'exam') goal = localStorage.getItem('kiyo_exam');
-            else if(localStorage.getItem('kiyo_user_path') === 'skill') goal = localStorage.getItem('kiyo_skill');
-            document.getElementById('studentGoal').innerText = goal || "Explorer";
+            let goal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || localStorage.getItem('kiyo_skill') || "Learning Guide";
+            document.getElementById('studentGoal').innerText = goal;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
             if(savedPic) { document.getElementById('profileImg').src = savedPic; }
 
             if(localStorage.getItem('kiyo_theme') === 'dark') {
-                document.body.classList.add('dark-theme');
+                document.documentElement.classList.add('dark-theme');
                 document.getElementById('themeToggle').checked = true;
             }
         };
@@ -426,10 +476,10 @@
         function switchTheme() {
             const isDark = document.getElementById('themeToggle').checked;
             if(isDark) {
-                document.body.classList.add('dark-theme');
+                document.documentElement.classList.add('dark-theme');
                 localStorage.setItem('kiyo_theme', 'dark');
             } else {
-                document.body.classList.remove('dark-theme');
+                document.documentElement.classList.remove('dark-theme');
                 localStorage.setItem('kiyo_theme', 'light');
             }
         }
@@ -449,38 +499,40 @@
         }
 
         // Custom Modal Controls
-        function openCustomModal(id) { document.getElementById(id).classList.add('active'); }
-        function closeCustomModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        // Edit Profile Logic
-        function openEditProfile() {
-            document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
-            document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "";
-            openCustomModal('editProfileModal');
+        function openCustomModal(id) { 
+            // Load existing data if edit profile is opened
+            if(id === 'editProfileModal') {
+                document.getElementById('editNameInput').value = localStorage.getItem('kiyo_user_name') || "";
+                document.getElementById('editDobInput').value = localStorage.getItem('kiyo_user_dob') || "";
+                document.getElementById('editClassInput').value = localStorage.getItem('kiyo_class') || "";
+                document.getElementById('editGoalInput').value = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || "";
+                document.getElementById('editCityInput').value = localStorage.getItem('kiyo_user_city') || "";
+            }
+            document.getElementById(id).classList.add('active'); 
         }
+        function closeCustomModal(id) { document.getElementById(id).classList.remove('active'); }
 
         async function saveProfileEdit() {
             const newName = document.getElementById('editNameInput').value.trim();
+            const newDob = document.getElementById('editDobInput').value;
+            const newClass = document.getElementById('editClassInput').value.trim();
+            const newGoal = document.getElementById('editGoalInput').value.trim();
             const newCity = document.getElementById('editCityInput').value.trim();
-            if(!newName || !newCity) { return showToast("Fields cannot be empty."); }
+            
+            if(!newName || !newCity) { return showToast("Name and City cannot be empty."); }
 
-            const email = localStorage.getItem('kiyo_user_email');
-            showToast("Saving...", "success");
+            localStorage.setItem('kiyo_user_name', newName);
+            localStorage.setItem('kiyo_user_dob', newDob);
+            localStorage.setItem('kiyo_class', newClass);
+            localStorage.setItem('kiyo_dream', newGoal);
+            localStorage.setItem('kiyo_user_city', newCity);
+
+            document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
+            document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "State");
+            document.getElementById('studentGoal').innerText = newGoal || "Explorer";
+
+            showToast("Profile Updated Successfully!", "success");
             closeCustomModal('editProfileModal');
-
-            try {
-                const res = await fetch('/api/update-profile', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, fullName: newName, city: newCity })
-                });
-                if(res.ok) {
-                    localStorage.setItem('kiyo_user_name', newName);
-                    localStorage.setItem('kiyo_user_city', newCity);
-                    document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openEditProfile()"></i>';
-                    document.getElementById('studentLocation').innerText = newCity + ", " + localStorage.getItem('kiyo_user_state');
-                    showToast("Profile Updated!", "success");
-                } else { showToast("Failed to update."); }
-            } catch(e) { showToast("Network Error."); }
         }
 
         // Delete Account Logic
