@@ -34,16 +34,13 @@
         .top-navbar { background: var(--surface-color); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
         html.dark-theme .top-navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
         .menu-btn { font-size: 22px; color: var(--text-main); cursor: pointer; }
-        .nav-title { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
+        .nav-title { font-size: 20px; font-weight: 800; color: var(--primary); margin: 0; letter-spacing: -0.5px;}
 
-        /* REAL NOTIFICATION DRAWER */
-        .notif-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .notif-overlay.active { opacity: 1; pointer-events: all; }
-        .notification-drawer { position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px; height: 100%; background: var(--bg-color); z-index: 1001; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1); }
-        .notification-drawer.active { right: 0; }
-        .notif-header-drawer { padding: 20px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 18px; color: var(--text-main); }
-        .notif-body { padding: 15px; flex: 1; overflow-y: auto; }
-        .notif-card { background: var(--surface-color); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 2px 8px rgba(0,0,0,0.02); display: flex; gap: 15px; align-items: flex-start; }
+        /* NOTIFICATION PANEL */
+        .notification-panel { position: fixed; top: 60px; right: -320px; width: 300px; max-height: 400px; background: var(--surface-color); box-shadow: -5px 5px 25px rgba(0,0,0,0.1); border-radius: 0 0 0 16px; z-index: 100; transition: right 0.3s ease; overflow-y: auto; border: 1px solid var(--border-color); }
+        .notification-panel.active { right: 0; }
+        .notif-header { padding: 15px 20px; border-bottom: 1px solid var(--border-color); font-weight: 800; font-size: 16px; display: flex; justify-content: space-between; align-items: center;}
+        .notif-item { padding: 15px 20px; border-bottom: 1px solid var(--border-color); display: flex; gap: 15px; }
         .notif-icon { background: rgba(99, 102, 241, 0.1); color: var(--primary); width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;}
         .notif-text h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--text-main); }
         .notif-text p { margin: 0; font-size: 12px; color: var(--text-muted); line-height: 1.4; }
@@ -361,7 +358,7 @@
         </div>
     </div>
 
-    <!-- CUSTOM SELECTION LIST (Replaces Old Browser Select) -->
+    <!-- CUSTOM SELECTION LIST (Replaces ugly <select>) -->
     <div class="custom-modal-overlay" id="selectionSheetModal" style="z-index: 400;">
         <div class="custom-modal-box selection-list-box">
             <div class="selection-header">
@@ -392,7 +389,20 @@
 
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('passwordModal')">Cancel</button>
-                <button class="btn-confirm" onclick="triggerAction('Verification OTP sent for Password change!')">Send OTP</button>
+                <button class="btn-confirm" onclick="initiatePasswordChange()">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Password Change OTP -->
+    <div class="custom-modal-overlay" id="passwordOtpModal">
+        <div class="custom-modal-box">
+            <h3 style="color:var(--text-main);">Verify Password Change</h3>
+            <p style="color:var(--text-muted); font-size:12px;">Enter the 6-digit OTP sent to your email.</p>
+            <input type="text" id="passOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('passwordOtpModal')">Cancel</button>
+                <button class="btn-confirm" onclick="verifyPasswordChange()">Verify & Change</button>
             </div>
         </div>
     </div>
@@ -409,7 +419,20 @@
             
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('emailUpdateModal')">Cancel</button>
-                <button class="btn-confirm" onclick="triggerAction('Verification OTP sent to new Email!')">Verify Email</button>
+                <button class="btn-confirm" onclick="initiateEmailChange()">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Email Update OTP -->
+    <div class="custom-modal-overlay" id="emailOtpModal">
+        <div class="custom-modal-box">
+            <h3 style="color:var(--text-main);">Verify New Email</h3>
+            <p style="color:var(--text-muted); font-size:12px;">Enter the 6-digit OTP sent to your NEW email.</p>
+            <input type="text" id="emailOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('emailOtpModal')">Cancel</button>
+                <button class="btn-confirm" onclick="verifyEmailChange()">Verify & Update</button>
             </div>
         </div>
     </div>
@@ -422,7 +445,20 @@
             <p style="color:var(--text-muted); font-size:12px;">We will send a 6-digit OTP to your registered email to verify deletion.</p>
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCustomModal('deleteWarningModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="triggerAction('Delete OTP Sent!')">Send OTP</button>
+                <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM MODAL: Enter Delete OTP -->
+    <div class="custom-modal-overlay" id="deleteOtpModal">
+        <div class="custom-modal-box">
+            <h3 style="color:var(--text-main);">Verify Deletion</h3>
+            <p style="color:var(--text-muted); font-size:12px;">Enter the 6-digit OTP sent to your email.</p>
+            <input type="text" id="deleteOtpInput" class="modal-input" placeholder="0 0 0 0 0 0" maxlength="6" style="letter-spacing: 5px;">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCustomModal('deleteOtpModal')">Cancel</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteAccount()">Delete Forever</button>
             </div>
         </div>
     </div>
@@ -444,14 +480,9 @@
             const toastBox = document.getElementById('toastBox');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
-            toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#10b981;"></i> <span>${message}</span>`;
+            toast.innerHTML = `<i class="fa-solid ${type==='success'?'fa-circle-check':'fa-circle-xmark'}"></i> <span>${message}</span>`;
             toastBox.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 400); }, 3000);
-        }
-
-        function triggerAction(msg) {
-            showToast(msg);
-            document.querySelectorAll('.custom-modal-overlay').forEach(m => m.classList.remove('active'));
         }
 
         // Notification Toggle
@@ -583,6 +614,7 @@
             closeCustomModal('selectionSheetModal');
         }
 
+        // API LOGIC - EDIT PROFILE
         async function saveProfileEdit() {
             const newName = document.getElementById('editNameInput').value.trim();
             const newDob = document.getElementById('editDobInput').value;
@@ -594,23 +626,172 @@
             
             if(!newName || !newCity) { return showToast("Name and City are required", "error"); }
 
-            localStorage.setItem('kiyo_user_name', newName);
-            localStorage.setItem('kiyo_user_dob', newDob);
-            localStorage.setItem('kiyo_class', newClass);
-            localStorage.setItem('kiyo_board', newBoard);
-            localStorage.setItem('kiyo_dream', newGoal);
-            localStorage.setItem('kiyo_skill', newSkill);
-            localStorage.setItem('kiyo_user_city', newCity);
+            const email = localStorage.getItem('kiyo_user_email');
+            showToast("Saving changes...", "success");
 
-            document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
-            document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
+            try {
+                const res = await fetch('/api/update-profile', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, fullName: newName, city: newCity, dob: newDob, board: newBoard, studentClass: newClass, goal: newGoal, skill: newSkill })
+                });
+
+                if(res.ok) {
+                    localStorage.setItem('kiyo_user_name', newName);
+                    localStorage.setItem('kiyo_user_dob', newDob);
+                    localStorage.setItem('kiyo_class', newClass);
+                    localStorage.setItem('kiyo_board', newBoard);
+                    localStorage.setItem('kiyo_dream', newGoal);
+                    localStorage.setItem('kiyo_skill', newSkill);
+                    localStorage.setItem('kiyo_user_city', newCity);
+
+                    document.getElementById('studentName').innerHTML = newName + ' <i class="fa-solid fa-pen" style="font-size: 13px; color: #fff; cursor: pointer; opacity: 0.8;" onclick="openCustomModal(\'editProfileModal\')"></i>';
+                    document.getElementById('studentLocation').innerText = newCity + ", " + (localStorage.getItem('kiyo_user_state') || "Bihar");
+                    
+                    document.getElementById('studentGoal').innerText = newGoal || "NEET";
+                    document.getElementById('studentClass').innerText = classOptions.find(o=>o.id===newClass)?.name || newClass;
+                    document.getElementById('studentBoard').innerText = boardOptions.find(o=>o.id===newBoard)?.name || newBoard;
+
+                    showToast("Profile Updated Successfully!", "success");
+                    closeCustomModal('editProfileModal');
+                } else { showToast("Failed to update profile", "error"); }
+            } catch (e) { showToast("Network Error", "error"); }
+        }
+
+        // API LOGIC - Z+ SECURITY PASSWORD CHANGE
+        async function initiatePasswordChange() {
+            const newPass = document.getElementById('newPasswordInput').value;
+            const confirmPass = document.getElementById('confirmPasswordInput').value;
             
-            document.getElementById('studentGoal').innerText = newGoal || "NEET";
-            document.getElementById('studentClass').innerText = classOptions.find(o=>o.id===newClass)?.name || newClass;
-            document.getElementById('studentBoard').innerText = boardOptions.find(o=>o.id===newBoard)?.name || newBoard;
+            if(!newPass || newPass.length < 6) return showToast("Password must be at least 6 characters", "error");
+            if(newPass !== confirmPass) return showToast("Passwords do not match", "error");
 
-            showToast("Profile Updated Successfully!");
-            closeCustomModal('editProfileModal');
+            const email = localStorage.getItem('kiyo_user_email');
+            showToast("Sending OTP...", "success");
+
+            try {
+                const res = await fetch('/api/send-pass-change-otp', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email})
+                });
+                if(res.ok) {
+                    closeCustomModal('passwordModal');
+                    openCustomModal('passwordOtpModal');
+                    showToast("OTP Sent to Email!", "success");
+                } else { showToast("Failed to send OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        async function verifyPasswordChange() {
+            const otp = document.getElementById('passOtpInput').value.trim();
+            const newPassword = document.getElementById('newPasswordInput').value;
+            const email = localStorage.getItem('kiyo_user_email');
+
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP", "error");
+
+            try {
+                const res = await fetch('/api/verify-pass-change', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email, otp: otp, newPassword: newPassword})
+                });
+                if(res.ok) {
+                    closeCustomModal('passwordOtpModal');
+                    showToast("Password Changed Successfully!", "success");
+                    document.getElementById('newPasswordInput').value = '';
+                    document.getElementById('confirmPasswordInput').value = '';
+                    document.getElementById('passOtpInput').value = '';
+                } else { showToast("Invalid OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        // API LOGIC - Z+ SECURITY EMAIL UPDATE
+        async function initiateEmailChange() {
+            const newEmail = document.getElementById('newEmailInput').value.trim();
+            const oldEmail = localStorage.getItem('kiyo_user_email');
+            
+            if(!newEmail) return showToast("Enter new email", "error");
+            if(newEmail === oldEmail) return showToast("Enter a different email", "error");
+
+            showToast("Sending OTP to new email...", "success");
+
+            try {
+                const res = await fetch('/api/send-email-change-otp', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({oldEmail: oldEmail, newEmail: newEmail})
+                });
+                const data = await res.json();
+                
+                if(data.status === 'exists') {
+                    showToast(data.message, "error");
+                } else if(res.ok) {
+                    closeCustomModal('emailUpdateModal');
+                    openCustomModal('emailOtpModal');
+                    showToast("OTP Sent to " + newEmail, "success");
+                } else { showToast("Failed to send OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        async function verifyEmailChange() {
+            const otp = document.getElementById('emailOtpInput').value.trim();
+            const oldEmail = localStorage.getItem('kiyo_user_email');
+
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP", "error");
+
+            try {
+                const res = await fetch('/api/verify-email-change', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({oldEmail: oldEmail, otp: otp})
+                });
+                const data = await res.json();
+                
+                if(res.ok) {
+                    localStorage.setItem('kiyo_user_email', data.newEmail);
+                    closeCustomModal('emailOtpModal');
+                    showToast("Email Updated Successfully!", "success");
+                    setTimeout(() => location.reload(), 1500); // Reload to reflect changes
+                } else { showToast("Invalid OTP", "error"); }
+            } catch(e) { showToast("Network Error", "error"); }
+        }
+
+        // API LOGIC - DELETE ACCOUNT
+        function openDeleteWarning() { openCustomModal('deleteWarningModal'); }
+        
+        async function sendDeleteOTP() {
+            const email = localStorage.getItem('kiyo_user_email');
+            showToast("Sending OTP...", "success");
+            closeCustomModal('deleteWarningModal');
+            
+            try {
+                const res = await fetch('/api/send-delete-otp', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                if(res.ok) {
+                    document.getElementById('deleteOtpInput').value = "";
+                    openCustomModal('deleteOtpModal');
+                    showToast("OTP Sent to Email", "success");
+                } else { showToast("Failed to send OTP.", "error"); }
+            } catch(e) { showToast("Network Error.", "error"); }
+        }
+
+        async function verifyDeleteAccount() {
+            const otp = document.getElementById('deleteOtpInput').value.trim();
+            const email = localStorage.getItem('kiyo_user_email');
+            if(otp.length !== 6) return showToast("Enter 6-digit OTP.", "error");
+            
+            try {
+                const res = await fetch('/api/delete-account', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, otp: otp })
+                });
+                if(res.ok) {
+                    closeCustomModal('deleteOtpModal');
+                    showToast("Account Deleted", "success");
+                    setTimeout(() => {
+                        localStorage.clear();
+                        window.location.replace("login.html");
+                    }, 1500);
+                } else { showToast("Invalid OTP.", "error"); }
+            } catch(e) { showToast("Network Error.", "error"); }
         }
     </script>
 </body>
