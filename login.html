@@ -121,12 +121,6 @@
         .sheet-header h3 { margin: 0; font-size: 16px; color: #0f172a; font-weight: 800; }
         .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
         
-        .custom-list-container { overflow-y: auto; padding: 15px 20px; display: flex; flex-direction: column; gap: 8px; }
-        .list-item { padding: 14px 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; color: #334155; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: space-between; }
-        .list-item i { color: var(--primary); opacity: 0; transform: scale(0.5); transition: 0.3s; font-size: 16px; }
-        .list-item.selected { background: var(--primary-light); border: 1px solid var(--primary); color: var(--primary-dark); }
-        .list-item.selected i { opacity: 1; transform: scale(1); }
-
         .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 14px 15px; text-decoration: none; color: #0f172a; border-bottom: 1px solid #f1f5f9; transition: 0.2s;}
         .ticbull-link-item i { font-size: 20px; color: var(--primary); width: 25px; text-align: center;}
         .ticbull-link-item span { font-size: 14px; font-weight: 600; }
@@ -189,11 +183,13 @@
                         <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
                     </div>
 
+                    <!-- THese buttons now ALL redirect to your separate HTML files -->
                     <div id="pathBoardUI">
                         <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
                         
-                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
-                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
+                        <!-- SMART LOGIC FIELDS: Only shows if 11th, 12th or Dropper is selected -->
+                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="saveTempAndGo('subjects.html')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-right"></i></div></div>
+                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="saveTempAndGo('goal.html')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-right"></i></div></div>
 
                         <div class="input-group" id="boardGroup"><div class="custom-select-btn" id="btnBoard" onclick="saveTempAndGo('board.html')"><span id="lblBoard">Select Board...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
                     </div>
@@ -258,17 +254,6 @@
         </div>
     </div>
 
-    <!-- Internal List Modal for Stream & Dream -->
-    <div class="modal-overlay" id="listModal">
-        <div class="bottom-sheet">
-            <div class="sheet-header">
-                <h3 id="listTitle">Select Option</h3>
-                <i class="fa-solid fa-xmark close-sheet" onclick="closeListModal()"></i>
-            </div>
-            <div class="custom-list-container" id="listContent"></div>
-        </div>
-    </div>
-
     <!-- OTP Modal for Signup Verification -->
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
@@ -317,12 +302,6 @@
         let currentMode = 'signin';
         let currentPath = 'board';
 
-        // Internal Data Lists for Stream & Goal
-        const dataLists = {
-            stream: [ {id: 'pcb', name: 'PCB (Physics, Chem, Bio)'}, {id: 'pcm', name: 'PCM (Physics, Chem, Math)'}, {id: 'pcmb', name: 'PCMB (Math & Bio)'}, {id: 'commerce', name: 'Commerce (Accounts)'}, {id: 'arts', name: 'Arts / Humanities'} ],
-            dream: [ {id: 'neet', name: 'Doctor (Crack NEET)'}, {id: 'jee', name: 'Engineer (Crack JEE)'}, {id: 'upsc', name: 'IAS / IPS (UPSC)'}, {id: 'ca', name: 'Chartered Accountant (CA)'}, {id: 'nda', name: 'Defence Officer (NDA)'}, {id: 'clat', name: 'Top Lawyer (CLAT)'}, {id: 'board_topper', name: 'Only Board Topper 95%+'} ]
-        };
-
         // Helper function for logic visibility
         function applyClassLogic(className) {
             const streamGrp = document.getElementById('streamGroup');
@@ -332,11 +311,11 @@
             if(!className) return;
 
             const nameLow = className.toLowerCase();
-            if (nameLow.includes('11') || nameLow.includes('12') || nameLow.includes('dropper')) {
+            if (nameLow.includes('11') || nameLow.includes('12') || nameLow.includes('dropper') || nameLow.includes('graduation')) {
                 streamGrp.style.display = 'block';
                 dreamGrp.style.display = 'block';
-                // Hide Board if Dropper
-                if (nameLow.includes('dropper')) {
+                // Hide Board if Dropper or Graduation
+                if (nameLow.includes('dropper') || nameLow.includes('graduation')) {
                     boardGrp.style.display = 'none';
                 } else {
                     boardGrp.style.display = 'block';
@@ -491,74 +470,6 @@
             document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
         }
 
-        // ================= SMART FILTERING LOGIC =================
-        function openSelectionList(type) {
-            const contentBox = document.getElementById('listContent');
-            const titles = { stream: "Select Streams / Subjects", dream: "Select Your Goal" };
-            document.getElementById('listTitle').innerText = titles[type];
-            contentBox.innerHTML = '';
-
-            const currentVal = localStorage.getItem('kiyo_' + type);
-            let itemsToShow = dataLists[type];
-
-            // AI-LEVEL FILTERING FOR 'DREAM' (TARGET GOAL)
-            if (type === 'dream') {
-                const savedClass = localStorage.getItem('kiyo_class') || '';
-                const savedStream = localStorage.getItem('kiyo_stream') || '';
-                const isDropper = savedClass.toLowerCase().includes('dropper');
-
-                itemsToShow = dataLists.dream.filter(item => {
-                    // Rule 1: Dropper cannot have 'Board Topper' as goal
-                    if (isDropper && item.id === 'board_topper') return false;
-
-                    // Rule 2: Filter goals based on selected Stream
-                    if (savedStream) {
-                        const streamLow = savedStream.toLowerCase();
-                        if (streamLow.includes('pcb') && !streamLow.includes('pcmb')) {
-                            return ['neet', 'upsc', 'board_topper'].includes(item.id);
-                        } else if (streamLow.includes('pcm') && !streamLow.includes('pcmb')) {
-                            return ['jee', 'nda', 'upsc', 'board_topper'].includes(item.id);
-                        } else if (streamLow.includes('pcmb')) {
-                            return ['neet', 'jee', 'nda', 'upsc', 'board_topper'].includes(item.id);
-                        } else if (streamLow.includes('commerce')) {
-                            return ['ca', 'upsc', 'clat', 'board_topper'].includes(item.id);
-                        } else if (streamLow.includes('arts') || streamLow.includes('humanities')) {
-                            return ['upsc', 'clat', 'board_topper'].includes(item.id);
-                        }
-                    }
-                    return true;
-                });
-            }
-
-            itemsToShow.forEach(item => {
-                const isSelected = currentVal === item.name;
-                contentBox.innerHTML += `
-                    <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.name}')">
-                        <span>${item.name}</span>
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>`;
-            });
-            document.getElementById('listModal').classList.add('active');
-        }
-
-        function selectListItem(type, name) {
-            const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
-            btn.classList.add('selected');
-            document.getElementById('lbl' + type.charAt(0).toUpperCase() + type.slice(1)).innerText = name;
-            
-            localStorage.setItem('kiyo_' + type, name); 
-            
-            // Auto-reset Goal if Stream changes to avoid incorrect combinations
-            if (type === 'stream') {
-                document.getElementById('lblDream').innerText = 'Target Goal (NEET, JEE...)';
-                document.getElementById('btnDream').classList.remove('selected');
-                localStorage.removeItem('kiyo_dream');
-            }
-
-            closeListModal();
-        }
-
-        function closeListModal() { document.getElementById('listModal').classList.remove('active'); }
         function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
@@ -574,13 +485,13 @@
                     if(!selClass) return showToast("Select Class");
                     
                     const nameLow = selClass.toLowerCase();
-                    const isDropper = nameLow.includes('dropper');
+                    const isDropperOrGrad = nameLow.includes('dropper') || nameLow.includes('graduation');
                     
-                    if(!isDropper && !localStorage.getItem('kiyo_board')) { 
+                    if(!isDropperOrGrad && !localStorage.getItem('kiyo_board')) { 
                         return showToast("Select Board"); 
                     }
                     
-                    if (nameLow.includes('11') || nameLow.includes('12') || isDropper) {
+                    if (nameLow.includes('11') || nameLow.includes('12') || isDropperOrGrad) {
                         if(!localStorage.getItem('kiyo_stream') || !localStorage.getItem('kiyo_dream')) {
                             return showToast("Select Stream & Target Goal");
                         }
@@ -643,7 +554,8 @@
                 localStorage.setItem('kiyo_user_city', document.getElementById('cityInput').value.trim());
                 localStorage.setItem('kiyo_user_path', currentPath);
                 
-                sessionStorage.clear(); // Clear temp signup data
+                // Clear temporary session data
+                sessionStorage.clear();
 
                 showToast("Account Created!", 'success');
                 setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
@@ -671,6 +583,7 @@
             showToast("Verifying Email...", "success");
 
             try {
+                // SECURITY FIX: Check if email exists
                 const checkRes = await fetch('/api/check-user', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
@@ -681,6 +594,7 @@
                     return showToast("Account not found! Please check email.");
                 }
 
+                // If account exists, send the OTP
                 const res = await fetch('/api/send-pass-change-otp', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: email})
@@ -722,4 +636,3 @@
     </script>
 </body>
 </html>
-
