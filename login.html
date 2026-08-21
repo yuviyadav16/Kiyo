@@ -189,11 +189,9 @@
                         <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
                     </div>
 
-                    <!-- THese buttons now redirect to your 4 separate HTML files -->
                     <div id="pathBoardUI">
                         <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
                         
-                        <!-- SMART LOGIC FIELDS: Only shows if 11th, 12th or Dropper is selected -->
                         <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="openSelectionList('stream')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
                         <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="openSelectionList('dream')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-down"></i></div></div>
 
@@ -493,7 +491,7 @@
             document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
         }
 
-        // Internal List Modal for Stream & Dream
+        // ================= SMART FILTERING LOGIC =================
         function openSelectionList(type) {
             const contentBox = document.getElementById('listContent');
             const titles = { stream: "Select Streams / Subjects", dream: "Select Your Goal" };
@@ -501,8 +499,38 @@
             contentBox.innerHTML = '';
 
             const currentVal = localStorage.getItem('kiyo_' + type);
+            let itemsToShow = dataLists[type];
 
-            dataLists[type].forEach(item => {
+            // AI-LEVEL FILTERING FOR 'DREAM' (TARGET GOAL)
+            if (type === 'dream') {
+                const savedClass = localStorage.getItem('kiyo_class') || '';
+                const savedStream = localStorage.getItem('kiyo_stream') || '';
+                const isDropper = savedClass.toLowerCase().includes('dropper');
+
+                itemsToShow = dataLists.dream.filter(item => {
+                    // Rule 1: Dropper cannot have 'Board Topper' as goal
+                    if (isDropper && item.id === 'board_topper') return false;
+
+                    // Rule 2: Filter goals based on selected Stream
+                    if (savedStream) {
+                        const streamLow = savedStream.toLowerCase();
+                        if (streamLow.includes('pcb') && !streamLow.includes('pcmb')) {
+                            return ['neet', 'upsc', 'board_topper'].includes(item.id);
+                        } else if (streamLow.includes('pcm') && !streamLow.includes('pcmb')) {
+                            return ['jee', 'nda', 'upsc', 'board_topper'].includes(item.id);
+                        } else if (streamLow.includes('pcmb')) {
+                            return ['neet', 'jee', 'nda', 'upsc', 'board_topper'].includes(item.id);
+                        } else if (streamLow.includes('commerce')) {
+                            return ['ca', 'upsc', 'clat', 'board_topper'].includes(item.id);
+                        } else if (streamLow.includes('arts') || streamLow.includes('humanities')) {
+                            return ['upsc', 'clat', 'board_topper'].includes(item.id);
+                        }
+                    }
+                    return true;
+                });
+            }
+
+            itemsToShow.forEach(item => {
                 const isSelected = currentVal === item.name;
                 contentBox.innerHTML += `
                     <div class="list-item ${isSelected ? 'selected' : ''}" onclick="selectListItem('${type}', '${item.name}')">
@@ -518,8 +546,15 @@
             btn.classList.add('selected');
             document.getElementById('lbl' + type.charAt(0).toUpperCase() + type.slice(1)).innerText = name;
             
-            // Save immediately to local storage so it survives page reloads
             localStorage.setItem('kiyo_' + type, name); 
+            
+            // Auto-reset Goal if Stream changes to avoid incorrect combinations
+            if (type === 'stream') {
+                document.getElementById('lblDream').innerText = 'Target Goal (NEET, JEE...)';
+                document.getElementById('btnDream').classList.remove('selected');
+                localStorage.removeItem('kiyo_dream');
+            }
+
             closeListModal();
         }
 
@@ -541,12 +576,10 @@
                     const nameLow = selClass.toLowerCase();
                     const isDropper = nameLow.includes('dropper');
                     
-                    // Normal student needs board, dropper doesn't
                     if(!isDropper && !localStorage.getItem('kiyo_board')) { 
                         return showToast("Select Board"); 
                     }
                     
-                    // Validate Stream and Dream if Class is 11, 12 or Dropper
                     if (nameLow.includes('11') || nameLow.includes('12') || isDropper) {
                         if(!localStorage.getItem('kiyo_stream') || !localStorage.getItem('kiyo_dream')) {
                             return showToast("Select Stream & Target Goal");
@@ -610,10 +643,7 @@
                 localStorage.setItem('kiyo_user_city', document.getElementById('cityInput').value.trim());
                 localStorage.setItem('kiyo_user_path', currentPath);
                 
-                // Note: Board, Class, Exam, Skill are already saved in localStorage from the 4 files
-                
-                // Clear temporary session data
-                sessionStorage.clear();
+                sessionStorage.clear(); // Clear temp signup data
 
                 showToast("Account Created!", 'success');
                 setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
@@ -641,7 +671,6 @@
             showToast("Verifying Email...", "success");
 
             try {
-                // SECURITY FIX: Check if email exists
                 const checkRes = await fetch('/api/check-user', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
@@ -652,7 +681,6 @@
                     return showToast("Account not found! Please check email.");
                 }
 
-                // If account exists, send the OTP
                 const res = await fetch('/api/send-pass-change-otp', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: email})
@@ -694,3 +722,4 @@
     </script>
 </body>
 </html>
+
