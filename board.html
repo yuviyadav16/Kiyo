@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Select Board - Kiyo AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- ECOSYSTEM SYNC: Dark Mode Check before page loads -->
+    <script>
+        if(localStorage.getItem('kiyo_theme') === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+        }
+    </script>
+
+    <style>
+        :root {
+            --primary: #6366f1; --bg-color: #f8fafc; --surface-color: #ffffff; 
+            --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
+        }
+        html.dark-theme {
+            --bg-color: #0B101E; --surface-color: #121826; 
+            --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1);
+        }
+
+        body { margin: 0; background: var(--bg-color); color: var(--text-main); font-family: system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* App Header */
+        .header { display: flex; align-items: center; padding: 20px; background: var(--surface-color); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .back-btn { font-size: 20px; color: var(--text-main); cursor: pointer; text-decoration: none; margin-right: 15px; }
+        .title { font-size: 18px; font-weight: 800; margin: 0; }
+
+        /* Search Bar */
+        .search-container { padding: 15px 20px; background: var(--bg-color); position: sticky; top: 65px; z-index: 9;}
+        .search-box { display: flex; align-items: center; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 15px; }
+        .search-box i { color: var(--text-muted); font-size: 16px; margin-right: 10px; }
+        .search-box input { border: none; background: transparent; outline: none; width: 100%; color: var(--text-main); font-size: 15px; font-weight: 600; }
+
+        /* Board List */
+        .list-container { padding: 0 20px 20px 20px; }
+        .list-item { background: var(--surface-color); border: 1px solid var(--border-color); padding: 18px; border-radius: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .list-item:active { transform: scale(0.98); border-color: var(--primary); }
+        .list-item.selected { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
+        .list-item.selected i { color: var(--primary); }
+        
+        .board-name { font-size: 15px; font-weight: 700; color: var(--text-main); }
+        .check-icon { color: transparent; font-size: 18px; }
+
+        /* Toast Loading */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: #fff; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; display: none; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); z-index: 100;}
+        .toast.show { display: block; animation: popUp 0.3s ease; }
+        @keyframes popUp { from { bottom: -20px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1 class="title">Select Educational Board</h1>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search your board..." onkeyup="filterBoards()">
+        </div>
+    </div>
+
+    <div class="list-container" id="boardList">
+        <!-- JS will populate this -->
+    </div>
+
+    <div class="toast" id="loadingToast">Saving permanently... <i class="fa-solid fa-spinner fa-spin"></i></div>
+
+    <script>
+        // Data List
+        const boards = [
+            {id: 'CBSE', name: 'CBSE Board'}, 
+            {id: 'BSEB', name: 'Bihar Board (BSEB)'},
+            {id: 'ICSE', name: 'ICSE / ISC'}, 
+            {id: 'UPMSP', name: 'UP Board'},
+            {id: 'RBSE', name: 'Rajasthan Board'}, 
+            {id: 'MPBSE', name: 'Maharashtra Board'},
+            {id: 'WBBSE', name: 'West Bengal Board'}, 
+            {id: 'State', name: 'Other State Board'}
+        ];
+
+        const listContainer = document.getElementById('boardList');
+        const currentBoard = localStorage.getItem('kiyo_board');
+
+        // Render List
+        function renderList() {
+            listContainer.innerHTML = '';
+            boards.forEach(board => {
+                const isSelected = board.id === currentBoard ? 'selected' : '';
+                const checkClass = board.id === currentBoard ? 'fa-solid fa-circle-check check-icon' : 'fa-regular fa-circle check-icon';
+                
+                listContainer.innerHTML += `
+                    <div class="list-item ${isSelected}" onclick="saveBoard('${board.id}', '${board.name}')">
+                        <span class="board-name">${board.name}</span>
+                        <i class="${checkClass}" style="${board.id === currentBoard ? 'color: var(--primary);' : ''}"></i>
+                    </div>
+                `;
+            });
+        }
+
+        // Live Search
+        function filterBoards() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.list-item');
+            items.forEach(item => {
+                const text = item.querySelector('.board-name').innerText.toLowerCase();
+                if(text.includes(query)) item.style.display = 'flex';
+                else item.style.display = 'none';
+            });
+        }
+
+        // Save to Firebase & Local, then go back
+        async function saveBoard(boardId, boardName) {
+            document.getElementById('loadingToast').classList.add('show');
+            
+            const email = localStorage.getItem('kiyo_user_email');
+            
+            try {
+                // Permanent Save in Python Backend
+                const res = await fetch('/api/update-profile', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, board: boardId }) // Updating board node in Firebase
+                });
+
+                if(res.ok) {
+                    // Update Locally
+                    localStorage.setItem('kiyo_board', boardId);
+                    
+                    // Redirect back to dashboard after 1 second
+                    setTimeout(() => {
+                        window.location.replace("dashboard.html");
+                    }, 1000);
+                } else {
+                    alert("Network error while saving.");
+                    document.getElementById('loadingToast').classList.remove('show');
+                }
+            } catch (e) {
+                alert("Connection failed.");
+                document.getElementById('loadingToast').classList.remove('show');
+            }
+        }
+
+        // Init
+        renderList();
+    </script>
+</body>
+</html>
