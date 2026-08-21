@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Select Exam</title></head>
+<body>
+    <div class="header"><a href="login.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a><h1 class="title">Select Target Exam</h1></div>
+    <div class="list-container" id="examList"></div>
+    <script>
+        const exams = ["NEET Class 11", "NEET Class 12", "NEET Dropper", "JEE Main Class 11", "JEE Main Class 12", "JEE Dropper", "UPSC CSE", "NDA & NA", "CDS", "AFCAT", "SSC CGL", "SSC CHSL", "IBPS PO", "SBI PO", "CLAT (Law)", "CAT (MBA)", "BITSAT", "VITEEE", "GATE", "IIT JAM", "UGC NET"];
+        const container = document.getElementById('examList');
+        exams.forEach(e => {
+            container.innerHTML += `<div class="list-item" onclick="save('${e}')"><span class="item-name">${e}</span></div>`;
+        });
+        function save(val) { localStorage.setItem('kiyo_exam', val); window.location.replace('login.html'); }
+    </script>
+</body>
+</html>
