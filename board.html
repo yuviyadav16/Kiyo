@@ -17,6 +17,7 @@
         :root {
             --primary: #6366f1; --bg-color: #f8fafc; --surface-color: #ffffff; 
             --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
+            --danger: #ef4444; --success: #10b981;
         }
         html.dark-theme {
             --bg-color: #0B101E; --surface-color: #121826; 
@@ -36,117 +37,183 @@
         .search-box i { color: var(--text-muted); font-size: 16px; margin-right: 10px; }
         .search-box input { border: none; background: transparent; outline: none; width: 100%; color: var(--text-main); font-size: 15px; font-weight: 600; }
 
-        /* Board List */
+        /* List Items */
         .list-container { padding: 0 20px 20px 20px; }
+        .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px 5px; }
+        
         .list-item { background: var(--surface-color); border: 1px solid var(--border-color); padding: 18px; border-radius: 14px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .list-item:active { transform: scale(0.98); border-color: var(--primary); }
         .list-item.selected { border-color: var(--primary); background: rgba(99, 102, 241, 0.05); }
         .list-item.selected i { color: var(--primary); }
         
-        .board-name { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .check-icon { color: transparent; font-size: 18px; }
+        .item-name { font-size: 14px; font-weight: 700; color: var(--text-main); line-height: 1.4;}
+        .check-icon { color: transparent; font-size: 18px; flex-shrink: 0; margin-left: 10px;}
 
-        /* Toast Loading */
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: #fff; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 14px; display: none; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); z-index: 100;}
-        .toast.show { display: block; animation: popUp 0.3s ease; }
-        @keyframes popUp { from { bottom: -20px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        /* Custom Professional Toast */
+        .toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(100px); opacity: 0; animation: slideUp 0.4s forwards; text-align: center;}
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <a href="javascript:history.back()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <h1 class="title">Select Educational Board</h1>
+        <a href="javascript:goBack()" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h1 class="title">Select Board</h1>
     </div>
 
     <div class="search-container">
         <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search your board..." onkeyup="filterBoards()">
+            <input type="text" id="searchInput" placeholder="Search your educational board..." onkeyup="filterList()">
         </div>
     </div>
 
-    <div class="list-container" id="boardList">
+    <div class="list-container" id="dataList">
         <!-- JS will populate this -->
     </div>
 
-    <div class="toast" id="loadingToast">Saving permanently... <i class="fa-solid fa-spinner fa-spin"></i></div>
+    <div class="toast-container" id="toastBox"></div>
 
     <script>
-        // Data List
-        const boards = [
-            {id: 'CBSE', name: 'CBSE Board'}, 
-            {id: 'BSEB', name: 'Bihar Board (BSEB)'},
-            {id: 'ICSE', name: 'ICSE / ISC'}, 
-            {id: 'UPMSP', name: 'UP Board'},
-            {id: 'RBSE', name: 'Rajasthan Board'}, 
-            {id: 'MPBSE', name: 'Maharashtra Board'},
-            {id: 'WBBSE', name: 'West Bengal Board'}, 
-            {id: 'State', name: 'Other State Board'}
+        // Massive PAN-India Board Database
+        const boardsData = [
+            // National Boards
+            { id: 'CBSE', name: 'Central Board of Secondary Education (CBSE)', type: 'National' },
+            { id: 'CISCE', name: 'Council for the Indian School Certificate Examinations (ICSE/ISC)', type: 'National' },
+            { id: 'NIOS', name: 'National Institute of Open Schooling (NIOS)', type: 'National' },
+
+            // State Boards (Alphabetical Order)
+            { id: 'AP_BSE', name: 'Andhra Pradesh Board of Secondary Education (BSEAP)', type: 'State' },
+            { id: 'ARUNACHAL', name: 'Arunachal Pradesh State Board', type: 'State' },
+            { id: 'ASSAM_SEBA', name: 'Assam Board of Secondary Education (SEBA / AHSEC)', type: 'State' },
+            { id: 'BIHAR_BSEB', name: 'Bihar School Examination Board (BSEB)', type: 'State' },
+            { id: 'CG_BSE', name: 'Chhattisgarh Board of Secondary Education (CGBSE)', type: 'State' },
+            { id: 'GOA_GBSHSE', name: 'Goa Board of Sec. & Hr. Sec. Education (GBSHSE)', type: 'State' },
+            { id: 'GUJARAT_GSEB', name: 'Gujarat Secondary & Higher Secondary Education Board (GSEB)', type: 'State' },
+            { id: 'HARYANA_BSEH', name: 'Haryana Board of School Education (BSEH / HBSE)', type: 'State' },
+            { id: 'HP_BOSE', name: 'Himachal Pradesh Board of School Education (HPBOSE)', type: 'State' },
+            { id: 'JHARKHAND_JAC', name: 'Jharkhand Academic Council (JAC)', type: 'State' },
+            { id: 'KARNATAKA_KSEEB', name: 'Karnataka Secondary Education Examination Board (KSEEB / PUE)', type: 'State' },
+            { id: 'KERALA_DHSE', name: 'Kerala Board of Public Examinations (KBPE / DHSE)', type: 'State' },
+            { id: 'MP_BSE', name: 'Madhya Pradesh Board of Secondary Education (MPBSE)', type: 'State' },
+            { id: 'MAHARASHTRA_SSC', name: 'Maharashtra State Board (MSBSHSE)', type: 'State' },
+            { id: 'MANIPUR_BSEM', name: 'Manipur Board of Secondary Education (BSEM / COHSEM)', type: 'State' },
+            { id: 'MEGHALAYA_MBOSE', name: 'Meghalaya Board of School Education (MBOSE)', type: 'State' },
+            { id: 'MIZORAM_MBSE', name: 'Mizoram Board of School Education (MBSE)', type: 'State' },
+            { id: 'NAGALAND_NBSE', name: 'Nagaland Board of School Education (NBSE)', type: 'State' },
+            { id: 'ODISHA_BSE', name: 'Odisha Board of Secondary Education (BSE / CHSE)', type: 'State' },
+            { id: 'PUNJAB_PSEB', name: 'Punjab School Education Board (PSEB)', type: 'State' },
+            { id: 'RAJASTHAN_RBSE', name: 'Rajasthan Board of Secondary Education (RBSE)', type: 'State' },
+            { id: 'SIKKIM', name: 'Sikkim State Board', type: 'State' },
+            { id: 'TAMILNADU_TNBSE', name: 'Tamil Nadu State Board (TNBSE)', type: 'State' },
+            { id: 'TELANGANA_BSE', name: 'Telangana State Board of Secondary Education (TSBIE)', type: 'State' },
+            { id: 'TRIPURA_TBSE', name: 'Tripura Board of Secondary Education (TBSE)', type: 'State' },
+            { id: 'UP_MSP', name: 'Uttar Pradesh Madhyamik Shiksha Parishad (UPMSP)', type: 'State' },
+            { id: 'UTTARAKHAND_UBSE', name: 'Uttarakhand Board of School Education (UBSE)', type: 'State' },
+            { id: 'WESTBENGAL_WBBSE', name: 'West Bengal Board of Secondary Education (WBBSE / WBCHSE)', type: 'State' },
+
+            // International & Others
+            { id: 'IB', name: 'International Baccalaureate (IB)', type: 'International' },
+            { id: 'CAMBRIDGE', name: 'Cambridge Assessment International Education (CAIE)', type: 'International' },
+            { id: 'OTHER', name: 'Other Board / Open School', type: 'Other' }
         ];
 
-        const listContainer = document.getElementById('boardList');
-        const currentBoard = localStorage.getItem('kiyo_board');
+        const listContainer = document.getElementById('dataList');
+        const currentSelection = localStorage.getItem('kiyo_board'); // Saves the exact name
 
-        // Render List
+        // Custom Toast Notification
+        function showToast(message, type = 'success') {
+            const toastBox = document.getElementById('toastBox');
+            toastBox.innerHTML = ''; 
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            const icon = type === 'success' ? 'fa-spinner fa-spin' : 'fa-circle-xmark';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+            toastBox.appendChild(toast);
+        }
+
+        // Render List Dynamically with Category Dividers
         function renderList() {
             listContainer.innerHTML = '';
-            boards.forEach(board => {
-                const isSelected = board.id === currentBoard ? 'selected' : '';
-                const checkClass = board.id === currentBoard ? 'fa-solid fa-circle-check check-icon' : 'fa-regular fa-circle check-icon';
+            
+            let currentCategory = '';
+
+            boardsData.forEach(item => {
+                // Add Category Header
+                if (item.type !== currentCategory) {
+                    currentCategory = item.type;
+                    listContainer.innerHTML += `<div class="section-title">${currentCategory} BOARDS</div>`;
+                }
+
+                const isSelected = item.name === currentSelection ? 'selected' : '';
+                const checkClass = item.name === currentSelection ? 'fa-solid fa-circle-check check-icon' : 'fa-regular fa-circle check-icon';
                 
                 listContainer.innerHTML += `
-                    <div class="list-item ${isSelected}" onclick="saveBoard('${board.id}', '${board.name}')">
-                        <span class="board-name">${board.name}</span>
-                        <i class="${checkClass}" style="${board.id === currentBoard ? 'color: var(--primary);' : ''}"></i>
+                    <div class="list-item ${isSelected}" onclick="saveSelection('${item.name}')">
+                        <span class="item-name">${item.name}</span>
+                        <i class="${checkClass}" style="${item.name === currentSelection ? 'color: var(--primary);' : ''}"></i>
                     </div>
                 `;
             });
         }
 
-        // Live Search
-        function filterBoards() {
+        // Live Search Filter (Searches through all 35+ boards instantly)
+        function filterList() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const items = document.querySelectorAll('.list-item');
+            const headers = document.querySelectorAll('.section-title');
+            
+            // Hide headers during search to keep it clean
+            headers.forEach(h => h.style.display = query ? 'none' : 'block');
+
             items.forEach(item => {
-                const text = item.querySelector('.board-name').innerText.toLowerCase();
+                const text = item.querySelector('.item-name').innerText.toLowerCase();
                 if(text.includes(query)) item.style.display = 'flex';
                 else item.style.display = 'none';
             });
         }
 
-        // Save to Firebase & Local, then go back
-        async function saveBoard(boardId, boardName) {
-            document.getElementById('loadingToast').classList.add('show');
-            
-            const email = localStorage.getItem('kiyo_user_email');
-            
-            try {
-                // Permanent Save in Python Backend
-                const res = await fetch('/api/update-profile', {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, board: boardId }) // Updating board node in Firebase
-                });
-
-                if(res.ok) {
-                    // Update Locally
-                    localStorage.setItem('kiyo_board', boardId);
-                    
-                    // Redirect back to dashboard after 1 second
-                    setTimeout(() => {
-                        window.location.replace("dashboard.html");
-                    }, 1000);
-                } else {
-                    alert("Network error while saving.");
-                    document.getElementById('loadingToast').classList.remove('show');
-                }
-            } catch (e) {
-                alert("Connection failed.");
-                document.getElementById('loadingToast').classList.remove('show');
+        // Smart Back Navigation
+        function goBack() {
+            const isSignup = sessionStorage.getItem('temp_step') === '2';
+            if (isSignup) {
+                window.location.replace("login.html");
+            } else {
+                window.location.replace("dashboard.html");
             }
         }
 
-        // Init
+        // Save Selection with Smart Ecosystem Logic
+        async function saveSelection(boardName) {
+            showToast("Saving...", "success");
+            
+            // Save locally for ecosystem connection
+            localStorage.setItem('kiyo_board', boardName);
+            
+            // Check current status: Is user doing Signup OR Editing profile from Dashboard?
+            const email = localStorage.getItem('kiyo_user_email');
+            const isSignup = sessionStorage.getItem('temp_step') === '2';
+
+            if (email && !isSignup) {
+                // User is already logged in, update database silently
+                try {
+                    await fetch('/api/update-profile', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email, board: boardName })
+                    });
+                } catch (e) {
+                    console.log("Offline save success, DB sync failed");
+                }
+            }
+
+            // Redirect back smoothly after 800ms
+            setTimeout(() => { goBack(); }, 800);
+        }
+
+        // Initialize App
         renderList();
     </script>
 </body>
