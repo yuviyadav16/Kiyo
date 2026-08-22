@@ -13,7 +13,7 @@
 
     <style>
         :root {
-            /* MySA Premium Theme Colors */
+            /* Premium Light Purple Theme (MySA Style) */
             --primary: #5c64f4; 
             --accent-green: #10b981; 
             --bg-top: #eef0ff; 
@@ -24,6 +24,7 @@
             --border-color: #e2e8f0;
             --danger: #ef4444;
             --card-gradient: linear-gradient(135deg, #6b73ff 0%, #4a54e1 100%); 
+            --nav-bg: #ffffff;
         }
 
         html.dark-theme {
@@ -34,22 +35,29 @@
             --text-muted: #94a3b8; 
             --border-color: rgba(255,255,255,0.05);
             --card-gradient: linear-gradient(135deg, #3730a3, #312e81);
+            --nav-bg: #121826;
         }
 
         body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
+            margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100dvh; 
             background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 35%, var(--bg-bottom) 100%);
+            background-attachment: fixed;
             color: var(--text-main); font-family: system-ui, sans-serif; 
             overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
         }
 
-        /* TOPBAR (Transparent for premium blend) */
+        /* TOPBAR */
         .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; position: sticky; top: 0; z-index: 50; }
         .menu-btn { font-size: 24px; cursor: pointer; color: var(--text-main); }
         .logo-text { font-size: 24px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px;}
         .logo-text span { color: var(--accent-green); }
         
-        .main-content { padding: 15px 20px; padding-bottom: 80px; }
+        /* NOTIFICATION BELL WITH DOT */
+        .notification-wrapper { position: relative; cursor: pointer; }
+        .notification-wrapper i { font-size: 22px; color: var(--text-main); }
+        .notification-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-top); }
+
+        .main-content { padding: 15px 20px; padding-bottom: 90px; } /* Padding bottom for nav bar */
 
         /* 16:9 STRICT PROFILE CARD */
         .profile-card { 
@@ -81,31 +89,31 @@
         .edit-profile-btn:active { background: rgba(255,255,255,0.4); }
         .user-details p { margin: 6px 0 0 0; font-size: 13px; font-weight: 600; opacity: 0.9; }
 
-        /* BATCH INFO IN PROFILE (Only shows if bought) */
+        /* BATCH INFO IN PROFILE (Shows only if bought) */
         .profile-batch-info { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; gap: 5px; z-index: 2;}
         .batch-label { font-size: 11px; font-weight: 800; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;}
         .batch-name { font-size: 15px; font-weight: 800; }
 
-        /* PREMIUM ACTION BANNERS */
-        .action-banner { background: var(--surface-color); border-radius: 20px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); transition: 0.2s; }
-        .action-banner:active { transform: scale(0.98); }
+        /* PROFESSIONAL UPDATES/ADS SECTION */
+        .section-header { margin: 10px 0 15px 0; font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;}
+        .section-header span { font-size: 12px; color: var(--primary); font-weight: 700; cursor: pointer; }
         
-        .banner-content { display: flex; align-items: center; gap: 15px; }
-        .banner-content h4 { margin: 0 0 5px 0; font-size: 18px; font-weight: 800; color: var(--text-main); }
-        .banner-content p { margin: 0; font-size: 13px; font-weight: 600; color: var(--text-muted); }
-        
-        /* Explore Batches Icon (Green MySA Style) */
-        .explore-icon-bg { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); width: 50px; height: 50px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 22px; }
-        
-        /* Classroom Icon (Purple Style) */
-        .class-icon-bg { background: rgba(92, 100, 244, 0.1); color: var(--primary); width: 50px; height: 50px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 22px; }
-        
-        .arrow-icon { color: var(--text-muted); font-size: 18px; opacity: 0.5; }
+        .update-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; }
+        .update-icon { background: rgba(92, 100, 244, 0.1); color: var(--primary); width: 50px; height: 50px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0;}
+        .update-text h4 { margin: 0 0 5px 0; font-size: 16px; font-weight: 800; }
+        .update-text p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4;}
+
+        /* BOTTOM NAVIGATION BAR */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 700; transition: 0.2s; width: 25%; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item:active { transform: scale(0.9); }
 
         /* SIDEBAR MENU */
-        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: all; }
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); z-index: 101; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); z-index: 201; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
         .sidebar.active { left: 0; }
         .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
         .sidebar-header h3 { margin: 0; font-size: 22px; font-weight: 900; color: var(--text-main); }
@@ -114,8 +122,11 @@
         .menu-list { flex: 1; overflow-y: auto; padding: 15px 0; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; }
         .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
+        
+        /* Highlighted TicBull Academy Link */
+        .highlight-item { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); margin: 0 15px 15px 15px; border-radius: 12px; font-weight: 800;}
+        .highlight-item i { color: var(--accent-green); }
 
-        /* Theme Toggle */
         .theme-box { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -131,7 +142,7 @@
         .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
         /* FULL SCREEN MODALS */
-        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; }
+        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 300; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; }
         .full-modal.active { transform: translateX(0); }
         .fm-header { padding: 20px; display: flex; align-items: center; gap: 15px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); }
         .fm-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
@@ -139,7 +150,7 @@
         .fm-content { padding: 20px; overflow-y: auto; }
 
         /* CENTER MODALS */
-        .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 300; }
+        .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 400; }
         .center-modal-overlay.active { opacity: 1; pointer-events: all; }
         .center-box { background: var(--surface-color); padding: 25px 20px; border-radius: 24px; width: 85%; max-width: 320px; text-align: center; transform: scale(0.9); transition: 0.3s; }
         .center-modal-overlay.active .center-box { transform: scale(1); }
@@ -169,11 +180,15 @@
     <div class="topbar">
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="logo-text">Kiyo <span>AI</span></h1>
-        <i class="fa-regular fa-bell" style="font-size: 22px; color: var(--text-main);" onclick="handleEcosystemLink('coming-soon.html?feature=Notifications')"></i>
+        
+        <div class="notification-wrapper" onclick="window.location.href='coming-soon.html?feature=Notifications'">
+            <i class="fa-regular fa-bell"></i>
+            <div class="notification-dot"></div>
+        </div>
     </div>
 
     <div class="main-content">
-        <!-- STRICT 16:9 PROFILE CARD -->
+        <!-- 16:9 PROFILE CARD -->
         <div class="profile-card">
             <div class="profile-top">
                 <div class="avatar-container">
@@ -189,34 +204,43 @@
             
             <!-- Shows ONLY when a batch is purchased -->
             <div class="profile-batch-info" id="batchInfo" style="display: none;">
-                <span class="batch-label">Enrolled Batch</span>
+                <span class="batch-label">Active Batch</span>
                 <span class="batch-name" id="batchNameText">Premium Target Batch</span>
             </div>
         </div>
 
-        <!-- 1. EXPLORE BATCHES BANNER -->
-        <div class="action-banner" onclick="handleEcosystemLink('coming-soon.html?feature=ExploreBatches')">
-            <div class="banner-content">
-                <div class="explore-icon-bg"><i class="fa-solid fa-compass"></i></div>
-                <div>
-                    <h4>Explore Batches</h4>
-                    <p>Find the perfect batch for your exam</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+        <!-- PROFESSIONAL UPDATES / ADS AREA -->
+        <div class="section-header">
+            Announcements <span>View All</span>
         </div>
+        
+        <div class="update-card">
+            <div class="update-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="update-text">
+                <h4>Welcome to Kiyo AI</h4>
+                <p>Explore our premium batches and boost your preparation with AI.</p>
+            </div>
+        </div>
+    </div>
 
-        <!-- 2. MY CLASSROOM BANNER -->
-        <div class="action-banner" id="classroomBtn" onclick="handleLockedClick('coming-soon.html?feature=Classroom')">
-            <div class="banner-content">
-                <div class="class-icon-bg"><i class="fa-solid fa-chalkboard-user"></i></div>
-                <div>
-                    <h4>My Classroom</h4>
-                    <p id="classroomStatusText">Locked - Join a batch</p>
-                </div>
-            </div>
-            <i class="fa-solid fa-lock arrow-icon" id="classroomLock"></i>
-        </div>
+    <!-- FIXED BOTTOM NAVIGATION BAR -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="batches.html" class="nav-item">
+            <i class="fa-solid fa-box-open"></i>
+            <span>Batches</span>
+        </a>
+        <a href="study.html" class="nav-item">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Study</span>
+        </a>
+        <a href="other.html" class="nav-item">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Other</span>
+        </a>
     </div>
 
     <!-- SIDEBAR -->
@@ -236,14 +260,13 @@
         </div>
 
         <div class="menu-list">
-            <!-- Explore Batches Link -->
-            <a href="javascript:void(0)" class="menu-item" onclick="handleEcosystemLink('coming-soon.html?feature=ExploreBatches')"><i class="fa-solid fa-compass"></i> Explore Batches</a>
+            <!-- TICBULL ACADEMY HIGHLIGHT LINK -->
+            <a href="https://ticbull-academy.vercel.app/" target="_blank" class="menu-item highlight-item">
+                <i class="fa-solid fa-rocket"></i> Visit TicBull Academy
+            </a>
             
-            <!-- Settings Modal Trigger -->
             <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
-            
-            <!-- DIRECT LINKS to existing files -->
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
@@ -269,22 +292,20 @@
             <h2>Settings & Security</h2>
         </div>
         <div class="fm-content">
-            <div class="action-banner" style="margin-bottom: 20px; box-shadow:none; padding:15px;" onclick="openCenterModal('passModal')">
-                <div class="banner-content">
-                    <div style="width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size:16px;"><i class="fa-solid fa-lock"></i></div>
-                    <span style="font-weight: 800;">Change Password (Z+ Security)</span>
-                </div>
-                <i class="fa-solid fa-chevron-right arrow-icon"></i>
+            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; padding: 20px 15px; display: flex; align-items: center; cursor: pointer; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);" onclick="openCenterModal('passModal')">
+                <div style="width: 45px; height: 45px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; justify-content: center; align-items: center; margin-right: 15px; font-size: 18px;"><i class="fa-solid fa-lock"></i></div>
+                <span style="flex:1; font-weight: 800; font-size: 16px;">Change Password</span>
+                <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
             </div>
             
-            <button onclick="logout()" style="width: 100%; padding: 15px; background: transparent; border: 2px solid var(--border-color); color: var(--danger); border-radius: 16px; font-weight: 800; cursor: pointer;">
+            <button onclick="logout()" style="width: 100%; padding: 16px; background: transparent; border: 2px solid var(--border-color); color: var(--danger); border-radius: 16px; font-weight: 800; cursor: pointer; font-size: 15px;">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </button>
 
             <div class="danger-card">
                 <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: var(--danger); margin-bottom: 10px;"></i>
                 <h3 style="margin: 0 0 10px 0; color: var(--danger);">Danger Zone</h3>
-                <p style="font-size: 13px; margin-bottom: 15px;">Permanent deletion will erase all your history and batches.</p>
+                <p style="font-size: 13px; margin-bottom: 15px; font-weight: 600; color: var(--text-muted);">Permanent deletion will erase all your history and batches.</p>
                 <button onclick="openCenterModal('deleteWarnModal')" style="width: 100%; padding: 14px; background: var(--danger); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer;">Delete Account</button>
             </div>
         </div>
@@ -318,7 +339,7 @@
     <div class="center-modal-overlay" id="passModal">
         <div class="center-box">
             <h3 style="margin-top: 0;">Change Password</h3>
-            <p style="font-size: 12px; color: var(--text-muted);">We will send an OTP to your email.</p>
+            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">We will send an OTP to your email.</p>
             
             <div class="input-group">
                 <input type="password" id="newPass" class="input-field" placeholder="New Password (Min 6)" style="margin-top:0;">
@@ -353,7 +374,7 @@
     <div class="center-modal-overlay" id="deleteWarnModal">
         <div class="center-box" style="border: 1px solid var(--danger);">
             <h3 style="margin-top: 0; color: var(--danger);">Confirm Deletion</h3>
-            <p style="font-size: 12px; color: var(--text-muted);">An OTP will be sent to verify deletion.</p>
+            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">An OTP will be sent to verify deletion.</p>
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteWarnModal')">Cancel</button>
                 <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
@@ -368,7 +389,7 @@
             <input type="text" id="deleteOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete Forever</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete</button>
             </div>
         </div>
     </div>
@@ -382,15 +403,11 @@
 
             updateProfileDOM();
 
-            // Check if batch is purchased to unlock classroom
+            // Setup Profile logic
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
             if(isPaid) {
                 document.getElementById('batchInfo').style.display = 'flex';
-                document.getElementById('batchNameText').innerText = localStorage.getItem('kiyo_active_batch') || "Premium Active Batch";
-                
-                document.getElementById('classroomLock').className = "fa-solid fa-chevron-right arrow-icon";
-                document.getElementById('classroomStatusText').innerText = "Access your learning hub";
-                document.getElementById('classroomStatusText').style.color = "var(--accent-green)";
+                document.getElementById('batchNameText').innerText = localStorage.getItem('kiyo_active_batch') || "Premium AI Batch";
             }
         };
 
@@ -404,28 +421,6 @@
                 document.getElementById('userAge').innerText = age;
             } else {
                 document.getElementById('userAge').innerText = '18';
-            }
-        }
-
-        // Links missing files safely to coming-soon.html
-        function handleEcosystemLink(url) {
-            const readyFiles = ['login.html', 'dashboard.html', 'terms.html', 'privacy.html', 'support.html', 'chat.html'];
-            const targetFile = url.split('?')[0];
-
-            if (readyFiles.includes(targetFile)) {
-                window.location.href = url;
-            } else {
-                window.location.href = url; // Will correctly go to coming-soon.html?feature=...
-            }
-        }
-
-        function handleLockedClick(url) {
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
-            if (isPaid) {
-                handleEcosystemLink(url);
-            } else {
-                showToast("Please Join a Batch first.", "danger");
-                setTimeout(() => { handleEcosystemLink('coming-soon.html?feature=ExploreBatches'); }, 1500);
             }
         }
 
@@ -511,7 +506,7 @@
             const newPass = document.getElementById('newPass').value;
             const confirmPass = document.getElementById('confirmPass').value;
             if(newPass.length < 6) return showToast('Min 6 chars', 'danger');
-            if(newPass !== confirmPass) return showToast('Passwords do not match', 'danger');
+            if(newPass !== confirmPass) return showToast('Passwords mismatch', 'danger');
             
             showToast('Sending OTP...');
             const email = localStorage.getItem('kiyo_user_email');
