@@ -47,7 +47,7 @@
         .main-content { padding: 20px; padding-bottom: 80px; }
 
         /* PROFILE CARD */
-        .profile-card { width: 100%; background: var(--card-gradient); border-radius: 24px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2); position: relative; overflow: hidden;}
+        .profile-card { width: 100%; background: var(--card-gradient); border-radius: 24px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; gap: 15px; box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2); position: relative; overflow: hidden; margin-bottom: 20px;}
         
         .profile-top { display: flex; align-items: center; gap: 15px; z-index: 2; }
         .avatar-container { position: relative; width: 70px; height: 70px; flex-shrink: 0;}
@@ -60,17 +60,23 @@
         .edit-profile-btn:active { background: rgba(255,255,255,0.4); }
         .user-details p { margin: 4px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
 
-        .profile-stats { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; z-index: 2; border: 1px solid rgba(255,255,255,0.2);}
-        .stat-col { display: flex; flex-direction: column; gap: 3px; flex: 1; overflow: hidden;}
-        .stat-label { font-size: 9px; font-weight: 800; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;}
-        .stat-val { font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 5px;}
+        /* BATCH DETAILS IN PROFILE */
+        .profile-batch-info { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 12px 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); display: flex; flex-direction: column; gap: 5px; z-index: 2;}
+        .batch-label { font-size: 10px; font-weight: 800; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;}
+        .batch-name { font-size: 14px; font-weight: 800; }
 
-        /* PROFILE BUTTONS (Update Plan & Your Goal) */
-        .profile-buttons { display: flex; gap: 10px; z-index: 2; }
-        .prof-btn { flex: 1; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 800; text-align: center; cursor: pointer; border: none; transition: 0.2s; }
-        .prof-btn:active { transform: scale(0.96); }
-        .btn-update-plan { background: var(--accent-green); color: white; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); }
-        .btn-your-goal { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); }
+        /* 2 MAIN BANNERS (Explore & Classroom) */
+        .explore-banner { background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 16px; padding: 18px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+        .explore-banner h4 { margin: 0; font-size: 16px; font-weight: 900; }
+        .explore-banner p { margin: 3px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
+        .explore-icon { background: rgba(255,255,255,0.2); width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px;}
+
+        .classroom-banner { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .classroom-content { display: flex; align-items: center; gap: 15px; }
+        .classroom-banner .icon-bg { background: var(--primary-light); color: var(--primary); width: 45px; height: 45px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+        .classroom-banner h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--text-main); }
+        .classroom-banner p { margin: 0; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+        .lock-icon-large { color: var(--text-muted); opacity: 0.5; font-size: 18px; }
 
         /* LEARNING HUB */
         .section-header { margin: 25px 0 15px 0; font-size: 16px; font-weight: 800; }
@@ -109,7 +115,8 @@
         .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
         .socials { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
         .socials a { color: var(--text-muted); font-size: 18px; }
-        .powered { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; }
+        .powered { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 3px;}
+        .made-in { font-size: 9px; font-weight: 700; color: var(--accent-green); letter-spacing: 0.5px;}
 
         /* FULL SCREEN MODALS */
         .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 200; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; }
@@ -150,12 +157,12 @@
     <div class="topbar">
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="logo-text">Kiyo <span>AI</span></h1>
-        <!-- Using your existing coming-soon.html for notifications -->
+        <!-- Link to your coming-soon.html -->
         <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted);" onclick="handleEcosystemLink('coming-soon.html?feature=Notifications')"></i>
     </div>
 
     <div class="main-content">
-        <!-- PROFILE CARD -->
+        <!-- PROFILE CARD (Clean, Only Shows Batch Info if Available) -->
         <div class="profile-card">
             <div class="profile-top">
                 <div class="avatar-container">
@@ -169,408 +176,63 @@
                 </div>
             </div>
             
-            <div class="profile-stats">
-                <div class="stat-col">
-                    <span class="stat-label">Class</span>
-                    <span class="stat-val" id="userClass">Loading</span>
-                </div>
-                <div class="stat-col" style="text-align: center;">
-                    <span class="stat-label">Board / Exam</span>
-                    <span class="stat-val" id="userBoard">Loading</span>
-                </div>
-                <div class="stat-col" style="text-align: right;">
-                    <span class="stat-label">Target</span>
-                    <span class="stat-val" id="userGoal">Loading</span>
-                </div>
+            <!-- Shows only when a batch is purchased -->
+            <div class="profile-batch-info" id="batchInfo" style="display: none;">
+                <span class="batch-label">Enrolled In</span>
+                <span class="batch-name" id="batchNameText">Premium Class 11 Batch</span>
             </div>
+        </div>
 
-            <!-- Profile Buttons: Update Plan & Your Goal -->
-            <div class="profile-buttons">
-                <!-- Using handleEcosystemLink to safely route -->
-                <button class="prof-btn btn-update-plan" id="updatePlanBtn" onclick="handleEcosystemLink('payment.html')">Update Plan</button>
-                <button class="prof-btn btn-your-goal" onclick="handleEcosystemLink('history.html')">Your Goal</button>
+        <!-- EXPLORE BATCHES BANNER -->
+        <div class="explore-banner" onclick="handleEcosystemLink('coming-soon.html?feature=ExploreBatches')">
+            <div>
+                <h4>Explore Batches</h4>
+                <p>Find the perfect batch for your exam</p>
             </div>
+            <div class="explore-icon"><i class="fa-solid fa-compass"></i></div>
+        </div>
+
+        <!-- MY CLASSROOM BANNER (Locked if not paid) -->
+        <div class="classroom-banner" id="classroomBtn" onclick="handleLockedClick('coming-soon.html?feature=Classroom')">
+            <div class="classroom-content">
+                <div class="icon-bg"><i class="fa-solid fa-chalkboard-user"></i></div>
+                <div>
+                    <h4>My Classroom</h4>
+                    <p id="classroomStatusText">Locked - Join a batch</p>
+                </div>
+            </div>
+            <i class="fa-solid fa-lock lock-icon-large" id="classroomLock"></i>
         </div>
 
         <h3 class="section-header">Learning Hub</h3>
         
         <!-- 4 ACTION GRID -->
-        <div class="action-grid">
-            <!-- Ask Teacher is ALWAYS FREE & UNLOCKED -->
-            <div class="grid-card" onclick="handleEcosystemLink('chat.html')">
-                <div class="grid-icon-wrapper">
-                    <!-- Auto-playing muted video as logo -->
-                    <video src="230816.mp4" class="video-logo" autoplay loop muted playsinline></video>
-                </div>
-                <span>Ask Teacher</span>
-            </div>
+        Bhai, ekdum samajh gaya. Tum chahte ho ki app ka flow bilkul clean aur batch-oriented ho, bina kisi unnecessary onboarding friction ke. Yeh "ecosystem" approach bohot sahi hai—students seedhe platform mein aayenge aur jab tak koi batch join nahi karte, tab tak unhe extra details fill karne ki zarurat nahi hai.
 
-            <!-- Locked Options (Require Payment) -->
-            <div class="grid-card" onclick="handleLockedClick('pyqs.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-file-pen"></i></div>
-                <span>PYQs</span>
-            </div>
-            <div class="grid-card" onclick="handleLockedClick('tests.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-stopwatch"></i></div>
-                <span>Tests</span>
-            </div>
-            <div class="grid-card" onclick="handleLockedClick('other.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-                <span>Other</span>
-            </div>
-        </div>
+Chalo isko tumhare web setup mein step-by-step update karte hain:
+
+### 1. Menu Aur Footer UI Updates (Ref: "16841_2.jpg")
+*   **Remove "Update Target Goal":** Apne HTML/frontend code mein jahan sidebar menu render ho raha hai, wahan se "Update Target Goal" aur "My Goals History" wale sections completely hata do.
+*   **Keep Only 2 Main Options:** Navbar/Sidebar mein ab sirf **"Explore Batches"** aur **"Classroom"** ke buttons ya links rakho (baaki Settings, Privacy Policy wagarah waise hi chhod sakte ho jaisa image mein hai).
+*   **"Made in India" Footer:** Jaha sidebar ke ekdum neeche "POWERED BY TICBULL" likha hai, us HTML code ko update karke uske theek neeche add kar do:
+    ```html
+    <div class="footer-branding">
+       <span>POWERED BY TICBULL</span><br>
+       <span style="font-weight: bold; color: #ff9933;">Made in India 🇮🇳</span>
     </div>
+    ```
 
-    <!-- SIDEBAR -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>Menu</h3>
-            <i class="fa-solid fa-xmark" style="font-size: 24px; color: var(--text-muted); cursor: pointer;" onclick="toggleSidebar()"></i>
-        </div>
-        
-        <div class="theme-box">
-            <span>Dark Mode</span>
-            <label class="switch">
-                <input type="checkbox" id="themeToggle" onchange="switchTheme()">
-                <span class="slider"></span>
-            </label>
-        </div>
+### 2. Login & Onboarding Flow
+*   **Remove Details Form:** Abhi login/signup ke baad jo form trigger hota tha (jo Class, Board, Exam mangta tha), us form ya modal ko flow se hata do. 
+*   **Direct Redirect:** Authentication successful hote hi user ko seedhe Dashboard/Home page par redirect kar do. Isse login super fast ho jayega.
 
-        <div class="menu-list">
-            <!-- Settings Modal Trigger -->
-            <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
-            <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
-            
-            <!-- DIRECT LINKS to your existing files (No 404, No Modals) -->
-            <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
-            <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
-            <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
-        </div>
+### 3. Profile Aur Classroom Logic (The Ecosystem)
+Profile ab general target ke bajaye direct student ke actions (enrollments) pe depend karegi.
+*   **Dynamic Rendering:** Jab user profile ya dashboard khole, toh backend/database (jaise Firebase) se check karo ki student ke `purchased_batches` array mein kuch hai ya nahi.
+*   **Logic Rule:**
+    *   *If Enrolled:* Agar student ne batch liya hai, toh sirf us batch ke data se related details (Class, Subjects, Exam) unki profile aur Classroom mein show karo. 
+    *   *If Not Enrolled:* Agar koi batch nahi liya hai, toh profile par ek clean message dikhao jaise *"No active batches found"* aur wahi par ek call-to-action button de do jo unhe wapas **"Explore Batches"** par bhej de.
 
-        <div class="sidebar-footer">
-            <div class="socials">
-                <a href="https://youtube.com/@mryuviyadav"><i class="fa-brands fa-youtube"></i></a>
-                <a href="https://instagram.com/mryuvi_yadav"><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://facebook.com/mryuviyadav"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="https://x.com/mryuviyadav"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="https://t.me/mryuviyadav"><i class="fa-brands fa-telegram"></i></a>
-            </div>
-            <div class="powered">POWERED BY TICBULL</div>
-        </div>
-    </div>
+File names ko leke jo issue aa raha hai (ki purana naam ya galat file show ho rahi hai), woh aksar caching ya deployment issue hota hai. Ek baar check kar lo ki jo latest HTML files tumne edit ki hain, wahi GitHub pe push ho rahi hain aur Vercel nayi build properly bana raha hai.
 
-    <!-- SETTINGS FULL MODAL -->
-    <div class="full-modal" id="settingsModal">
-        <div class="fm-header">
-            <i class="fa-solid fa-arrow-left" onclick="closeFullModal('settingsModal')"></i>
-            <h2>Settings & Security</h2>
-        </div>
-        <div class="fm-content">
-            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px 15px; display: flex; align-items: center; cursor: pointer; margin-bottom: 20px;" onclick="openCenterModal('passModal')">
-                <div style="width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px;"><i class="fa-solid fa-lock"></i></div>
-                <span style="flex:1; font-weight: 700;">Change Password (Z+ Security)</span>
-                <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
-            </div>
-            
-            <button onclick="logout()" style="width: 100%; padding: 15px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; cursor: pointer;">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </button>
-
-            <div class="danger-card">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size: 30px; color: var(--danger); margin-bottom: 10px;"></i>
-                <h3 style="margin: 0 0 10px 0; color: var(--danger);">Danger Zone</h3>
-                <p style="font-size: 12px; margin-bottom: 15px;">Permanent deletion will erase all your history and batches.</p>
-                <button onclick="openCenterModal('deleteWarnModal')" style="width: 100%; padding: 12px; background: var(--danger); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Delete Account</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Profile Modal (Updated Fields) -->
-    <div class="center-modal-overlay" id="editProfileModal">
-        <div class="center-box">
-            <h3 style="margin-top: 0; margin-bottom: 20px;">Edit Profile</h3>
-            
-            <span class="input-label">Full Name</span>
-            <input type="text" id="editName" class="input-field" placeholder="Full Name" style="margin-bottom:10px; margin-top:0;">
-            
-            <span class="input-label">Date of Birth</span>
-            <input type="date" id="editDob" class="input-field" style="margin-bottom:10px; margin-top:0;">
-            
-            <span class="input-label">State</span>
-            <input type="text" id="editState" class="input-field" placeholder="State" style="margin-bottom:10px; margin-top:0;">
-            
-            <span class="input-label">City</span>
-            <input type="text" id="editCity" class="input-field" placeholder="City" style="margin-top:0;">
-            
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
-                <button class="btn-confirm" onclick="saveProfileEdit()">Save</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Change Password Send OTP -->
-    <div class="center-modal-overlay" id="passModal">
-        <div class="center-box">
-            <h3 style="margin-top: 0;">Change Password</h3>
-            <p style="font-size: 12px; color: var(--text-muted);">We will send an OTP to your email.</p>
-            
-            <div class="input-group">
-                <input type="password" id="newPass" class="input-field" placeholder="New Password (Min 6)" style="margin-top:0;">
-                <i class="fa-solid fa-eye toggle-password" id="eye1" onclick="togglePass('newPass', 'eye1')"></i>
-            </div>
-            
-            <div class="input-group">
-                <input type="password" id="confirmPass" class="input-field" placeholder="Confirm Password" style="margin-top:0;">
-                <i class="fa-solid fa-eye toggle-password" id="eye2" onclick="togglePass('confirmPass', 'eye2')"></i>
-            </div>
-
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCenterModal('passModal')">Cancel</button>
-                <button class="btn-confirm" onclick="sendPassOTP()">Send OTP</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Verify Password OTP -->
-    <div class="center-modal-overlay" id="passOtpModal">
-        <div class="center-box">
-            <h3 style="margin-top: 0;">Verify Password OTP</h3>
-            <input type="text" id="passOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCenterModal('passOtpModal')">Cancel</button>
-                <button class="btn-confirm" onclick="verifyPassOTP()">Update</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete Warn -->
-    <div class="center-modal-overlay" id="deleteWarnModal">
-        <div class="center-box" style="border: 1px solid var(--danger);">
-            <h3 style="margin-top: 0; color: var(--danger);">Confirm Deletion</h3>
-            <p style="font-size: 12px; color: var(--text-muted);">An OTP will be sent to verify deletion.</p>
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCenterModal('deleteWarnModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Verify Delete OTP -->
-    <div class="center-modal-overlay" id="deleteOtpModal">
-        <div class="center-box">
-            <h3 style="margin-top: 0; color: var(--danger);">Verify Delete OTP</h3>
-            <input type="text" id="deleteOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
-            <div class="btn-row">
-                <button class="btn-cancel" onclick="closeCenterModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete Forever</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // INIT DATA & LOGIC
-        window.onload = function() {
-            // Theme setup
-            if(localStorage.getItem('kiyo_theme') === 'dark') document.getElementById('themeToggle').checked = true;
-
-            // Load Profile Picture
-            const savedPic = localStorage.getItem('kiyo_profile_pic');
-            if(savedPic) document.getElementById('profileImg').src = savedPic;
-
-            // Update DOM with User Info
-            updateProfileDOM();
-
-            // Check Payment Status to hide locks
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
-            if(isPaid) {
-                document.querySelectorAll('.payment-lock').forEach(icon => icon.style.display = 'none');
-                document.getElementById('updatePlanBtn').innerText = "Manage Plan";
-            }
-        };
-
-        function updateProfileDOM() {
-            // Basic Details
-            document.getElementById('userName').innerText = localStorage.getItem('kiyo_user_name') || 'Student';
-            document.getElementById('userLocation').innerText = (localStorage.getItem('kiyo_user_city') || 'City') + ', ' + (localStorage.getItem('kiyo_user_state') || 'State');
-            
-            // Age Calculate
-            const dob = localStorage.getItem('kiyo_user_dob');
-            if(dob) {
-                const age = new Date().getFullYear() - new Date(dob).getFullYear();
-                document.getElementById('userAge').innerText = age;
-            } else {
-                document.getElementById('userAge').innerText = '18';
-            }
-
-            // Education Details
-            document.getElementById('userClass').innerText = localStorage.getItem('kiyo_class') || 'N/A';
-            document.getElementById('userBoard').innerText = localStorage.getItem('kiyo_board') || localStorage.getItem('kiyo_exam') || 'N/A';
-            document.getElementById('userGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_skill') || 'N/A';
-        }
-
-        // --- CORE ECOSYSTEM NAVIGATION FUNCTION ---
-        // Links missing files safely to your existing coming-soon.html
-        function handleEcosystemLink(url) {
-            // Files you currently have ready:
-            const readyFiles = ['login.html', 'dashboard.html', 'class.html', 'board.html', 'exam.html', 'skills.html', 'subjects.html', 'goal.html', 'terms.html', 'privacy.html', 'support.html', 'chat.html'];
-            
-            const targetFile = url.split('?')[0];
-
-            if (readyFiles.includes(targetFile)) {
-                window.location.href = url;
-            } else {
-                // Extracts the feature name to display nicely in your coming-soon.html
-                const featureName = targetFile.replace('.html', '').toUpperCase();
-                window.location.href = `coming-soon.html?feature=${featureName}`;
-            }
-        }
-
-        // Locked Features Logic (PYQs, Tests, Other)
-        function handleLockedClick(url) {
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
-            if (isPaid) {
-                handleEcosystemLink(url);
-            } else {
-                showToast("Please Update Plan to unlock this feature.", "danger");
-                // Uses the safe router so if payment.html isn't there, it handles it gracefully
-                setTimeout(() => { handleEcosystemLink('payment.html'); }, 1500);
-            }
-        }
-
-        // UI FUNCTIONS
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
-        }
-
-        function switchTheme() {
-            const isDark = document.getElementById('themeToggle').checked;
-            if(isDark) {
-                document.documentElement.classList.add('dark-theme');
-                localStorage.setItem('kiyo_theme', 'dark');
-            } else {
-                document.documentElement.classList.remove('dark-theme');
-                localStorage.setItem('kiyo_theme', 'light');
-            }
-        }
-
-        function togglePass(fieldId, iconId) {
-            const pass = document.getElementById(fieldId); 
-            const icon = document.getElementById(iconId);
-            const isText = pass.type === 'text';
-            pass.type = isText ? 'password' : 'text';
-            icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
-        }
-
-        function showToast(msg, type='success') {
-            const box = document.getElementById('toastBox');
-            box.innerHTML = '';
-            setTimeout(() => {
-                box.innerHTML = `<div class="toast"><i class="fa-solid fa-circle-check" style="color:var(--${type});"></i> <span>${msg}</span></div>`;
-            }, 100);
-            setTimeout(() => { box.innerHTML = ''; }, 3000);
-        }
-
-        function uploadPhoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profileImg').src = e.target.result;
-                    localStorage.setItem('kiyo_profile_pic', e.target.result); 
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function logout() { localStorage.clear(); sessionStorage.clear(); window.location.replace("login.html"); }
-
-        // MODAL FUNCTIONS
-        function openFullModal(id) { document.getElementById(id).classList.add('active'); toggleSidebar(); }
-        function closeFullModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openCenterModal(id) { 
-            document.getElementById(id).classList.add('active'); 
-            if(id === 'editProfileModal') {
-                document.getElementById('editName').value = localStorage.getItem('kiyo_user_name') || '';
-                document.getElementById('editDob').value = localStorage.getItem('kiyo_user_dob') || '';
-                document.getElementById('editState').value = localStorage.getItem('kiyo_user_state') || '';
-                document.getElementById('editCity').value = localStorage.getItem('kiyo_user_city') || '';
-            }
-        }
-        function closeCenterModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        // PROFILE EDIT SAVE
-        function saveProfileEdit() {
-            const newName = document.getElementById('editName').value.trim();
-            const newDob = document.getElementById('editDob').value;
-            const newState = document.getElementById('editState').value.trim();
-            const newCity = document.getElementById('editCity').value.trim();
-            
-            if(!newName) return showToast('Name is required', 'danger');
-            
-            localStorage.setItem('kiyo_user_name', newName);
-            localStorage.setItem('kiyo_user_dob', newDob);
-            localStorage.setItem('kiyo_user_state', newState);
-            localStorage.setItem('kiyo_user_city', newCity);
-            
-            updateProfileDOM(); // Refresh DOM
-            closeCenterModal('editProfileModal');
-            showToast('Profile Updated');
-        }
-
-        // Z+ SECURITY API SIMULATIONS
-        async function sendPassOTP() {
-            const newPass = document.getElementById('newPass').value;
-            const confirmPass = document.getElementById('confirmPass').value;
-            if(newPass.length < 6) return showToast('Min 6 chars required', 'danger');
-            if(newPass !== confirmPass) return showToast('Passwords do not match', 'danger');
-            
-            showToast('Sending OTP...');
-            const email = localStorage.getItem('kiyo_user_email');
-            try {
-                const res = await fetch('/api/send-pass-change-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
-                if(res.ok) { closeCenterModal('passModal'); openCenterModal('passOtpModal'); showToast('OTP Sent!'); }
-            } catch(e) { showToast('Network Error', 'danger'); }
-        }
-
-        async function verifyPassOTP() {
-            const otp = document.getElementById('passOtp').value;
-            const newPass = document.getElementById('newPass').value;
-            const email = localStorage.getItem('kiyo_user_email');
-            if(otp.length !== 6) return showToast('Enter 6 digit OTP', 'danger');
-
-            try {
-                const res = await fetch('/api/verify-pass-change', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp, newPassword: newPass}) });
-                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated!'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
-                else showToast('Invalid OTP', 'danger');
-            } catch(e) { showToast('Network Error', 'danger'); }
-        }
-
-        async function sendDeleteOTP() {
-            showToast('Sending OTP...');
-            const email = localStorage.getItem('kiyo_user_email');
-            try {
-                const res = await fetch('/api/send-delete-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
-                if(res.ok) { closeCenterModal('deleteWarnModal'); openCenterModal('deleteOtpModal'); showToast('OTP Sent!'); }
-            } catch(e) { showToast('Network Error', 'danger'); }
-        }
-
-        async function verifyDeleteOTP() {
-            const otp = document.getElementById('deleteOtp').value;
-            const email = localStorage.getItem('kiyo_user_email');
-            if(otp.length !== 6) return showToast('Enter 6 digit OTP', 'danger');
-
-            try {
-                const res = await fetch('/api/delete-account', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp}) });
-                if(res.ok) { showToast('Account Deleted!'); setTimeout(logout, 1500); }
-                else showToast('Invalid OTP', 'danger');
-            } catch(e) { showToast('Network Error', 'danger'); }
-        }
-    </script>
-</body>
-</html>
+In changes ko live karne se pehle, kya tumne "Classroom" button ke liye naya page aur URL routing set up kar liya hai, ya abhi usko design karna baaki hai?
