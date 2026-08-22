@@ -78,16 +78,13 @@
         .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
         .dot.active { background: #fff; width: 16px; border-radius: 4px; }
 
-        /* LEARNING HUB (4 OPTIONS) */
+        /* PROFESSIONAL UPDATES SECTION */
         .section-header { margin: 0 0 15px 0; font-size: 18px; font-weight: 800; color: var(--text-main); }
         
-        .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .grid-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); color: var(--text-main); text-decoration: none; position: relative;}
-        .grid-card:active { transform: scale(0.96); }
-        .grid-icon-wrapper { position: relative; width: 55px; height: 55px; display: flex; justify-content: center; align-items: center; background: var(--primary-light); border-radius: 50%; color: var(--primary); font-size: 24px; }
-        .grid-card span { font-size: 15px; font-weight: 700; }
-        .video-logo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: absolute; top: 0; left: 0; }
-        .lock-icon { position: absolute; top: 12px; right: 12px; color: var(--text-muted); font-size: 13px; opacity: 0.6;}
+        .update-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; margin-bottom: 15px;}
+        .update-icon { background: rgba(92, 100, 244, 0.1); color: var(--primary); width: 50px; height: 50px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0;}
+        .update-text h4 { margin: 0 0 5px 0; font-size: 16px; font-weight: 800; color: var(--text-main);}
+        .update-text p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4;}
 
         /* BOTTOM NAVIGATION BAR */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
@@ -141,7 +138,7 @@
         .powered { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;}
         .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
-        /* FULL SCREEN MODALS */
+        /* FULL SCREEN MODALS (Z-INDEX FIXED) */
         .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-bottom); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
         .full-modal.active { transform: translateX(0); }
         .fm-header { padding: 20px; display: flex; align-items: center; gap: 15px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top:0; z-index: 2;}
@@ -157,9 +154,12 @@
         
         .input-group { position: relative; margin-top: 15px; }
         
-        /* SELECT DROPDOWNS Styling (Native System Feel) */
-        .input-field, .select-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; margin-bottom: 10px; font-family: inherit;}
-        .select-field { appearance: none; -webkit-appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;utf8,<svg fill="%2364748b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position-x: 95%; background-position-y: 50%; }
+        /* Custom Input Fields */
+        .input-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; margin-bottom: 10px; font-family: inherit;}
+        
+        /* CUSTOM SELECT BOX (No Ugly Native Radio Popups) */
+        .custom-select-btn { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px; text-align: left; }
+        .custom-select-btn i { color: var(--text-muted); font-size: 12px;}
         
         .input-label { display: block; text-align: left; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 5px; margin-left: 5px; text-transform: uppercase; }
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; }
@@ -171,8 +171,20 @@
         
         .danger-card { border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05); padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center;}
         
+        /* Custom List Modal for States/Cities */
+        .list-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--surface-color); z-index: 9999999; transform: translateY(100%); transition: 0.3s ease; display: flex; flex-direction: column; }
+        .list-modal.active { transform: translateY(0); }
+        .list-header { padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border-color); background: var(--surface-color); position: sticky; top: 0; }
+        .list-header h3 { margin: 0; font-size: 18px; color: var(--text-main); }
+        .search-bar-list { width: 100%; padding: 12px 15px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 10px; font-size: 14px; font-weight: 600; outline: none; margin: 10px 20px; width: calc(100% - 40px); box-sizing: border-box;}
+        .list-content { flex: 1; overflow-y: auto; padding: 0 20px 20px 20px; }
+        .list-item { padding: 15px 0; border-bottom: 1px solid var(--border-color); font-size: 15px; font-weight: 600; color: var(--text-main); cursor: pointer; display: flex; justify-content: space-between; align-items: center;}
+        .list-item i { color: transparent; font-size: 18px; }
+        .list-item.selected { color: var(--primary); }
+        .list-item.selected i { color: var(--primary); }
+
         /* TOAST */
-        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
+        .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 99999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -185,7 +197,7 @@
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="logo-text">Kiyo <span>AI</span></h1>
         
-        <!-- Native Link to your coming-soon (avoiding JS 404 issue) -->
+        <!-- Native Link to your coming-soon -->
         <a href="coming-soon.html" class="notification-wrapper">
             <i class="fa-regular fa-bell"></i>
             <div class="notification-dot"></div>
@@ -213,20 +225,20 @@
                 </div>
             </div>
 
-            <!-- Dynamic Batch Button (Routes directly to payment.html if not paid) -->
-            <button onclick="window.location.href='payment.html'" id="homeBatchBtn" class="batch-status-btn btn-update">
+            <!-- Dynamic Batch Button (Native href) -->
+            <a href="payment.html" id="homeBatchBtn" class="batch-status-btn btn-update">
                 Update Plan
-            </button>
+            </a>
         </div>
 
         <!-- 2. 16:9 IMAGE AUTO SLIDER (Instagram Style) -->
         <div class="slider-container" id="sliderContainer">
             <div class="slides" id="slides">
-                <!-- Slide 1 -->
+                <!-- Slide 1 links to batches -->
                 <a href="batches.html" class="slide">
                     <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1000&auto=format&fit=crop" alt="Explore Batches">
                 </a>
-                <!-- Slide 2 -->
+                <!-- Slide 2 links to coming-soon (or tests) -->
                 <a href="coming-soon.html" class="slide">
                     <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000&auto=format&fit=crop" alt="Mock Tests">
                 </a>
@@ -237,38 +249,15 @@
             </div>
         </div>
 
-        <!-- 3. LEARNING HUB (4 Options) -->
-        <div class="section-header">Learning Hub</div>
-        <div class="action-grid">
-            
-            <!-- Ask Teacher is FREE -->
-            <a href="chat.html" class="grid-card" style="text-decoration: none;">
-                <div class="grid-icon-wrapper">
-                    <!-- Auto-playing muted video -->
-                    <video src="230816.mp4" class="video-logo" autoplay loop muted playsinline></video>
-                </div>
-                <span>Ask Teacher</span>
-            </a>
-
-            <!-- Locked Options (Linked to coming-soon.html to prevent 404, or use JS to check lock) -->
-            <!-- We will use Native Links pointing to coming-soon if unpaid, handled in JS -->
-            <a href="#" id="linkPyqs" class="grid-card" onclick="return checkPaidAndGo(event, 'pyqs.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-file-pen"></i></div>
-                <span>PYQs</span>
-            </a>
-            
-            <a href="#" id="linkTests" class="grid-card" onclick="return checkPaidAndGo(event, 'tests.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-stopwatch"></i></div>
-                <span>Tests</span>
-            </a>
-            
-            <a href="#" id="linkOther" class="grid-card" onclick="return checkPaidAndGo(event, 'other.html')">
-                <i class="fa-solid fa-lock lock-icon payment-lock"></i>
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-                <span>Other</span>
-            </a>
+        <!-- 3. PROFESSIONAL UPDATES SECTION -->
+        <div class="section-header">Announcements</div>
+        
+        <div class="update-card">
+            <div class="update-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="update-text">
+                <h4>Kiyo AI Launched!</h4>
+                <p>Welcome to the most intelligent learning platform. Explore batches to begin.</p>
+            </div>
         </div>
     </div>
 
@@ -333,7 +322,7 @@
             <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             
-            <!-- NATIVE LINKS (Vercel handles 404s natively) -->
+            <!-- NATIVE LINKS -->
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
@@ -380,7 +369,7 @@
         </div>
     </div>
 
-    <!-- Edit Profile Modal WITH FULL INDIA STATES/CITIES DROPDOWN -->
+    <!-- Edit Profile Modal WITH CUSTOM DROPDOWNS -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main);">Edit Profile</h3>
@@ -392,49 +381,33 @@
             <input type="date" id="editDob" class="input-field">
             
             <span class="input-label">State</span>
-            <select id="editState" class="select-field" onchange="updateCities()">
-                <option value="">Select State</option>
-                <!-- Full India States -->
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                <option value="Assam">Assam</option>
-                <option value="Bihar">Bihar</option>
-                <option value="Chhattisgarh">Chhattisgarh</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Goa">Goa</option>
-                <option value="Gujarat">Gujarat</option>
-                <option value="Haryana">Haryana</option>
-                <option value="Himachal Pradesh">Himachal Pradesh</option>
-                <option value="Jharkhand">Jharkhand</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Madhya Pradesh">Madhya Pradesh</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Manipur">Manipur</option>
-                <option value="Meghalaya">Meghalaya</option>
-                <option value="Mizoram">Mizoram</option>
-                <option value="Nagaland">Nagaland</option>
-                <option value="Odisha">Odisha</option>
-                <option value="Punjab">Punjab</option>
-                <option value="Rajasthan">Rajasthan</option>
-                <option value="Sikkim">Sikkim</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Telangana">Telangana</option>
-                <option value="Tripura">Tripura</option>
-                <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <option value="Uttarakhand">Uttarakhand</option>
-                <option value="West Bengal">West Bengal</option>
-            </select>
+            <div class="custom-select-btn" onclick="openListModal('state')">
+                <span id="displayState">Select State</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
             
             <span class="input-label">City</span>
-            <select id="editCity" class="select-field">
-                <option value="">Select City</option>
-            </select>
+            <div class="custom-select-btn" onclick="openListModal('city')">
+                <span id="displayCity">Select City</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
             
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
                 <button class="btn-confirm" onclick="saveProfileEdit()">Save</button>
             </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM LIST MODAL FOR STATE/CITY (No Ugly Popup) -->
+    <div class="list-modal" id="selectionListModal">
+        <div class="list-header">
+            <i class="fa-solid fa-arrow-left" style="font-size: 20px; color: var(--text-muted); cursor: pointer;" onclick="closeListModal()"></i>
+            <h3 id="listModalTitle">Select</h3>
+        </div>
+        <input type="text" class="search-bar-list" id="listSearch" placeholder="Search..." onkeyup="filterListModal()">
+        <div class="list-content" id="listContent">
+            <!-- Dynamic Content -->
         </div>
     </div>
 
@@ -498,57 +471,54 @@
     </div>
 
     <script>
-        // FULL INDIA CITIES DATA (Major Cities per State)
-        const indiaCities = {
-            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati"],
-            "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat"],
-            "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat"],
-            "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Siwan", "Darbhanga", "Purnia"],
-            "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba"],
-            "Delhi": ["New Delhi", "North Delhi", "South Delhi", "Dwarka", "Rohini"],
-            "Goa": ["Panaji", "Margao", "Vasco da Gama"],
-            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar"],
-            "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Rohtak"],
-            "Himachal Pradesh": ["Shimla", "Dharamshala", "Manali", "Mandi"],
-            "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
-            "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru", "Belagavi"],
-            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kozhikode"],
-            "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad"],
-            "Manipur": ["Imphal", "Churachandpur"],
-            "Meghalaya": ["Shillong", "Tura"],
-            "Mizoram": ["Aizawl", "Lunglei"],
-            "Nagaland": ["Kohima", "Dimapur"],
-            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Puri"],
-            "Punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
-            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Ajmer"],
-            "Sikkim": ["Gangtok", "Namchi"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
-            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
-            "Tripura": ["Agartala", "Udaipur"],
-            "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad"],
-            "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani"],
-            "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Asansol"]
+        // FULL INDIA CITIES DATA
+        const indiaData = {
+            "Andaman and Nicobar Islands": ["Port Blair", "Diglipur", "Mayabunder"],
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati", "Rajahmundry", "Kakinada", "Kurnool", "Kadapa"],
+            "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang"],
+            "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia"],
+            "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Ara", "Begusarai", "Katihar", "Chapra", "Siwan"],
+            "Chandigarh": ["Chandigarh"],
+            "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Durg"],
+            "Dadra and Nagar Haveli and Daman and Diu": ["Silvassa", "Daman", "Diu"],
+            "Delhi": ["New Delhi", "North Delhi", "South Delhi", "Dwarka", "Rohini", "Shahdara"],
+            "Goa": ["Panaji", "Vasco da Gama", "Margao", "Mapusa"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Gandhinagar", "Junagadh"],
+            "Haryana": ["Faridabad", "Gurugram", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal"],
+            "Himachal Pradesh": ["Shimla", "Mandi", "Solan", "Dharamshala", "Manali"],
+            "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla"],
+            "Jharkhand": ["Jamshedpur", "Dhanbad", "Ranchi", "Bokaro", "Deoghar", "Hazaribagh"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru", "Belagavi", "Davangere", "Ballari", "Tumakuru"],
+            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kollam", "Thrissur", "Kannur", "Alappuzha"],
+            "Ladakh": ["Srinagar", "Leh", "Kargil"],
+            "Lakshadweep": ["Leh", "Kargil"],
+            "Madhya Pradesh": ["Indore", "Bhopal", "Jabalpur", "Gwalior", "Ujjain", "Sagar", "Dewas", "Satna"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane", "Nashik", "Kalyan-Dombivli", "Vasai-Virar", "Aurangabad", "Navi Mumbai", "Solapur"],
+            "Manipur": ["Imphal", "Churachandpur", "Kakching"],
+            "Meghalaya": ["Shillong", "Tura", "Nongstoin"],
+            "Mizoram": ["Aizawl", "Lunglei", "Champhai"],
+            "Nagaland": ["Dimapur", "Kohima", "Mokokchung"],
+            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Brahmapur", "Sambalpur", "Puri", "Balasore"],
+            "Puducherry": ["Kavaratti"],
+            "Punjab": ["Ludhiana", "Amritsar", "Jalandhar", "Patiala", "Bathinda", "Mohali", "Pathankot"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Kota", "Bikaner", "Ajmer", "Udaipur", "Bhilwara", "Alwar"],
+            "Sikkim": ["Gangtok", "Namchi", "Geyzing"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Ambattur"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar", "Ramagundam", "Khammam"],
+            "Tripura": ["Agartala", "Udaipur", "Dharmanagar"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad", "Bareilly", "Aligarh", "Moradabad"],
+            "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani", "Rudrapur", "Rishikesh"],
+            "West Bengal": ["Kolkata", "Asansol", "Siliguri", "Durgapur", "Bardhaman", "Malda", "Baharampur", "Habra"]
         };
 
-        function updateCities() {
-            const state = document.getElementById('editState').value;
-            const citySelect = document.getElementById('editCity');
-            citySelect.innerHTML = '<option value="">Select City</option>'; 
-            
-            if(state && indiaCities[state]) {
-                indiaCities[state].forEach(city => {
-                    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
-                });
-            }
-        }
+        let currentListType = '';
 
         // INIT DATA & LOGIC
         window.onload = function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.getElementById('themeToggle').checked = true;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
-            if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
+            if(savedPic) { document.getElementById('menuProfileImg').src = savedPic; }
 
             updateProfileDOM();
             startSlider();
@@ -560,7 +530,10 @@
             document.getElementById('welcomeNameText').innerText = `Welcome, ${userName.split(' ')[0]}! 👋`;
 
             document.getElementById('menuUserName').innerHTML = `${userName} <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i>`;
-            document.getElementById('menuUserLocation').innerText = (localStorage.getItem('kiyo_user_city') || 'City') + ', ' + (localStorage.getItem('kiyo_user_state') || 'State');
+            
+            const savedState = localStorage.getItem('kiyo_user_state') || 'State';
+            const savedCity = localStorage.getItem('kiyo_user_city') || 'City';
+            document.getElementById('menuUserLocation').innerText = `${savedCity}, ${savedState}`;
             
             const dob = localStorage.getItem('kiyo_user_dob');
             if(dob) {
@@ -573,34 +546,88 @@
             document.getElementById('homeClass').innerText = localStorage.getItem('kiyo_class') || 'N/A';
             document.getElementById('homeGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_skill') || 'N/A';
 
-            // Check Payment Status
+            // Payment Logic
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
             if(isPaid) {
-                // Remove locks from Learning Hub
-                document.querySelectorAll('.payment-lock').forEach(icon => icon.style.display = 'none');
-                
-                // Update Menu Batch
                 document.getElementById('menuBatchName').innerText = localStorage.getItem('kiyo_active_batch') || "Premium AI Batch";
                 
-                // Update Home Button to act as an un-clickable Status Badge
                 const btn = document.getElementById('homeBatchBtn');
                 btn.innerText = localStorage.getItem('kiyo_active_batch') || "Premium Active";
                 btn.className = "batch-status-btn btn-active";
-                btn.removeAttribute("onclick"); 
+                btn.removeAttribute("href"); 
             }
         }
 
-        // Smart Router: Checks payment before redirecting. If unpaid, goes to coming-soon.
-        function checkPaidAndGo(event, targetFile) {
-            event.preventDefault();
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
+        // CUSTOM LIST MODAL FOR STATE/CITY
+        function openListModal(type) {
+            currentListType = type;
+            const modal = document.getElementById('selectionListModal');
+            const title = document.getElementById('listModalTitle');
+            const content = document.getElementById('listContent');
+            const searchBox = document.getElementById('listSearch');
             
-            if (isPaid) {
-                window.location.href = targetFile; // Native routing
-            } else {
-                showToast("Please Update Plan to unlock this feature.", "danger");
-                setTimeout(() => { window.location.href = 'coming-soon.html'; }, 1500);
+            searchBox.value = '';
+            content.innerHTML = '';
+            modal.classList.add('active');
+
+            if (type === 'state') {
+                title.innerText = "Select State";
+                const states = Object.keys(indiaData).sort();
+                const selectedState = localStorage.getItem('kiyo_user_state');
+                
+                states.forEach(state => {
+                    const isSelected = state === selectedState ? 'selected' : '';
+                    content.innerHTML += `
+                        <div class="list-item ${isSelected}" onclick="selectItem('state', '${state}')">
+                            <span>${state}</span>
+                            <i class="fa-solid fa-check"></i>
+                        </div>`;
+                });
+            } else if (type === 'city') {
+                title.innerText = "Select City";
+                const currentState = document.getElementById('displayState').innerText;
+                
+                if (currentState === 'Select State') {
+                    content.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--text-muted);">Please select a State first.</div>`;
+                    return;
+                }
+
+                const cities = indiaData[currentState].sort();
+                const selectedCity = localStorage.getItem('kiyo_user_city');
+                
+                cities.forEach(city => {
+                    const isSelected = city === selectedCity ? 'selected' : '';
+                    content.innerHTML += `
+                        <div class="list-item ${isSelected}" onclick="selectItem('city', '${city}')">
+                            <span>${city}</span>
+                            <i class="fa-solid fa-check"></i>
+                        </div>`;
+                });
             }
+        }
+
+        function closeListModal() { document.getElementById('selectionListModal').classList.remove('active'); }
+
+        function selectItem(type, value) {
+            if (type === 'state') {
+                document.getElementById('displayState').innerText = value;
+                localStorage.setItem('kiyo_user_state', value);
+                // Reset city if state changes
+                document.getElementById('displayCity').innerText = 'Select City';
+                localStorage.removeItem('kiyo_user_city');
+            } else if (type === 'city') {
+                document.getElementById('displayCity').innerText = value;
+                localStorage.setItem('kiyo_user_city', value);
+            }
+            closeListModal();
+        }
+
+        function filterListModal() {
+            const query = document.getElementById('listSearch').value.toLowerCase();
+            document.querySelectorAll('.list-item').forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
         }
 
         // IMAGE SLIDER LOGIC
@@ -674,12 +701,11 @@
                 document.getElementById('editName').value = localStorage.getItem('kiyo_user_name') || '';
                 document.getElementById('editDob').value = localStorage.getItem('kiyo_user_dob') || '';
                 
-                const savedState = localStorage.getItem('kiyo_user_state') || '';
-                document.getElementById('editState').value = savedState;
-                updateCities(); // Populate cities
+                const savedState = localStorage.getItem('kiyo_user_state') || 'Select State';
+                document.getElementById('displayState').innerText = savedState;
                 
-                const savedCity = localStorage.getItem('kiyo_user_city') || '';
-                if(savedCity) document.getElementById('editCity').value = savedCity;
+                const savedCity = localStorage.getItem('kiyo_user_city') || 'Select City';
+                document.getElementById('displayCity').innerText = savedCity;
             }
         }
         function closeCenterModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -687,21 +713,21 @@
         function saveProfileEdit() {
             const newName = document.getElementById('editName').value.trim();
             const newDob = document.getElementById('editDob').value;
-            const newState = document.getElementById('editState').value;
-            const newCity = document.getElementById('editCity').value;
+            const newState = document.getElementById('displayState').innerText;
+            const newCity = document.getElementById('displayCity').innerText;
             
             if(!newName) return showToast('Name is required', 'danger');
+            if(newState === 'Select State' || newCity === 'Select City') return showToast('Please select State & City', 'danger');
             
             localStorage.setItem('kiyo_user_name', newName);
             localStorage.setItem('kiyo_user_dob', newDob);
-            localStorage.setItem('kiyo_user_state', newState);
-            localStorage.setItem('kiyo_user_city', newCity);
             
             updateProfileDOM(); 
             closeCenterModal('editProfileModal');
             showToast('Profile Updated');
         }
 
+        // Z+ SECURITY API SIMULATIONS
         async function sendPassOTP() {
             const newPass = document.getElementById('newPass').value;
             const confirmPass = document.getElementById('confirmPass').value;
