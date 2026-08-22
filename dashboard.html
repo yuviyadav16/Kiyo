@@ -13,10 +13,9 @@
 
     <style>
         :root {
-            /* Premium Light Purple Theme (MySA Style) */
             --primary: #5c64f4; 
             --accent-green: #10b981; 
-            --bg-top: #eef0ff; 
+            --bg-top: #f5f7ff; 
             --bg-bottom: #ffffff;
             --surface-color: #ffffff;
             --text-main: #0f172a; 
@@ -52,40 +51,34 @@
         .logo-text { font-size: 24px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px;}
         .logo-text span { color: var(--accent-green); }
         
-        /* NOTIFICATION BELL */
-        .notification-wrapper { position: relative; cursor: pointer; text-decoration: none; color: var(--text-main);}
+        .notification-wrapper { position: relative; cursor: pointer; color: var(--text-main); text-decoration: none;}
         .notification-wrapper i { font-size: 22px; }
         .notification-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-top); }
 
-        .main-content { padding: 10px 20px; padding-bottom: 90px; } 
+        .main-content { padding: 10px 20px; padding-bottom: 90px; }
 
-        /* 1. TOP SECTION (Welcome & Batch Status) */
+        /* WELCOME & BATCH CARD (HOME) */
         .welcome-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;}
-        .welcome-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .welcome-text h2 { margin: 0; font-size: 22px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 8px;}
-        .welcome-text p { margin: 4px 0 0 0; font-size: 13px; font-weight: 600; color: var(--text-muted); }
         
-        /* Profile Details Labels */
         .details-row { display: flex; justify-content: space-between; background: rgba(92, 100, 244, 0.05); padding: 10px 15px; border-radius: 12px; border: 1px solid rgba(92, 100, 244, 0.1);}
         .detail-col { display: flex; flex-direction: column; gap: 2px; }
         .d-label { font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase;}
         .d-val { font-size: 13px; font-weight: 800; color: var(--text-main);}
 
-        /* Batch Status Button */
-        .batch-status-btn { width: 100%; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 800; text-align: center; text-decoration: none; display: block; box-sizing: border-box; transition: 0.2s;}
+        .batch-status-btn { width: 100%; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 800; text-align: center; text-decoration: none; display: block; box-sizing: border-box; transition: 0.2s; cursor: pointer; border: none;}
         .btn-update { background: linear-gradient(45deg, #f59e0b, #d97706); color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
         .btn-active { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); pointer-events: none;}
 
-        /* 2. 16:9 IMAGE SLIDER (Instagram Style) */
+        /* 16:9 AUTO SLIDER */
         .slider-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; position: relative; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); background: var(--border-color);}
         .slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
         .slide { min-width: 100%; height: 100%; text-decoration: none; position: relative;}
         .slide img { width: 100%; height: 100%; object-fit: cover; }
         .slide-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
-        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.4); border-radius: 50%; transition: 0.3s; }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.5); border-radius: 50%; transition: 0.3s; }
         .dot.active { background: #fff; width: 16px; border-radius: 4px; }
 
-        /* 3. LEARNING HUB (4 Options) */
+        /* LEARNING HUB (4 OPTIONS) */
         .section-header { margin: 0 0 15px 0; font-size: 18px; font-weight: 800; color: var(--text-main); }
         
         .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
@@ -163,7 +156,8 @@
         .center-modal-overlay.active .center-box { transform: scale(1); }
         
         .input-group { position: relative; margin-top: 15px; }
-        /* Make Select dropdowns look exactly like input fields */
+        
+        /* SELECT DROPDOWNS Styling (Native System Feel) */
         .input-field, .select-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; margin-bottom: 10px; font-family: inherit;}
         .select-field { appearance: none; -webkit-appearance: none; cursor: pointer; background-image: url('data:image/svg+xml;utf8,<svg fill="%2364748b" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); background-repeat: no-repeat; background-position-x: 95%; background-position-y: 50%; }
         
@@ -191,8 +185,8 @@
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="logo-text">Kiyo <span>AI</span></h1>
         
-        <!-- Native Link for Notifications -->
-        <a href="notifications.html" class="notification-wrapper">
+        <!-- Native Link to your coming-soon (avoiding JS 404 issue) -->
+        <a href="coming-soon.html" class="notification-wrapper">
             <i class="fa-regular fa-bell"></i>
             <div class="notification-dot"></div>
         </a>
@@ -205,7 +199,6 @@
             <div class="welcome-header">
                 <div class="welcome-text">
                     <h2 id="welcomeNameText">Welcome! 👋</h2>
-                    <p>Ready to boost your preparation?</p>
                 </div>
             </div>
 
@@ -220,21 +213,21 @@
                 </div>
             </div>
 
-            <!-- Dynamic Batch Button -->
-            <a href="payment.html" id="homeBatchBtn" class="batch-status-btn btn-update">
+            <!-- Dynamic Batch Button (Routes directly to payment.html if not paid) -->
+            <button onclick="window.location.href='payment.html'" id="homeBatchBtn" class="batch-status-btn btn-update">
                 Update Plan
-            </a>
+            </button>
         </div>
 
-        <!-- 2. 16:9 IMAGE SLIDER -->
+        <!-- 2. 16:9 IMAGE AUTO SLIDER (Instagram Style) -->
         <div class="slider-container" id="sliderContainer">
             <div class="slides" id="slides">
-                <!-- Slide 1 links to batches -->
+                <!-- Slide 1 -->
                 <a href="batches.html" class="slide">
                     <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1000&auto=format&fit=crop" alt="Explore Batches">
                 </a>
-                <!-- Slide 2 links to a specific test or feature -->
-                <a href="tests.html" class="slide">
+                <!-- Slide 2 -->
+                <a href="coming-soon.html" class="slide">
                     <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000&auto=format&fit=crop" alt="Mock Tests">
                 </a>
             </div>
@@ -247,26 +240,31 @@
         <!-- 3. LEARNING HUB (4 Options) -->
         <div class="section-header">Learning Hub</div>
         <div class="action-grid">
-            <!-- Ask Teacher is ALWAYS FREE -->
-            <a href="chat.html" class="grid-card">
+            
+            <!-- Ask Teacher is FREE -->
+            <a href="chat.html" class="grid-card" style="text-decoration: none;">
                 <div class="grid-icon-wrapper">
+                    <!-- Auto-playing muted video -->
                     <video src="230816.mp4" class="video-logo" autoplay loop muted playsinline></video>
                 </div>
                 <span>Ask Teacher</span>
             </a>
 
-            <!-- Locked Options (Using standard href, user logic decides lock behavior if needed, or backend handles it) -->
-            <a href="pyqs.html" class="grid-card" onclick="return checkPaid(event)">
+            <!-- Locked Options (Linked to coming-soon.html to prevent 404, or use JS to check lock) -->
+            <!-- We will use Native Links pointing to coming-soon if unpaid, handled in JS -->
+            <a href="#" id="linkPyqs" class="grid-card" onclick="return checkPaidAndGo(event, 'pyqs.html')">
                 <i class="fa-solid fa-lock lock-icon payment-lock"></i>
                 <div class="grid-icon-wrapper"><i class="fa-solid fa-file-pen"></i></div>
                 <span>PYQs</span>
             </a>
-            <a href="tests.html" class="grid-card" onclick="return checkPaid(event)">
+            
+            <a href="#" id="linkTests" class="grid-card" onclick="return checkPaidAndGo(event, 'tests.html')">
                 <i class="fa-solid fa-lock lock-icon payment-lock"></i>
                 <div class="grid-icon-wrapper"><i class="fa-solid fa-stopwatch"></i></div>
                 <span>Tests</span>
             </a>
-            <a href="other.html" class="grid-card" onclick="return checkPaid(event)">
+            
+            <a href="#" id="linkOther" class="grid-card" onclick="return checkPaidAndGo(event, 'other.html')">
                 <i class="fa-solid fa-lock lock-icon payment-lock"></i>
                 <div class="grid-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
                 <span>Other</span>
@@ -288,7 +286,7 @@
             <i class="fa-solid fa-book-open"></i>
             <span>Study</span>
         </a>
-        <a href="other.html" class="nav-item">
+        <a href="coming-soon.html" class="nav-item">
             <i class="fa-solid fa-layer-group"></i>
             <span>Other</span>
         </a>
@@ -335,7 +333,7 @@
             <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             
-            <!-- NATIVE LINKS (Vercel handles 404s) -->
+            <!-- NATIVE LINKS (Vercel handles 404s natively) -->
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
@@ -382,7 +380,7 @@
         </div>
     </div>
 
-    <!-- Edit Profile Modal WITH DROPDOWNS -->
+    <!-- Edit Profile Modal WITH FULL INDIA STATES/CITIES DROPDOWN -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main);">Edit Profile</h3>
@@ -396,17 +394,41 @@
             <span class="input-label">State</span>
             <select id="editState" class="select-field" onchange="updateCities()">
                 <option value="">Select State</option>
+                <!-- Full India States -->
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
                 <option value="Bihar">Bihar</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
                 <option value="Delhi">Delhi</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
                 <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
                 <option value="Uttar Pradesh">Uttar Pradesh</option>
-                <!-- Add other states as needed -->
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
             </select>
             
             <span class="input-label">City</span>
             <select id="editCity" class="select-field">
                 <option value="">Select City</option>
-                <!-- Cities will be populated based on state -->
             </select>
             
             <div class="btn-row">
@@ -470,20 +492,63 @@
             <input type="text" id="deleteOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete Forever</button>
             </div>
         </div>
     </div>
 
     <script>
+        // FULL INDIA CITIES DATA (Major Cities per State)
+        const indiaCities = {
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Tirupati"],
+            "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat"],
+            "Assam": ["Guwahati", "Silchar", "Dibrugarh", "Jorhat"],
+            "Bihar": ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Siwan", "Darbhanga", "Purnia"],
+            "Chhattisgarh": ["Raipur", "Bhilai", "Bilaspur", "Korba"],
+            "Delhi": ["New Delhi", "North Delhi", "South Delhi", "Dwarka", "Rohini"],
+            "Goa": ["Panaji", "Margao", "Vasco da Gama"],
+            "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Gandhinagar"],
+            "Haryana": ["Gurugram", "Faridabad", "Panipat", "Ambala", "Rohtak"],
+            "Himachal Pradesh": ["Shimla", "Dharamshala", "Manali", "Mandi"],
+            "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Hubli", "Mangaluru", "Belagavi"],
+            "Kerala": ["Thiruvananthapuram", "Kochi", "Kozhikode", "Kozhikode"],
+            "Madhya Pradesh": ["Bhopal", "Indore", "Gwalior", "Jabalpur", "Ujjain"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane", "Aurangabad"],
+            "Manipur": ["Imphal", "Churachandpur"],
+            "Meghalaya": ["Shillong", "Tura"],
+            "Mizoram": ["Aizawl", "Lunglei"],
+            "Nagaland": ["Kohima", "Dimapur"],
+            "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela", "Puri"],
+            "Punjab": ["Chandigarh", "Ludhiana", "Amritsar", "Jalandhar", "Patiala"],
+            "Rajasthan": ["Jaipur", "Jodhpur", "Udaipur", "Kota", "Ajmer"],
+            "Sikkim": ["Gangtok", "Namchi"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
+            "Tripura": ["Agartala", "Udaipur"],
+            "Uttar Pradesh": ["Lucknow", "Kanpur", "Ghaziabad", "Agra", "Varanasi", "Meerut", "Allahabad"],
+            "Uttarakhand": ["Dehradun", "Haridwar", "Roorkee", "Haldwani"],
+            "West Bengal": ["Kolkata", "Howrah", "Darjeeling", "Siliguri", "Asansol"]
+        };
+
+        function updateCities() {
+            const state = document.getElementById('editState').value;
+            const citySelect = document.getElementById('editCity');
+            citySelect.innerHTML = '<option value="">Select City</option>'; 
+            
+            if(state && indiaCities[state]) {
+                indiaCities[state].forEach(city => {
+                    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+                });
+            }
+        }
+
         // INIT DATA & LOGIC
         window.onload = function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.getElementById('themeToggle').checked = true;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
-            if(savedPic) {
-                document.getElementById('menuProfileImg').src = savedPic;
-            }
+            if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
 
             updateProfileDOM();
             startSlider();
@@ -492,10 +557,8 @@
         function updateProfileDOM() {
             const userName = localStorage.getItem('kiyo_user_name') || 'Student';
             
-            // Dashboard Welcome Message
             document.getElementById('welcomeNameText').innerText = `Welcome, ${userName.split(' ')[0]}! 👋`;
 
-            // Menu Profile Details
             document.getElementById('menuUserName').innerHTML = `${userName} <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i>`;
             document.getElementById('menuUserLocation').innerText = (localStorage.getItem('kiyo_user_city') || 'City') + ', ' + (localStorage.getItem('kiyo_user_state') || 'State');
             
@@ -507,38 +570,40 @@
                 document.getElementById('menuUserAge').innerText = '18';
             }
 
-            // Home Details
             document.getElementById('homeClass').innerText = localStorage.getItem('kiyo_class') || 'N/A';
             document.getElementById('homeGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_skill') || 'N/A';
 
             // Check Payment Status
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
             if(isPaid) {
-                // Remove locks
+                // Remove locks from Learning Hub
                 document.querySelectorAll('.payment-lock').forEach(icon => icon.style.display = 'none');
                 
                 // Update Menu Batch
                 document.getElementById('menuBatchName').innerText = localStorage.getItem('kiyo_active_batch') || "Premium AI Batch";
                 
-                // Update Home Button to show Batch Name instead of "Update Plan"
+                // Update Home Button to act as an un-clickable Status Badge
                 const btn = document.getElementById('homeBatchBtn');
                 btn.innerText = localStorage.getItem('kiyo_active_batch') || "Premium Active";
                 btn.className = "batch-status-btn btn-active";
-                btn.removeAttribute("href"); // Remove link so it's just a badge
+                btn.removeAttribute("onclick"); 
             }
         }
 
-        function checkPaid(event) {
+        // Smart Router: Checks payment before redirecting. If unpaid, goes to coming-soon.
+        function checkPaidAndGo(event, targetFile) {
+            event.preventDefault();
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
-            if (!isPaid) {
-                event.preventDefault(); // Stop direct navigation
-                window.location.href = "payment.html"; // Route to payment
-                return false;
+            
+            if (isPaid) {
+                window.location.href = targetFile; // Native routing
+            } else {
+                showToast("Please Update Plan to unlock this feature.", "danger");
+                setTimeout(() => { window.location.href = 'coming-soon.html'; }, 1500);
             }
-            return true;
         }
 
-        // SLIDER LOGIC
+        // IMAGE SLIDER LOGIC
         let currentSlide = 0;
         function startSlider() {
             const slides = document.getElementById('slides');
@@ -550,30 +615,9 @@
                 slides.style.transform = `translateX(-${currentSlide * 100}%)`;
                 dots.forEach(d => d.classList.remove('active'));
                 dots[currentSlide].classList.add('active');
-            }, 3000); // Slides every 3 seconds
+            }, 3000); 
         }
 
-        // DUMMY CITY LOGIC FOR DROPDOWN
-        const cityData = {
-            "Bihar": ["Patna", "Siwan", "Gaya", "Muzaffarpur"],
-            "Delhi": ["New Delhi", "Dwarka", "Rohini"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur"],
-            "Uttar Pradesh": ["Lucknow", "Kanpur", "Varanasi", "Noida"]
-        };
-
-        function updateCities() {
-            const state = document.getElementById('editState').value;
-            const citySelect = document.getElementById('editCity');
-            citySelect.innerHTML = '<option value="">Select City</option>'; // Reset
-            
-            if(state && cityData[state]) {
-                cityData[state].forEach(city => {
-                    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
-                });
-            }
-        }
-
-        // UI FUNCTIONS
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('sidebarOverlay').classList.toggle('active');
@@ -632,7 +676,7 @@
                 
                 const savedState = localStorage.getItem('kiyo_user_state') || '';
                 document.getElementById('editState').value = savedState;
-                updateCities(); // Populates cities based on saved state
+                updateCities(); // Populate cities
                 
                 const savedCity = localStorage.getItem('kiyo_user_city') || '';
                 if(savedCity) document.getElementById('editCity').value = savedCity;
