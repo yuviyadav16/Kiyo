@@ -13,10 +13,10 @@
 
     <style>
         :root {
-            /* Premium Light Purple Theme (MySA Style) */
+            /* Premium Light Purple Theme */
             --primary: #5c64f4; 
             --accent-green: #10b981; 
-            --bg-top: #eef0ff; 
+            --bg-top: #f5f7ff; 
             --bg-bottom: #ffffff;
             --surface-color: #ffffff;
             --text-main: #0f172a; 
@@ -52,16 +52,15 @@
         .logo-text { font-size: 24px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px;}
         .logo-text span { color: var(--accent-green); }
         
-        /* NOTIFICATION BELL */
-        .notification-wrapper { position: relative; cursor: pointer; }
-        .notification-wrapper i { font-size: 22px; color: var(--text-main); }
+        .notification-wrapper { position: relative; cursor: pointer; color: var(--text-main); text-decoration: none;}
+        .notification-wrapper i { font-size: 22px; }
         .notification-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-top); }
 
-        .main-content { padding: 15px 20px; padding-bottom: 90px; } 
+        .main-content { padding: 10px 20px; padding-bottom: 90px; }
 
         /* WELCOME SECTION ON HOME */
-        .welcome-section { margin-top: 10px; margin-bottom: 30px; }
-        .welcome-section h2 { margin: 0; font-size: 26px; font-weight: 900; color: var(--text-main); line-height: 1.2; }
+        .welcome-section { margin-top: 5px; margin-bottom: 30px; }
+        .welcome-section h2 { margin: 0; font-size: 28px; font-weight: 900; color: var(--text-main); line-height: 1.2; display: flex; align-items: center; gap: 8px;}
         .welcome-section p { margin: 5px 0 0 0; font-size: 14px; font-weight: 600; color: var(--text-muted); }
 
         /* PREMIUM ACTION BANNERS */
@@ -78,11 +77,11 @@
         .arrow-icon { color: var(--text-muted); font-size: 18px; opacity: 0.5; }
 
         /* PROFESSIONAL UPDATES SECTION */
-        .section-header { margin: 30px 0 15px 0; font-size: 18px; font-weight: 800; color: var(--text-main); display: flex; justify-content: space-between; align-items: center;}
+        .section-header { margin: 30px 0 15px 0; font-size: 18px; font-weight: 800; color: var(--text-main); }
         
         .update-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; margin-bottom: 15px;}
         .update-icon { background: rgba(92, 100, 244, 0.1); color: var(--primary); width: 50px; height: 50px; border-radius: 16px; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0;}
-        .update-text h4 { margin: 0 0 5px 0; font-size: 16px; font-weight: 800; }
+        .update-text h4 { margin: 0 0 5px 0; font-size: 16px; font-weight: 800; color: var(--text-main);}
         .update-text p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 600; line-height: 1.4;}
 
         /* BOTTOM NAVIGATION BAR */
@@ -104,7 +103,12 @@
 
         /* PROFILE INSIDE MENU */
         .menu-profile { padding: 20px; margin: 0 15px 15px 15px; background: var(--card-gradient); border-radius: 20px; color: white; display: flex; flex-direction: column; align-items: center; text-align: center; box-shadow: 0 10px 20px rgba(92, 100, 244, 0.2); position: relative;}
-        .menu-avatar { width: 65px; height: 65px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.5); margin-bottom: 10px; object-fit: cover; background: #fff;}
+        
+        .avatar-container-menu { position: relative; width: 70px; height: 70px; margin-bottom: 10px; }
+        .menu-avatar { width: 100%; height: 100%; border-radius: 50%; border: 3px solid rgba(255,255,255,0.5); object-fit: cover; background: #fff;}
+        .upload-btn-menu { position: absolute; bottom: 0; right: 0; background: var(--accent-green); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; cursor: pointer; border: 2px solid var(--primary); }
+        #fileInput { display: none; }
+
         .menu-profile h4 { margin: 0; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; justify-content: center;}
         .menu-profile p { margin: 5px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9;}
         .edit-icon-menu { font-size: 13px; background: rgba(255,255,255,0.2); padding: 5px 8px; border-radius: 8px; cursor: pointer; }
@@ -113,7 +117,6 @@
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; }
         .menu-item i { font-size: 18px; color: var(--text-muted); width: 25px; text-align: center; }
         
-        /* Highlighted TicBull Website Link */
         .highlight-item { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); margin: 0 15px 15px 15px; border-radius: 12px; font-weight: 800;}
         .highlight-item i { color: var(--accent-green); }
 
@@ -131,8 +134,8 @@
         .powered { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;}
         .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
-        /* FULL SCREEN MODALS (Z-INDEX FIXED) */
-        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-color); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
+        /* FULL SCREEN MODALS (Z-INDEX & BACKGROUND FIXED) */
+        .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-bottom); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
         .full-modal.active { transform: translateX(0); }
         .fm-header { padding: 20px; display: flex; align-items: center; gap: 15px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top:0; z-index: 2;}
         .fm-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
@@ -171,8 +174,8 @@
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
         <h1 class="logo-text">Kiyo <span>AI</span></h1>
         
-        <!-- Native Link for Notifications -->
-        <a href="notifications.html" class="notification-wrapper" style="text-decoration:none;">
+        <!-- Native Link for Notifications (Vercel will handle 404) -->
+        <a href="notifications.html" class="notification-wrapper">
             <i class="fa-regular fa-bell"></i>
             <div class="notification-dot"></div>
         </a>
@@ -180,13 +183,13 @@
 
     <div class="main-content">
         
-        <!-- CLEAN WELCOME SECTION ON HOME -->
+        <!-- CLEAN WELCOME SECTION -->
         <div class="welcome-section">
-            <h2 id="welcomeNameText">Welcome, Student! 👋</h2>
+            <h2 id="welcomeNameText">Welcome! 👋</h2>
             <p>Ready to boost your preparation?</p>
         </div>
 
-        <!-- 1. EXPLORE BATCHES BANNER -->
+        <!-- 1. EXPLORE BATCHES BANNER (Direct Native Link) -->
         <a href="batches.html" class="action-banner">
             <div class="banner-content">
                 <div class="explore-icon-bg"><i class="fa-solid fa-compass"></i></div>
@@ -198,8 +201,8 @@
             <i class="fa-solid fa-chevron-right arrow-icon"></i>
         </a>
 
-        <!-- 2. MY CLASSROOM BANNER -->
-        <a href="classroom.html" class="action-banner" id="classroomBtn" onclick="return checkClassroomAccess(event);">
+        <!-- 2. MY CLASSROOM BANNER (Direct Native Link) -->
+        <a href="classroom.html" class="action-banner">
             <div class="banner-content">
                 <div class="class-icon-bg"><i class="fa-solid fa-chalkboard-user"></i></div>
                 <div>
@@ -210,7 +213,7 @@
             <i class="fa-solid fa-lock arrow-icon" id="classroomLock"></i>
         </a>
 
-        <!-- PROFESSIONAL UPDATES / ADS AREA -->
+        <!-- PROFESSIONAL UPDATES / ANNOUNCEMENTS AREA -->
         <div class="section-header">
             Announcements
         </div>
@@ -254,7 +257,11 @@
 
         <!-- PROFILE MOVED TO MENU -->
         <div class="menu-profile">
-            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="menuProfileImg" class="menu-avatar">
+            <div class="avatar-container-menu">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="menuProfileImg" class="menu-avatar">
+                <label for="fileInput" class="upload-btn-menu"><i class="fa-solid fa-camera"></i></label>
+                <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto(event)">
+            </div>
             <h4 id="menuUserName">Student Name <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i></h4>
             <p><span id="menuUserAge">18</span> Years Old • <span id="menuUserLocation">City, State</span></p>
         </div>
@@ -268,7 +275,7 @@
         </div>
 
         <div class="menu-list">
-            <!-- TICBULL WEBSITE LINK (Fixed wording) -->
+            <!-- TICBULL WEBSITE LINK -->
             <a href="https://ticbull-academy.vercel.app/" target="_blank" class="menu-item highlight-item">
                 <i class="fa-solid fa-rocket"></i> Visit TicBull Website
             </a>
@@ -276,7 +283,7 @@
             <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             
-            <!-- NATIVE LINKS (No JS Hack, Vercel will handle 404s if missing) -->
+            <!-- NATIVE LINKS (Vercel will handle 404s) -->
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
@@ -326,7 +333,7 @@
     <!-- Edit Profile Modal -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
-            <h3 style="margin-top: 0; margin-bottom: 20px;">Edit Profile</h3>
+            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main);">Edit Profile</h3>
             
             <span class="input-label">Full Name</span>
             <input type="text" id="editName" class="input-field" placeholder="Full Name">
@@ -350,7 +357,7 @@
     <!-- Change Password Send OTP -->
     <div class="center-modal-overlay" id="passModal">
         <div class="center-box">
-            <h3 style="margin-top: 0;">Change Password</h3>
+            <h3 style="margin-top: 0; color: var(--text-main);">Change Password</h3>
             <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">We will send an OTP to your email.</p>
             
             <div class="input-group">
@@ -373,7 +380,7 @@
     <!-- Verify Password OTP -->
     <div class="center-modal-overlay" id="passOtpModal">
         <div class="center-box">
-            <h3 style="margin-top: 0;">Verify Password OTP</h3>
+            <h3 style="margin-top: 0; color: var(--text-main);">Verify Password OTP</h3>
             <input type="text" id="passOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('passOtpModal')">Cancel</button>
@@ -401,7 +408,7 @@
             <input type="text" id="deleteOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete Forever</button>
             </div>
         </div>
     </div>
@@ -418,7 +425,7 @@
 
             updateProfileDOM();
 
-            // Check if batch is purchased to unlock classroom
+            // Check if batch is purchased to unlock classroom icon
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
             if(isPaid) {
                 document.getElementById('classroomLock').className = "fa-solid fa-chevron-right arrow-icon";
@@ -444,15 +451,6 @@
             } else {
                 document.getElementById('menuUserAge').innerText = '18';
             }
-        }
-
-        function checkClassroomAccess(event) {
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
-            if (!isPaid) {
-                event.preventDefault(); // Stop navigation
-                showToast("Please Join a Batch first.", "danger");
-            }
-            return isPaid;
         }
 
         function toggleSidebar() {
@@ -486,6 +484,18 @@
                 box.innerHTML = `<div class="toast"><i class="fa-solid fa-circle-check" style="color:var(--${type});"></i> <span>${msg}</span></div>`;
             }, 100);
             setTimeout(() => { box.innerHTML = ''; }, 3000);
+        }
+
+        function uploadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('menuProfileImg').src = e.target.result;
+                    localStorage.setItem('kiyo_profile_pic', e.target.result); 
+                };
+                reader.readAsDataURL(file);
+            }
         }
 
         function logout() { localStorage.clear(); sessionStorage.clear(); window.location.replace("login.html"); }
