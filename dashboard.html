@@ -14,62 +14,77 @@
 
     <style>
         :root {
-            --primary: #6366f1; --primary-dark: #4338ca; --primary-light: rgba(99, 102, 241, 0.1);
-            --accent-green: #10b981; --accent-green-hover: #059669; --gold: #f59e0b;
-            --bg-color: #f8fafc; --surface-color: #ffffff;
-            --text-main: #0f172a; --text-muted: #64748b; --border-color: #e2e8f0;
-            --danger: #ef4444; --success: #10b981;
-            --card-gradient: linear-gradient(135deg, #6366f1, #4338ca);
+            /* Premium Light Purple Theme (Like Image 3) */
+            --primary: #6366f1; /* Indigo */
+            --primary-dark: #4f46e5;
+            --primary-light: #e0e7ff;
+            --accent-green: #10b981; 
+            --accent-green-hover: #059669; 
+            --gold: #f59e0b;
+            --bg-color: #f8fafc; 
+            --surface-color: #ffffff;
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --card-gradient: linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%); /* Soft Purple Gradient */
         }
 
         html.dark-theme {
             --bg-color: #0B101E; --surface-color: #121826;
             --text-main: #f8fafc; --text-muted: #94a3b8; --border-color: rgba(255,255,255,0.1);
-            --card-gradient: linear-gradient(135deg, #1e1b4b, #312e81);
+            --card-gradient: linear-gradient(135deg, #3730a3, #312e81);
+            --primary-light: rgba(99, 102, 241, 0.2);
         }
 
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg-color); color: var(--text-main); font-family: system-ui, sans-serif; overflow-x: hidden; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s;}
 
         /* TOPBAR */
-        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--surface-color); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--surface-color); position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.02); border-bottom: 1px solid var(--border-color);}
         .menu-btn { font-size: 22px; cursor: pointer; color: var(--text-main); }
-        .logo-text { font-size: 20px; font-weight: 900; color: var(--primary); margin: 0; }
+        .logo-text { font-size: 22px; font-weight: 900; color: var(--text-main); margin: 0; letter-spacing: -0.5px;}
+        .logo-text span { color: var(--accent-green); } /* Green AI Text */
         
         .main-content { padding: 20px; padding-bottom: 80px; }
 
         /* 16:9 PROFILE CARD */
-        .profile-card { width: 100%; aspect-ratio: 16 / 9; background: var(--card-gradient); border-radius: 20px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3); position: relative; overflow: hidden;}
+        .profile-card { width: 100%; aspect-ratio: 16 / 9; background: var(--card-gradient); border-radius: 24px; padding: 20px; box-sizing: border-box; color: #fff; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2); position: relative; overflow: hidden;}
         
         .profile-top { display: flex; align-items: center; gap: 15px; z-index: 2; }
-        .avatar-container { position: relative; width: 70px; height: 70px; }
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.4); }
-        .upload-btn { position: absolute; bottom: 0; right: 0; background: var(--accent-green); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; cursor: pointer; border: 2px solid #fff; }
+        .avatar-container { position: relative; width: 70px; height: 70px; flex-shrink: 0;}
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.6); background: #fff;}
+        .upload-btn { position: absolute; bottom: -2px; right: -2px; background: var(--accent-green); color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 11px; cursor: pointer; border: 2px solid var(--primary); }
         #fileInput { display: none; }
         
         .user-details h2 { margin: 0; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px;}
+        .edit-profile-btn { font-size: 12px; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 8px; cursor: pointer; }
         .user-details p { margin: 4px 0 0 0; font-size: 12px; font-weight: 600; opacity: 0.9; }
 
-        .profile-stats { background: rgba(0,0,0,0.2); backdrop-filter: blur(5px); padding: 12px 15px; border-radius: 14px; display: flex; justify-content: space-between; z-index: 2; }
-        .stat-col { display: flex; flex-direction: column; gap: 3px; }
-        .stat-label { font-size: 10px; font-weight: 700; opacity: 0.7; text-transform: uppercase; }
-        .stat-val { font-size: 13px; font-weight: 800; white-space: nowrap; }
+        .profile-stats { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 12px 15px; border-radius: 16px; display: flex; justify-content: space-between; z-index: 2; border: 1px solid rgba(255,255,255,0.2);}
+        .stat-col { display: flex; flex-direction: column; gap: 3px; flex: 1; overflow: hidden;}
+        .stat-label { font-size: 9px; font-weight: 800; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;}
+        .stat-val { font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 5px;}
 
-        /* PAYMENT BANNER */
-        .payment-banner { background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 16px; padding: 15px; margin-top: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); display: none; /* Hidden by default */ }
-        .payment-text h4 { margin: 0; font-size: 15px; font-weight: 900; }
-        .payment-text p { margin: 3px 0 0 0; font-size: 11px; font-weight: 600; opacity: 0.9; }
-        .payment-icon { font-size: 24px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 50%; }
-
-        /* 4 ACTION GRID */
-        .section-header { margin: 25px 0 15px 0; font-size: 16px; font-weight: 800; }
-        .action-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
-        .grid-card { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.02); text-decoration: none; color: var(--text-main); }
-        .grid-card:active { transform: scale(0.96); }
-        .grid-icon-wrapper { position: relative; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; background: var(--primary-light); border-radius: 50%; color: var(--primary); font-size: 22px; }
-        .grid-card span { font-size: 14px; font-weight: 700; }
+        /* SMART PAYMENT / BATCH SYSTEM */
+        .batch-system-container { margin-top: 20px; }
         
-        /* Video Logo for Ask Teacher */
-        .video-logo { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; position: absolute; top: 0; left: 0; }
+        /* State 1: Unpaid (Show Payment Options) */
+        .unpaid-state { display: flex; flex-direction: column; gap: 12px; }
+        .personalized-banner { background: var(--surface-color); border: 2px solid var(--accent-green); border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1); }
+        .personalized-banner h4 { margin: 0 0 4px 0; font-size: 15px; font-weight: 800; color: var(--text-main); }
+        .personalized-banner p { margin: 0; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+        .personalized-banner .icon-box { background: rgba(16, 185, 129, 0.1); color: var(--accent-green); width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        
+        .explore-banner { background: linear-gradient(45deg, #f59e0b, #d97706); border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
+        .explore-banner h4 { margin: 0; font-size: 15px; font-weight: 900; }
+        .explore-banner p { margin: 3px 0 0 0; font-size: 11px; font-weight: 600; opacity: 0.9; }
+
+        /* State 2: Paid (Show Classroom) */
+        .paid-state { display: none; }
+        .classroom-btn { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .classroom-btn .icon-bg { background: var(--primary-light); color: var(--primary); width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 22px; }
+        .classroom-btn h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 800; color: var(--text-main); }
+        .classroom-btn p { margin: 0; font-size: 12px; font-weight: 600; color: var(--accent-green); }
 
         /* SIDEBAR MENU */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
@@ -77,7 +92,8 @@
         .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--surface-color); z-index: 101; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
         .sidebar.active { left: 0; }
         .sidebar-header { padding: 25px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h3 { margin: 0; font-size: 20px; font-weight: 900; color: var(--primary); }
+        .sidebar-header h3 { margin: 0; font-size: 20px; font-weight: 900; color: var(--text-main); }
+        .sidebar-header h3 span { color: var(--accent-green); }
         
         .menu-list { flex: 1; overflow-y: auto; padding: 15px 0; }
         .menu-item { padding: 15px 25px; display: flex; align-items: center; gap: 15px; color: var(--text-main); text-decoration: none; font-size: 15px; font-weight: 600; }
@@ -105,25 +121,24 @@
         .fm-header h2 { margin: 0; font-size: 18px; }
         .fm-content { padding: 20px; overflow-y: auto; }
 
-        /* CENTER OTP/SECURITY MODALS */
+        /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 300; }
         .center-modal-overlay.active { opacity: 1; pointer-events: all; }
         .center-box { background: var(--surface-color); padding: 25px 20px; border-radius: 20px; width: 85%; max-width: 320px; text-align: center; transform: scale(0.9); transition: 0.3s; }
         .center-modal-overlay.active .center-box { transform: scale(1); }
-        .input-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; margin-top: 15px;}
-        .btn-row { display: flex; gap: 10px; margin-top: 15px;}
-        .btn-cancel { flex: 1; padding: 12px; background: var(--bg-color); color: var(--text-main); border: none; border-radius: 10px; font-weight: 700; cursor: pointer;}
-        .btn-confirm { flex: 1; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;}
-        .btn-danger { background: var(--danger); }
+        .input-group { position: relative; margin-top: 15px; }
+        .input-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; }
         
-        .danger-card { border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05); padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center;}
+        .btn-row { display: flex; gap: 10px; margin-top: 20px;}
+        .btn-cancel { flex: 1; padding: 14px; background: var(--bg-color); color: var(--text-main); border: none; border-radius: 12px; font-weight: 700; cursor: pointer;}
+        .btn-confirm { flex: 1; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;}
+        .btn-danger { background: var(--danger); }
         
         /* TOAST */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
-        .toast.hide { animation: fadeOut 0.3s forwards; }
-        @keyframes fadeOut { to { opacity: 0; } }
     </style>
 </head>
 <body>
@@ -132,7 +147,7 @@
 
     <div class="topbar">
         <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
-        <h1 class="logo-text">Kiyo AI</h1>
+        <h1 class="logo-text">Kiyo <span>AI</span></h1>
         <i class="fa-regular fa-bell" style="font-size: 20px; color: var(--text-muted);"></i>
     </div>
 
@@ -146,49 +161,62 @@
                     <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto(event)">
                 </div>
                 <div class="user-details">
-                    <h2 id="userName">Student Name</h2>
+                    <h2><span id="userName">Student Name</span> <i class="fa-solid fa-pen edit-profile-btn" onclick="openCenterModal('editProfileModal')"></i></h2>
                     <p><span id="userAge">18</span> Years Old • <span id="userLocation">City, State</span></p>
                 </div>
             </div>
             
             <div class="profile-stats">
-                <div class="stat-col"><span class="stat-label">Class</span><span class="stat-val" id="userClass">Loading</span></div>
-                <div class="stat-col" style="text-align: center;"><span class="stat-label">Board/Exam</span><span class="stat-val" id="userBoard">Loading</span></div>
-                <div class="stat-col" style="text-align: right;"><span class="stat-label">Target</span><span class="stat-val" id="userGoal">Loading</span></div>
-            </div>
-        </div>
-
-        <!-- DYNAMIC PAYMENT BANNER (Shows only to unpaid users) -->
-        <div class="payment-banner" id="paymentBanner" onclick="window.location.href='payment.html'">
-            <div class="payment-text">
-                <h4>Unlock Premium Batch</h4>
-                <p>Get full access to selected syllabus & tests</p>
-            </div>
-            <i class="fa-solid fa-crown payment-icon"></i>
-        </div>
-
-        <h3 class="section-header">Learning Hub</h3>
-        
-        <!-- 4 ACTION GRID -->
-        <div class="action-grid">
-            <a href="ask-teacher.html" class="grid-card">
-                <div class="grid-icon-wrapper">
-                    <video src="230816.mp4" class="video-logo" autoplay loop muted playsinline></video>
+                <div class="stat-col">
+                    <span class="stat-label">Class</span>
+                    <span class="stat-val" id="userClass">Loading</span>
                 </div>
-                <span>Ask Teacher</span>
-            </a>
-            <a href="pyqs.html" class="grid-card">
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-file-pen"></i></div>
-                <span>PYQs</span>
-            </a>
-            <a href="tests.html" class="grid-card">
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-stopwatch"></i></div>
-                <span>Tests</span>
-            </a>
-            <a href="other.html" class="grid-card">
-                <div class="grid-icon-wrapper"><i class="fa-solid fa-layer-group"></i></div>
-                <span>Other</span>
-            </a>
+                <div class="stat-col" style="text-align: center;">
+                    <span class="stat-label">Board / Exam</span>
+                    <span class="stat-val" id="userBoard">Loading</span>
+                </div>
+                <div class="stat-col" style="text-align: right;">
+                    <span class="stat-label">Target</span>
+                    <span class="stat-val" id="userGoal">Loading</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BATCH SYSTEM CONTAINER -->
+        <div class="batch-system-container">
+            
+            <!-- UNPAID STATE: Show Payment/Batch Options -->
+            <div class="unpaid-state" id="unpaidState">
+                <!-- Option 1: Personalized Batch (Auto creates based on Profile) -->
+                <div class="personalized-banner" onclick="initiatePayment('personalized')">
+                    <div>
+                        <h4>Get Personalized Batch</h4>
+                        <p id="personalizedText">Auto-generating syllabus...</p>
+                    </div>
+                    <div class="icon-box"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                </div>
+
+                <!-- Option 2: Pre-made Batches -->
+                <div class="explore-banner" onclick="window.location.href='batches.html'">
+                    <div>
+                        <h4>Explore Pre-made Batches</h4>
+                        <p>Browse all available courses & modules</p>
+                    </div>
+                    <i class="fa-solid fa-compass" style="font-size: 24px; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 50%;"></i>
+                </div>
+            </div>
+
+            <!-- PAID STATE: Show Classroom (Only visible if a batch is bought) -->
+            <div class="paid-state" id="paidState">
+                <div class="classroom-btn" onclick="window.location.href='classroom.html'">
+                    <div class="icon-bg"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <div>
+                        <h4>My Classroom</h4>
+                        <p id="activeBatchName">Loading active batch...</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -209,8 +237,8 @@
         </div>
 
         <div class="menu-list">
-            <a href="batches.html" class="menu-item"><i class="fa-solid fa-box-open" style="color:var(--primary);"></i> My Batches (History)</a>
-            <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="batches.html" class="menu-item"><i class="fa-solid fa-box-open" style="color:var(--primary);"></i> Explore Batches</a>
+            <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
@@ -236,33 +264,54 @@
             <h2>Settings & Security</h2>
         </div>
         <div class="fm-content">
-            <div class="grid-card" style="flex-direction: row; justify-content: flex-start; margin-bottom: 10px;" onclick="openCenterModal('passModal')">
-                <div class="grid-icon-wrapper" style="width: 40px; height: 40px; font-size: 16px;"><i class="fa-solid fa-lock"></i></div>
-                <span style="flex:1;">Change Password (Z+ Security)</span>
+            <div style="background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px 15px; display: flex; align-items: center; cursor: pointer; margin-bottom: 20px;" onclick="openCenterModal('passModal')">
+                <div style="width: 40px; height: 40px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px;"><i class="fa-solid fa-lock"></i></div>
+                <span style="flex:1; font-weight: 700;">Change Password (Z+ Security)</span>
                 <i class="fa-solid fa-chevron-right" style="color:var(--text-muted);"></i>
             </div>
             
-            <button onclick="logout()" style="width: 100%; padding: 15px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; margin-top: 20px; cursor: pointer;">
+            <button onclick="logout()" style="width: 100%; padding: 15px; background: transparent; border: 2px solid var(--text-muted); color: var(--text-main); border-radius: 12px; font-weight: 700; cursor: pointer;">
                 <i class="fa-solid fa-right-from-bracket"></i> Logout
             </button>
 
-            <div class="danger-card">
+            <div style="border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05); padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center;">
                 <i class="fa-solid fa-triangle-exclamation" style="font-size: 30px; color: var(--danger); margin-bottom: 10px;"></i>
                 <h3 style="margin: 0 0 10px 0; color: var(--danger);">Danger Zone</h3>
-                <p style="font-size: 12px; margin-bottom: 15px;">Permanent deletion will erase all your history, payments, and data.</p>
+                <p style="font-size: 12px; margin-bottom: 15px;">Permanent deletion will erase all your history and batches.</p>
                 <button onclick="openCenterModal('deleteWarnModal')" style="width: 100%; padding: 12px; background: var(--danger); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer;">Delete Account</button>
             </div>
         </div>
     </div>
 
-    <!-- Z+ SECURITY OTP MODALS -->
-    
+    <!-- Edit Profile Modal -->
+    <div class="center-modal-overlay" id="editProfileModal">
+        <div class="center-box">
+            <h3 style="margin-top: 0;">Edit Profile</h3>
+            <input type="text" id="editName" class="input-field" placeholder="Full Name">
+            <input type="text" id="editCity" class="input-field" placeholder="City">
+            <div class="btn-row">
+                <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
+                <button class="btn-confirm" onclick="saveProfileEdit()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Change Password Send OTP -->
     <div class="center-modal-overlay" id="passModal">
         <div class="center-box">
             <h3 style="margin-top: 0;">Change Password</h3>
             <p style="font-size: 12px; color: var(--text-muted);">We will send an OTP to your email.</p>
-            <input type="password" id="newPass" class="input-field" placeholder="New Password (Min 6)">
+            
+            <div class="input-group">
+                <input type="password" id="newPass" class="input-field" placeholder="New Password (Min 6)">
+                <i class="fa-solid fa-eye toggle-password" id="eye1" onclick="togglePass('newPass', 'eye1')"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="confirmPass" class="input-field" placeholder="Confirm Password">
+                <i class="fa-solid fa-eye toggle-password" id="eye2" onclick="togglePass('confirmPass', 'eye2')"></i>
+            </div>
+
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('passModal')">Cancel</button>
                 <button class="btn-confirm" onclick="sendPassOTP()">Send OTP</button>
@@ -307,12 +356,12 @@
     </div>
 
     <script>
-        // INIT DATA
+        // INIT DATA & LOGIC
         window.onload = function() {
-            // Check Theme
+            // Theme
             if(localStorage.getItem('kiyo_theme') === 'dark') document.getElementById('themeToggle').checked = true;
 
-            // Load Image
+            // Profile Picture
             const savedPic = localStorage.getItem('kiyo_profile_pic');
             if(savedPic) document.getElementById('profileImg').src = savedPic;
 
@@ -320,7 +369,7 @@
             document.getElementById('userName').innerText = localStorage.getItem('kiyo_user_name') || 'Student';
             document.getElementById('userLocation').innerText = (localStorage.getItem('kiyo_user_city') || 'City') + ', ' + (localStorage.getItem('kiyo_user_state') || 'State');
             
-            // Calculate Age
+            // Age Logic
             const dob = localStorage.getItem('kiyo_user_dob');
             if(dob) {
                 const age = new Date().getFullYear() - new Date(dob).getFullYear();
@@ -328,14 +377,26 @@
             }
 
             // Load Education Details
-            document.getElementById('userClass').innerText = localStorage.getItem('kiyo_class') || 'N/A';
-            const boardOrExam = localStorage.getItem('kiyo_board') || localStorage.getItem('kiyo_exam') || 'N/A';
-            document.getElementById('userBoard').innerText = boardOrExam.substring(0, 15) + '...'; // Truncate long names
-            document.getElementById('userGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_skill') || 'N/A';
+            const uClass = localStorage.getItem('kiyo_class') || 'N/A';
+            const uBoard = localStorage.getItem('kiyo_board') || localStorage.getItem('kiyo_exam') || 'N/A';
+            const uGoal = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_skill') || 'N/A';
 
-            // Payment Logic
-            if(localStorage.getItem('kiyo_paid') !== 'true') {
-                document.getElementById('paymentBanner').style.display = 'flex';
+            document.getElementById('userClass').innerText = uClass;
+            document.getElementById('userBoard').innerText = uBoard;
+            document.getElementById('userGoal').innerText = uGoal;
+
+            // Set Personalized Batch Text
+            document.getElementById('personalizedText').innerText = `Batch for ${uClass} & ${uGoal.substring(0, 10)}...`;
+
+            // Payment / Classroom Logic
+            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
+            if(isPaid) {
+                document.getElementById('unpaidState').style.display = 'none';
+                document.getElementById('paidState').style.display = 'block';
+                document.getElementById('activeBatchName').innerText = localStorage.getItem('kiyo_active_batch') || "Premium Active Batch";
+            } else {
+                document.getElementById('unpaidState').style.display = 'flex';
+                document.getElementById('paidState').style.display = 'none';
             }
         };
 
@@ -356,9 +417,20 @@
             }
         }
 
+        function togglePass(fieldId, iconId) {
+            const pass = document.getElementById(fieldId); 
+            const icon = document.getElementById(iconId);
+            const isText = pass.type === 'text';
+            pass.type = isText ? 'password' : 'text';
+            icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
+        }
+
         function showToast(msg, type='success') {
             const box = document.getElementById('toastBox');
-            box.innerHTML = `<div class="toast"><i class="fa-solid fa-circle-check" style="color:var(--${type});"></i> <span>${msg}</span></div>`;
+            box.innerHTML = '';
+            setTimeout(() => {
+                box.innerHTML = `<div class="toast"><i class="fa-solid fa-circle-check" style="color:var(--${type});"></i> <span>${msg}</span></div>`;
+            }, 100);
             setTimeout(() => { box.innerHTML = ''; }, 3000);
         }
 
@@ -379,13 +451,41 @@
         // MODAL FUNCTIONS
         function openFullModal(id) { document.getElementById(id).classList.add('active'); toggleSidebar(); }
         function closeFullModal(id) { document.getElementById(id).classList.remove('active'); }
-        function openCenterModal(id) { document.getElementById(id).classList.add('active'); }
+        function openCenterModal(id) { 
+            document.getElementById(id).classList.add('active'); 
+            if(id === 'editProfileModal') {
+                document.getElementById('editName').value = localStorage.getItem('kiyo_user_name') || '';
+                document.getElementById('editCity').value = localStorage.getItem('kiyo_user_city') || '';
+            }
+        }
         function closeCenterModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // PROFILE EDIT
+        function saveProfileEdit() {
+            const newName = document.getElementById('editName').value.trim();
+            const newCity = document.getElementById('editCity').value.trim();
+            if(!newName) return showToast('Name is required', 'danger');
+            
+            localStorage.setItem('kiyo_user_name', newName);
+            localStorage.setItem('kiyo_user_city', newCity);
+            document.getElementById('userName').innerText = newName;
+            document.getElementById('userLocation').innerText = newCity + ', ' + (localStorage.getItem('kiyo_user_state') || 'State');
+            closeCenterModal('editProfileModal');
+            showToast('Profile Updated');
+        }
+
+        // PAYMENT REDIRECT
+        function initiatePayment(type) {
+            sessionStorage.setItem('payment_type', type);
+            window.location.href = 'payment.html';
+        }
 
         // Z+ SECURITY API SIMULATIONS
         async function sendPassOTP() {
             const newPass = document.getElementById('newPass').value;
+            const confirmPass = document.getElementById('confirmPass').value;
             if(newPass.length < 6) return showToast('Min 6 chars required', 'danger');
+            if(newPass !== confirmPass) return showToast('Passwords do not match', 'danger');
             
             showToast('Sending OTP...');
             const email = localStorage.getItem('kiyo_user_email');
@@ -403,7 +503,7 @@
 
             try {
                 const res = await fetch('/api/verify-pass-change', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp, newPassword: newPass}) });
-                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated!'); document.getElementById('newPass').value = ''; }
+                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated!'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
                 else showToast('Invalid OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
