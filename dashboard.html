@@ -46,7 +46,6 @@
             overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
         }
 
-        /* PREMIUM TOPBAR */
         .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);}
         html.dark-theme .topbar { background: rgba(18,24,38,0.8); }
         
@@ -62,7 +61,6 @@
 
         .main-content { padding: 15px 20px; padding-bottom: 90px; }
 
-        /* SETTINGS SEARCH BAR */
         .settings-search-bar { background: var(--surface-color); border-radius: 100px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer;}
         .settings-search-content { display: flex; align-items: center; gap: 12px; width: 100%; }
         .settings-search-icon { color: var(--text-muted); font-size: 16px; }
@@ -70,7 +68,6 @@
 
         .external-frame { width: 100%; border: none; border-radius: 20px; overflow: hidden; margin-bottom: 25px; background: transparent; }
 
-        /* SMART BATCH CARD */
         .batch-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 25px;}
         .batch-header { display: flex; justify-content: space-between; margin-bottom: 15px;}
         .target-box span { display: block; font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 3px;}
@@ -80,14 +77,12 @@
         .btn-update { background: linear-gradient(45deg, #f59e0b, #d97706); color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
         .btn-active { background: var(--card-gradient); color: white; box-shadow: 0 4px 15px rgba(92, 100, 244, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px;}
 
-        /* BOTTOM NAVIGATION */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 700; transition: 0.2s; width: 25%; }
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--primary); }
         .nav-item:active { transform: scale(0.9); }
 
-        /* SIDEBAR MENU */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         .sidebar { position: fixed; top: 0; left: -300px; width: 290px; height: 100%; background: var(--surface-color); z-index: 201; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
@@ -127,12 +122,10 @@
         .powered { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;}
         .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
-        /* FULL SCREEN MODALS */
         .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-bottom); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
         .full-modal.active { transform: translateX(0); }
         .fm-header { padding: 20px; display: flex; align-items: center; gap: 15px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top:0; z-index: 2;}
         .fm-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
-        .fm-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
         .fm-content { padding: 20px; }
 
         .settings-section-title { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 20px 0 10px 5px; letter-spacing: 0.5px;}
@@ -143,7 +136,6 @@
         .setting-item-left i { font-size: 18px; color: var(--primary); width: 24px; text-align: center; }
         .setting-item.danger .setting-item-left i, .setting-item.danger span { color: var(--danger); }
 
-        /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
         .center-modal-overlay.active { opacity: 1; pointer-events: all; }
         .center-box { background: var(--surface-color); padding: 25px 20px; border-radius: 24px; width: 90%; max-width: 340px; max-height: 90vh; overflow-y: auto; text-align: center; transform: scale(0.9); transition: 0.3s; }
@@ -153,9 +145,7 @@
         .input-field { width: 100%; padding: 14px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--text-main); box-sizing: border-box; outline: none; margin-bottom: 12px; font-family: inherit;}
         .input-label { display: block; text-align: left; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 5px; margin-left: 5px; text-transform: uppercase; }
         
-        /* Grid for Amazon Style Form */
         .input-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; }
         
         .btn-row { display: flex; gap: 10px; margin-top: 15px;}
@@ -165,11 +155,10 @@
         .btn-gps:active { transform: scale(0.98); }
         .btn-danger { background: var(--danger); color: white; }
         
-        /* GREEN & RED COLOR-CODED TOASTS */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { color: #fff; padding: 16px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
-        .toast.success { background: #10b981; } /* Green */
-        .toast.danger { background: #ef4444; }  /* Red */
+        .toast.success { background: #10b981; }
+        .toast.danger { background: #ef4444; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
@@ -177,7 +166,6 @@
 
     <div class="toast-container" id="toastBox"></div>
 
-    <!-- PREMIUM TOPBAR -->
     <div class="topbar">
         <div class="top-left">
             <i class="fa-solid fa-bars menu-btn" onclick="toggleSidebar()"></i>
@@ -193,11 +181,8 @@
     </div>
 
     <div class="main-content">
-        
-        <!-- EXTERNAL SLIDER FRAME -->
         <iframe src="slider-data.html" class="external-frame" id="sliderFrame" scrolling="no"></iframe>
 
-        <!-- APP SETTINGS SEARCH BAR -->
         <div class="settings-search-bar" onclick="focusSettingsSearch()">
             <div class="settings-search-content">
                 <i class="fa-solid fa-magnifying-glass settings-search-icon"></i>
@@ -205,7 +190,6 @@
             </div>
         </div>
 
-        <!-- REAL DYNAMIC BATCH CARD -->
         <div class="batch-card">
             <div class="batch-header">
                 <div class="target-box">
@@ -222,11 +206,9 @@
             </a>
         </div>
 
-        <!-- EXTERNAL ANNOUNCEMENTS FRAME -->
         <iframe src="announcements.html" class="external-frame" id="announcementFrame" scrolling="no" style="height: 140px;"></iframe>
     </div>
 
-    <!-- FIXED BOTTOM NAVIGATION BAR -->
     <div class="bottom-nav">
         <a href="dashboard.html" class="nav-item active">
             <i class="fa-solid fa-house"></i>
@@ -246,7 +228,6 @@
         </a>
     </div>
 
-    <!-- SIDEBAR MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -284,15 +265,12 @@
         </div>
     </div>
 
-    <!-- SETTINGS FULL MODAL (Functional Password & Delete) -->
     <div class="full-modal" id="settingsModal">
         <div class="fm-header">
             <i class="fa-solid fa-arrow-left" onclick="closeFullModal('settingsModal')"></i>
-            <!-- Unlocked Search Input -->
             <input type="text" id="activeSearchInput" placeholder="Search settings..." style="border:none; outline:none; background:transparent; font-size:16px; font-weight:700; color:var(--text-main); width:100%; font-family:inherit;" onkeyup="searchAppSettings()">
         </div>
         <div class="fm-content" id="settingsContentList">
-            
             <div class="settings-section-title">Account Settings</div>
             <div class="settings-card-group">
                 <div class="setting-item" onclick="openCenterModal('passModal')" data-search="change password security z+">
@@ -328,7 +306,6 @@
         </div>
     </div>
 
-    <!-- AMAZON STYLE EDIT PROFILE MODAL -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main);">Edit Profile</h3>
@@ -339,7 +316,7 @@
             
             <div style="text-align: left; padding: 0 5px;">
                 <span class="input-label">Pincode</span>
-                <input type="number" id="editPincode" class="input-field" placeholder="6-digit Pincode">
+                <input type="text" id="editPincode" class="input-field" placeholder="6-digit Pincode">
                 
                 <div class="input-grid-2">
                     <div>
@@ -347,19 +324,19 @@
                         <input type="text" id="editState" class="input-field" placeholder="State">
                     </div>
                     <div>
-                        <span class="input-label">City</span>
+                        <span class="input-label">City / Town</span>
                         <input type="text" id="editCity" class="input-field" placeholder="City">
                     </div>
                 </div>
 
-                <span class="input-label">House No. / Building Name</span>
+                <span class="input-label">House / Flat / Building</span>
                 <input type="text" id="editHouse" class="input-field" placeholder="E.g. Flat 101, Om Tower">
                 
-                <span class="input-label">Area / Sector / Locality</span>
-                <input type="text" id="editArea" class="input-field" placeholder="E.g. Sector 62 or Main Market">
+                <span class="input-label">Area / Sector / Locality / Village</span>
+                <input type="text" id="editArea" class="input-field" placeholder="E.g. Sector 62 or Village Name">
                 
                 <span class="input-label">Landmark (Optional)</span>
-                <input type="text" id="editLandmark" class="input-field" placeholder="Near Hospital">
+                <input type="text" id="editLandmark" class="input-field" placeholder="Near Temple / Hospital">
 
                 <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
 
@@ -377,7 +354,6 @@
         </div>
     </div>
 
-    <!-- Modals for Password / Delete -->
     <div class="center-modal-overlay" id="passModal">
         <div class="center-box">
             <h3 style="margin-top: 0; color: var(--text-main);">Change Password</h3>
@@ -434,9 +410,7 @@
         window.onload = async function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
             
-            // Sync Permanent Data from Firebase API
             await syncUserFromFirebase();
-
             checkRealStreak();
             updateProfileDOM();
             
@@ -446,7 +420,6 @@
             }, 300);
         };
 
-        // FIREBASE CLOUD SYNC (Saves data life-time)
         async function syncUserFromFirebase() {
             const email = localStorage.getItem('kiyo_user_email');
             if(!email) return;
@@ -460,7 +433,6 @@
                         if(data.user.profilePic) localStorage.setItem('kiyo_profile_pic', data.user.profilePic);
                         if(data.user.dob) localStorage.setItem('kiyo_user_dob', data.user.dob);
                         
-                        // Address Components
                         if(data.user.pincode) localStorage.setItem('kiyo_pincode', data.user.pincode);
                         if(data.user.state) localStorage.setItem('kiyo_state', data.user.state);
                         if(data.user.city) localStorage.setItem('kiyo_city', data.user.city);
@@ -468,7 +440,6 @@
                         if(data.user.area) localStorage.setItem('kiyo_area', data.user.area);
                         if(data.user.landmark) localStorage.setItem('kiyo_landmark', data.user.landmark);
 
-                        // Premium Batch Sync
                         if(data.user.isPremium) localStorage.setItem('kiyo_is_premium', data.user.isPremium);
                         if(data.user.activeBatch) localStorage.setItem('kiyo_active_batch', data.user.activeBatch);
                         if(data.user.board) localStorage.setItem('kiyo_board', data.user.board);
@@ -480,7 +451,6 @@
             }
         }
 
-        // SAVE PROFILE & ADDRESS TO FIREBASE
         async function saveProfileToFirebase() {
             const email = localStorage.getItem('kiyo_user_email');
             const name = document.getElementById('editName').value.trim();
@@ -494,9 +464,7 @@
             const landmark = document.getElementById('editLandmark').value.trim();
 
             if(!name) return showToast('Name is required', 'danger');
-            if(!pincode || !state || !city || !area) return showToast('Pincode, State, City, and Area are mandatory', 'danger');
 
-            // Save locally
             localStorage.setItem('kiyo_user_name', name);
             localStorage.setItem('kiyo_user_dob', dob);
             localStorage.setItem('kiyo_pincode', pincode);
@@ -509,17 +477,20 @@
             updateProfileDOM();
             closeCenterModal('editProfileModal');
 
-            // Save to Firebase
             try {
-                showToast('Syncing to Cloud...', 'success');
-                await fetch('/api/save-user-data', {
+                showToast('Saving to cloud...', 'success');
+                const res = await fetch('/api/save-user-data', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ email, name, dob, pincode, state, city, house, area, landmark })
                 });
-                showToast('Profile Saved Permanently!', 'success');
+                if(res.ok) {
+                    showToast('Profile Saved Permanently!', 'success');
+                } else {
+                    showToast('Saved Locally. Server sync pending.', 'success');
+                }
             } catch(e) {
-                showToast('Saved Locally. Cloud sync queued.', 'success');
+                showToast('Saved Locally', 'success');
             }
         }
 
@@ -552,14 +523,21 @@
             const savedPic = localStorage.getItem('kiyo_profile_pic');
             if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
             
-            const city = localStorage.getItem('kiyo_city');
-            const state = localStorage.getItem('kiyo_state');
-            document.getElementById('menuUserLocation').innerText = (city && state) ? `${city}, ${state}` : 'Location Not Set';
+            const area = localStorage.getItem('kiyo_area') || '';
+            const city = localStorage.getItem('kiyo_city') || '';
+            const state = localStorage.getItem('kiyo_state') || '';
+            
+            const locationParts = [area, city, state].filter(Boolean);
+            document.getElementById('menuUserLocation').innerText = locationParts.length > 0 ? locationParts.join(', ') : 'Location Not Set';
             
             const dob = localStorage.getItem('kiyo_user_dob');
             if(dob) {
-                const age = new Date().getFullYear() - new Date(dob).getFullYear();
-                document.getElementById('menuUserAge').innerText = age;
+                const birthYear = new Date(dob).getFullYear();
+                if(!isNaN(birthYear)) {
+                    document.getElementById('menuUserAge').innerText = new Date().getFullYear() - birthYear;
+                } else {
+                    document.getElementById('menuUserAge').innerText = '18';
+                }
             } else {
                 document.getElementById('menuUserAge').innerText = '18';
             }
@@ -596,36 +574,42 @@
             });
         }
 
-        // AMAZON STYLE AUTO-DETECT GPS
         function autoDetectLocation() {
             const btn = document.getElementById('gpsBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting Accurate Location...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting GPS Location...`;
             
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async function(position) {
                     try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                         const data = await res.json();
+                        
                         if(data && data.address) {
-                            document.getElementById('editPincode').value = data.address.postcode || '';
-                            document.getElementById('editState').value = data.address.state || '';
-                            document.getElementById('editCity').value = data.address.city || data.address.town || data.address.village || '';
-                            document.getElementById('editArea').value = data.address.suburb || data.address.neighbourhood || data.address.residential || '';
-                            document.getElementById('editHouse').value = data.address.building || data.address.house_number || '';
+                            const addr = data.address;
                             
-                            showToast("Address Automatically Filled!", "success");
-                            btn.innerHTML = `<i class="fa-solid fa-check"></i> Found`;
+                            document.getElementById('editPincode').value = addr.postcode || '';
+                            document.getElementById('editState').value = addr.state || '';
+                            document.getElementById('editCity').value = addr.city || addr.town || addr.district || addr.county || '';
+                            
+                            const detectedArea = addr.suburb || addr.neighbourhood || addr.residential || addr.village || addr.hamlet || addr.road || addr.locality || '';
+                            document.getElementById('editArea').value = detectedArea;
+                            document.getElementById('editHouse').value = addr.building || addr.house_number || '';
+
+                            showToast("Address & Area Auto-Filled!", "success");
+                            btn.innerHTML = `<i class="fa-solid fa-check"></i> Location Detected`;
                         }
                     } catch(e) {
-                        showToast("Failed to fetch location details.", "danger");
+                        showToast("Failed to fetch detailed address.", "danger");
                         btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Location`;
                     }
                 }, function(error) {
-                    showToast("Please allow location access.", "danger");
+                    showToast("Please allow GPS location permission.", "danger");
                     btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Location`;
                 });
             } else {
-                showToast("Geolocation not supported.", "danger");
+                showToast("Geolocation is not supported by your browser.", "danger");
             }
         }
 
@@ -641,7 +625,6 @@
             i.className = p.type === 'text' ? 'fa-solid fa-eye-slash toggle-password' : 'fa-solid fa-eye toggle-password';
         }
 
-        // RED & GREEN NOTIFICATIONS
         function showToast(msg, type='success') {
             const box = document.getElementById('toastBox');
             const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark';
@@ -674,7 +657,14 @@
             }
         }
 
-        function logout() { localStorage.clear(); sessionStorage.clear(); window.location.replace("login.html"); }
+        function logout() { 
+            const savedTheme = localStorage.getItem('kiyo_theme');
+            localStorage.clear(); 
+            sessionStorage.clear(); 
+            if(savedTheme) localStorage.setItem('kiyo_theme', savedTheme);
+            window.location.replace("login.html"); 
+        }
+
         function openFullModal(id) { document.getElementById(id).classList.add('active'); toggleSidebar(); }
         function closeFullModal(id) { document.getElementById(id).classList.remove('active'); }
         
