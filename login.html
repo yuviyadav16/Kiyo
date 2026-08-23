@@ -57,7 +57,7 @@
         }
 
         /* FORM CONTAINER */
-        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
+        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1; overflow-y: auto; padding-right: 5px;}
 
         /* TAB SWITCHER */
         .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 14px; padding: 5px; margin-bottom: 20px; flex-shrink: 0;}
@@ -74,18 +74,12 @@
         .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
         .input-no-icon { padding-left: 15px; }
 
-        /* DROPDOWNS */
-        .custom-select-btn { width: 100%; padding: 14px 15px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-muted); font-size: 14px; font-weight: 600; box-sizing: border-box; text-align: left; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .custom-select-btn.selected { color: var(--primary-dark); border-color: var(--primary); background: #f8fafc; }
-
-        /* PATH SELECTORS */
-        .path-selector { display: flex; gap: 8px; margin-bottom: 15px; flex-shrink: 0;}
-        .path-btn { flex: 1; background: #f1f5f9; border: 1px solid #e2e8f0; color: var(--text-muted); padding: 10px 5px; border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center;}
-        .path-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0px 4px 12px var(--primary-light);}
-
         /* GREEN ACTION BUTTON */
         .action-btn { width: 100%; padding: 16px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
         .action-btn:active { transform: scale(0.97); }
+
+        .btn-gps { width: 100%; padding: 12px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 12px; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px;}
+        .btn-gps:active { transform: scale(0.98); }
 
         .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 700; flex-shrink: 0;}
         
@@ -158,9 +152,25 @@
                         <i class="fa-solid fa-calendar field-icon"></i>
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
                     </div>
+
+                    <!-- AUTO DETECT GPS LOCATION -->
+                    <button type="button" class="btn-gps" onclick="autoDetectLocation()" id="gpsBtn">
+                        <i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Address
+                    </button>
+
                     <div class="input-row">
+                        <input type="number" id="pincodeInput" class="input-field input-no-icon" placeholder="Pincode">
                         <input type="text" id="stateInput" class="input-field input-no-icon" placeholder="State">
+                    </div>
+                    <div class="input-row">
                         <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
+                        <input type="text" id="areaInput" class="input-field input-no-icon" placeholder="Area/Village">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="houseInput" class="input-field input-no-icon" placeholder="House No. / Building">
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="landmarkInput" class="input-field input-no-icon" placeholder="Landmark (Optional)">
                     </div>
                 </div>
 
@@ -176,36 +186,8 @@
                     </div>
                 </div>
 
-                <div id="step2Fields" style="display: none;">
-                    <div class="path-selector">
-                        <div class="path-btn active" onclick="setPath('board', this)">Board</div>
-                        <div class="path-btn" onclick="setPath('exam', this)">Exam</div>
-                        <div class="path-btn" onclick="setPath('skill', this)">Skill</div>
-                    </div>
-
-                    <!-- THese buttons now ALL redirect to your separate HTML files -->
-                    <div id="pathBoardUI">
-                        <div class="input-group"><div class="custom-select-btn" id="btnClass" onclick="saveTempAndGo('class.html')"><span id="lblClass">Select Class...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-                        
-                        <!-- SMART LOGIC FIELDS: Only shows if 11th, 12th or Dropper is selected -->
-                        <div class="input-group" id="streamGroup" style="display:none;"><div class="custom-select-btn" id="btnStream" onclick="saveTempAndGo('subjects.html')"><span id="lblStream">Select Stream (PCB, PCM...)</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-                        <div class="input-group" id="dreamGroup" style="display:none;"><div class="custom-select-btn" id="btnDream" onclick="saveTempAndGo('goal.html')"><span id="lblDream">Target Goal (NEET, JEE...)</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-
-                        <div class="input-group" id="boardGroup"><div class="custom-select-btn" id="btnBoard" onclick="saveTempAndGo('board.html')"><span id="lblBoard">Select Board...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-                    </div>
-                    
-                    <div id="pathExamUI" style="display:none;">
-                        <div class="input-group"><div class="custom-select-btn" id="btnExam" onclick="saveTempAndGo('exam.html')"><span id="lblExam">Select Exam...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-                    </div>
-                    
-                    <div id="pathSkillUI" style="display:none;">
-                        <div class="input-group"><div class="custom-select-btn" id="btnSkill" onclick="saveTempAndGo('skills.html')"><span id="lblSkill">Select Skill...</span> <i class="fa-solid fa-chevron-right"></i></div></div>
-                    </div>
-                </div>
-
                 <a href="#" class="forgot-link" id="forgotLink" onclick="openModal('forgotModal', event)">Forgot Password?</a>
                 
-                <button type="button" class="action-btn" id="nextBtn" style="display:none;" onclick="goToStep2()">NEXT STEP <i class="fa-solid fa-arrow-right"></i></button>
                 <button type="submit" class="action-btn" id="submitBtn">SIGN IN</button>
             </form>
         </div>
@@ -300,99 +282,13 @@
 
     <script>
         let currentMode = 'signin';
-        let currentPath = 'board';
 
-        // Helper function for logic visibility
-        function applyClassLogic(className) {
-            const streamGrp = document.getElementById('streamGroup');
-            const dreamGrp = document.getElementById('dreamGroup');
-            const boardGrp = document.getElementById('boardGroup');
-            
-            if(!className) return;
-
-            const nameLow = className.toLowerCase();
-            if (nameLow.includes('11') || nameLow.includes('12') || nameLow.includes('dropper') || nameLow.includes('graduation')) {
-                streamGrp.style.display = 'block';
-                dreamGrp.style.display = 'block';
-                // Hide Board if Dropper or Graduation
-                if (nameLow.includes('dropper') || nameLow.includes('graduation')) {
-                    boardGrp.style.display = 'none';
-                } else {
-                    boardGrp.style.display = 'block';
-                }
-            } else {
-                streamGrp.style.display = 'none';
-                dreamGrp.style.display = 'none';
-                boardGrp.style.display = 'block';
-            }
-        }
-
-        // ================= SMART DATA RESTORE SYSTEM =================
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
 
-            // Restore Temporary Form Data
-            if(sessionStorage.getItem('temp_name')) document.getElementById('fullName').value = sessionStorage.getItem('temp_name');
-            if(sessionStorage.getItem('temp_dob')) document.getElementById('dob').value = sessionStorage.getItem('temp_dob');
-            if(sessionStorage.getItem('temp_state')) document.getElementById('stateInput').value = sessionStorage.getItem('temp_state');
-            if(sessionStorage.getItem('temp_city')) document.getElementById('cityInput').value = sessionStorage.getItem('temp_city');
+            // Restore basic details if available
             if(sessionStorage.getItem('temp_email')) document.getElementById('email').value = sessionStorage.getItem('temp_email');
-            if(sessionStorage.getItem('temp_pass')) document.getElementById('password').value = sessionStorage.getItem('temp_pass');
-
-            // Restore Main Options
-            if(localStorage.getItem('kiyo_board')) {
-                document.getElementById('lblBoard').innerText = localStorage.getItem('kiyo_board');
-                document.getElementById('btnBoard').classList.add('selected');
-            }
-            if(localStorage.getItem('kiyo_exam')) {
-                document.getElementById('lblExam').innerText = localStorage.getItem('kiyo_exam');
-                document.getElementById('btnExam').classList.add('selected');
-            }
-            if(localStorage.getItem('kiyo_skill')) {
-                document.getElementById('lblSkill').innerText = localStorage.getItem('kiyo_skill');
-                document.getElementById('btnSkill').classList.add('selected');
-            }
-
-            // Restore Class & Check if Stream/Goal should show
-            const savedClass = localStorage.getItem('kiyo_class');
-            if(savedClass) {
-                document.getElementById('lblClass').innerText = savedClass;
-                document.getElementById('btnClass').classList.add('selected');
-                applyClassLogic(savedClass);
-            }
-
-            // Restore Internal Options (Stream & Dream)
-            if(localStorage.getItem('kiyo_stream')) {
-                document.getElementById('lblStream').innerText = localStorage.getItem('kiyo_stream');
-                document.getElementById('btnStream').classList.add('selected');
-            }
-            if(localStorage.getItem('kiyo_dream')) {
-                document.getElementById('lblDream').innerText = localStorage.getItem('kiyo_dream');
-                document.getElementById('btnDream').classList.add('selected');
-            }
-
-            // Auto-open Step 2 if returning
-            if(sessionStorage.getItem('temp_step') === '2') {
-                switchTab('signup');
-                goToStep2(true);
-                if(sessionStorage.getItem('temp_path')) {
-                    const btn = document.querySelector(`.path-btn[onclick*="${sessionStorage.getItem('temp_path')}"]`);
-                    if(btn) setPath(sessionStorage.getItem('temp_path'), btn);
-                }
-            }
         };
-
-        function saveTempAndGo(url) {
-            sessionStorage.setItem('temp_name', document.getElementById('fullName').value);
-            sessionStorage.setItem('temp_dob', document.getElementById('dob').value);
-            sessionStorage.setItem('temp_state', document.getElementById('stateInput').value);
-            sessionStorage.setItem('temp_city', document.getElementById('cityInput').value);
-            sessionStorage.setItem('temp_email', document.getElementById('email').value);
-            sessionStorage.setItem('temp_pass', document.getElementById('password').value);
-            sessionStorage.setItem('temp_step', '2'); 
-            sessionStorage.setItem('temp_path', currentPath);
-            window.location.href = url;
-        }
 
         function showToast(message, type = 'error') {
             const toastBox = document.getElementById('toastBox');
@@ -409,18 +305,9 @@
             document.getElementById('signupTabBtn').classList.toggle('active', mode === 'signup');
             
             document.getElementById('step1Fields').style.display = mode === 'signup' ? 'block' : 'none';
-            document.getElementById('step2Fields').style.display = 'none';
-            document.getElementById('commonFields').style.display = 'block';
             document.getElementById('forgotLink').style.display = mode === 'signin' ? 'block' : 'none';
             
-            if(mode === 'signup') {
-                document.getElementById('submitBtn').style.display = 'none';
-                document.getElementById('nextBtn').style.display = 'block';
-            } else {
-                document.getElementById('submitBtn').style.display = 'block';
-                document.getElementById('submitBtn').innerText = "SIGN IN";
-                document.getElementById('nextBtn').style.display = 'none';
-            }
+            document.getElementById('submitBtn').innerText = mode === 'signup' ? "SIGN UP" : "SIGN IN";
         }
 
         function getAge(dateString) {
@@ -438,40 +325,46 @@
             icon.className = isText ? 'fa-solid fa-eye toggle-password' : 'fa-solid fa-eye-slash toggle-password';
         }
 
-        function goToStep2(isRestore = false) {
-            if(!isRestore) {
-                const name = document.getElementById('fullName').value.trim();
-                const dob = document.getElementById('dob').value;
-                const state = document.getElementById('stateInput').value.trim();
-                const city = document.getElementById('cityInput').value.trim();
-                const email = document.getElementById('email').value.trim();
-                const pass = document.getElementById('password').value;
-
-                if(!name || !dob || !state || !city || !email || !pass) { return showToast("Please fill all details."); }
-                if(pass.length < 6) { return showToast("Password min 6 chars."); }
-                if(getAge(dob) < 13) { return showToast("13+ age required."); }
-            }
-
-            document.getElementById('step1Fields').style.display = 'none';
-            document.getElementById('commonFields').style.display = 'none';
-            document.getElementById('nextBtn').style.display = 'none';
-            document.getElementById('step2Fields').style.display = 'block';
-            document.getElementById('submitBtn').style.display = 'block';
-            document.getElementById('submitBtn').innerText = "CREATE SECURE ACCOUNT";
-        }
-
-        function setPath(path, btnElement) {
-            currentPath = path;
-            document.querySelectorAll('.path-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            
-            document.getElementById('pathBoardUI').style.display = path === 'board' ? 'block' : 'none';
-            document.getElementById('pathExamUI').style.display = path === 'exam' ? 'block' : 'none';
-            document.getElementById('pathSkillUI').style.display = path === 'skill' ? 'block' : 'none';
-        }
-
         function openModal(id, e) { if(e) e.preventDefault(); document.getElementById(id).classList.add('active'); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // AUTO-DETECT GPS LOCATION
+        function autoDetectLocation() {
+            const btn = document.getElementById('gpsBtn');
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting...`;
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async function(position) {
+                    try {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        
+                        if(data && data.address) {
+                            const addr = data.address;
+                            document.getElementById('pincodeInput').value = addr.postcode || '';
+                            document.getElementById('stateInput').value = addr.state || '';
+                            document.getElementById('cityInput').value = addr.city || addr.town || addr.district || addr.county || '';
+                            const detectedArea = addr.suburb || addr.neighbourhood || addr.residential || addr.village || addr.hamlet || addr.road || addr.locality || '';
+                            document.getElementById('areaInput').value = detectedArea;
+                            document.getElementById('houseInput').value = addr.building || addr.house_number || '';
+
+                            showToast("Address Auto-Filled!", "success");
+                            btn.innerHTML = `<i class="fa-solid fa-check"></i> Location Detected`;
+                        }
+                    } catch(e) {
+                        showToast("Failed to fetch address.", "error");
+                        btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Address`;
+                    }
+                }, function(error) {
+                    showToast("Please allow location access.", "error");
+                    btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Address`;
+                });
+            } else {
+                showToast("Geolocation not supported.", "error");
+            }
+        }
 
         async function handleSubmit(e) {
             e.preventDefault();
@@ -479,28 +372,18 @@
             const password = document.getElementById('password').value;
 
             if(currentMode === 'signup') {
-                if(currentPath === 'board') {
-                    const selClass = localStorage.getItem('kiyo_class');
-                    
-                    if(!selClass) return showToast("Select Class");
-                    
-                    const nameLow = selClass.toLowerCase();
-                    const isDropperOrGrad = nameLow.includes('dropper') || nameLow.includes('graduation');
-                    
-                    if(!isDropperOrGrad && !localStorage.getItem('kiyo_board')) { 
-                        return showToast("Select Board"); 
-                    }
-                    
-                    if (nameLow.includes('11') || nameLow.includes('12') || isDropperOrGrad) {
-                        if(!localStorage.getItem('kiyo_stream') || !localStorage.getItem('kiyo_dream')) {
-                            return showToast("Select Stream & Target Goal");
-                        }
-                    }
-                } else if (currentPath === 'exam') {
-                    if(!localStorage.getItem('kiyo_exam')) { return showToast("Select an Exam"); }
-                } else {
-                    if(!localStorage.getItem('kiyo_skill')) { return showToast("Select a Skill"); }
+                const name = document.getElementById('fullName').value.trim();
+                const dob = document.getElementById('dob').value;
+                const pincode = document.getElementById('pincodeInput').value.trim();
+                const state = document.getElementById('stateInput').value.trim();
+                const city = document.getElementById('cityInput').value.trim();
+                const area = document.getElementById('areaInput').value.trim();
+
+                if(!name || !dob || !pincode || !state || !city || !area || !email || !password) {
+                    return showToast("Please fill all mandatory details.");
                 }
+                if(password.length < 6) return showToast("Password min 6 chars.");
+                if(getAge(dob) < 13) return showToast("13+ age required to sign up.");
             } else if(password.length < 6) {
                 return showToast("Password min 6 chars");
             }
@@ -550,9 +433,12 @@
                 localStorage.setItem('kiyo_user_email', email);
                 localStorage.setItem('kiyo_user_name', document.getElementById('fullName').value.trim());
                 localStorage.setItem('kiyo_user_dob', document.getElementById('dob').value);
-                localStorage.setItem('kiyo_user_state', document.getElementById('stateInput').value.trim());
-                localStorage.setItem('kiyo_user_city', document.getElementById('cityInput').value.trim());
-                localStorage.setItem('kiyo_user_path', currentPath);
+                localStorage.setItem('kiyo_pincode', document.getElementById('pincodeInput').value.trim());
+                localStorage.setItem('kiyo_state', document.getElementById('stateInput').value.trim());
+                localStorage.setItem('kiyo_city', document.getElementById('cityInput').value.trim());
+                localStorage.setItem('kiyo_area', document.getElementById('areaInput').value.trim());
+                localStorage.setItem('kiyo_house', document.getElementById('houseInput').value.trim());
+                localStorage.setItem('kiyo_landmark', document.getElementById('landmarkInput').value.trim());
                 
                 // Clear temporary session data
                 sessionStorage.clear();
@@ -583,7 +469,6 @@
             showToast("Verifying Email...", "success");
 
             try {
-                // SECURITY FIX: Check if email exists
                 const checkRes = await fetch('/api/check-user', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, password: 'dummy', mode: 'signin' })
@@ -594,7 +479,6 @@
                     return showToast("Account not found! Please check email.");
                 }
 
-                // If account exists, send the OTP
                 const res = await fetch('/api/send-pass-change-otp', {
                     method: 'POST', headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({email: email})
@@ -636,3 +520,4 @@
     </script>
 </body>
 </html>
+
