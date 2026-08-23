@@ -13,7 +13,6 @@
 
     <style>
         :root {
-            /* Premium Light Purple Theme (MySA Vibe) */
             --primary: #5c64f4; 
             --accent-green: #10b981; 
             --gold: #f59e0b;
@@ -47,37 +46,43 @@
             overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
         }
 
-        /* PREMIUM TOPBAR (Greeting + Streaks) */
-        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; position: sticky; top: 0; z-index: 50; }
+        /* PREMIUM TOPBAR */
+        .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);}
+        html.dark-theme .topbar { background: rgba(18,24,38,0.8); }
+        
         .top-left { display: flex; align-items: center; gap: 12px; }
         .menu-btn { font-size: 22px; cursor: pointer; color: var(--text-main); }
         .greeting { margin: 0; font-size: 18px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
         
-        .top-right { display: flex; align-items: center; gap: 15px; }
-        .streak-pill { background: rgba(245, 158, 11, 0.15); padding: 5px 10px; border-radius: 20px; display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; color: var(--gold); }
-        .notification-wrapper { position: relative; cursor: pointer; color: var(--text-main); text-decoration: none;}
+        .top-right { display: flex; align-items: center; gap: 12px; }
+        .streak-pill { background: rgba(245, 158, 11, 0.15); padding: 5px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: var(--gold); }
+        .notification-wrapper { position: relative; cursor: pointer; color: var(--text-main); text-decoration: none; display: flex; align-items: center;}
         .notification-wrapper i { font-size: 22px; }
-        .notification-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-top); }
+        .notification-dot { position: absolute; top: 0; right: 0; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-top); }
 
-        .main-content { padding: 10px 20px; padding-bottom: 90px; }
+        .main-content { padding: 15px 20px; padding-bottom: 90px; }
 
-        /* 1. 16:9 HERO SLIDER */
+        /* 1. MULTI-BANNER EDUCATIONAL SLIDER (16:9) */
         .slider-container { width: 100%; aspect-ratio: 16 / 9; border-radius: 20px; overflow: hidden; position: relative; margin-bottom: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); background: var(--border-color);}
         .slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s ease-in-out; }
         .slide { min-width: 100%; height: 100%; text-decoration: none; position: relative;}
         .slide img { width: 100%; height: 100%; object-fit: cover; }
-        .slide-dots { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 10;}
+        .slide-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); color: white; box-sizing: border-box;}
+        .slide-overlay h4 { margin: 0 0 3px 0; font-size: 15px; font-weight: 800; }
+        .slide-overlay p { margin: 0; font-size: 11px; opacity: 0.9; font-weight: 600;}
+        
+        .slide-dots { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; z-index: 10;}
         .dot { width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: #fff; width: 16px; border-radius: 4px; }
+        .dot.active { background: #fff; width: 14px; border-radius: 4px; }
 
         /* 2. KIYO AI QUICK SEARCH BAR */
-        .ai-search-bar { background: var(--surface-color); border-radius: 100px; padding: 12px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none;}
+        .ai-search-bar { background: var(--surface-color); border-radius: 100px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer; text-decoration: none;}
         .ai-search-content { display: flex; align-items: center; gap: 12px; }
-        .ai-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 16px; }
+        .ai-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(92, 100, 244, 0.1); color: var(--primary); display: flex; justify-content: center; align-items: center; font-size: 15px; }
         .ai-search-text { font-size: 14px; font-weight: 600; color: var(--text-muted); }
         .ai-search-bar i.fa-microphone { color: var(--primary); font-size: 16px;}
 
-        /* 3. SMART BATCH CARD (Resume or Buy) */
+        /* 3. SMART BATCH CARD */
         .batch-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 25px;}
         .batch-header { display: flex; justify-content: space-between; margin-bottom: 15px;}
         .target-box span { display: block; font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 3px;}
@@ -101,7 +106,7 @@
         .nav-item.active { color: var(--primary); }
         .nav-item:active { transform: scale(0.9); }
 
-        /* SIDEBAR MENU (Profile inside) */
+        /* SIDEBAR MENU */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         .sidebar { position: fixed; top: 0; left: -300px; width: 290px; height: 100%; background: var(--surface-color); z-index: 201; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
@@ -131,10 +136,10 @@
         .theme-box { padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
         .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--primary); }
-        input:checked + .slider:before { transform: translateX(20px); }
+        .slider-toggle { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
+        .slider-toggle:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider-toggle { background-color: var(--primary); }
+        input:checked + .slider-toggle:before { transform: translateX(20px); }
 
         .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
         .socials { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
@@ -149,6 +154,16 @@
         .fm-header i { font-size: 20px; color: var(--text-muted); cursor: pointer; }
         .fm-header h2 { margin: 0; font-size: 18px; color: var(--text-main); }
         .fm-content { padding: 20px; }
+
+        /* PROFESSIONAL SETTINGS LIST STYLE (Telegram/WhatsApp Vibe) */
+        .settings-section-title { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin: 20px 0 10px 5px; letter-spacing: 0.5px;}
+        .settings-card-group { background: var(--surface-color); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+        .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: 0.2s; text-decoration: none; color: var(--text-main);}
+        .setting-item:last-child { border-bottom: none; }
+        .setting-item:active { background: rgba(92, 100, 244, 0.05); }
+        .setting-item-left { display: flex; align-items: center; gap: 15px; font-size: 15px; font-weight: 700; }
+        .setting-item-left i { font-size: 18px; color: var(--primary); width: 24px; text-align: center; }
+        .setting-item.danger .setting-item-left i, .setting-item.danger span { color: var(--danger); }
 
         /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
@@ -166,8 +181,6 @@
         .btn-confirm { flex: 1; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;}
         .btn-gps { width: 100%; padding: 12px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-danger { background: var(--danger); color: white; }
-        
-        .danger-card { border: 1px solid var(--danger); background: rgba(239, 68, 68, 0.05); padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center;}
         
         /* TOAST */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
@@ -187,7 +200,8 @@
         </div>
         
         <div class="top-right">
-            <div class="streak-pill"><i class="fa-solid fa-fire"></i> 12</div>
+            <!-- REAL DYNAMIC STREAK PILL -->
+            <div class="streak-pill"><i class="fa-solid fa-fire"></i> <span id="streakCount">0</span></div>
             <a href="notifications.html" class="notification-wrapper">
                 <i class="fa-regular fa-bell"></i>
                 <div class="notification-dot"></div>
@@ -197,20 +211,37 @@
 
     <div class="main-content">
         
-        <!-- 1. 16:9 AUTO HERO SLIDER -->
+        <!-- 1. MULTI-BANNER EDUCATIONAL CAROUSEL (10+ Educational Slides) -->
         <div class="slider-container" id="sliderContainer">
             <div class="slides" id="slides">
-                <!-- Slide 1 (Links to Batches) -->
+                <!-- Slide 1 -->
                 <a href="batches.html" class="slide">
-                    <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1000&auto=format&fit=crop" alt="Explore Batches">
+                    <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1000&auto=format&fit=crop" alt="Batch 1">
+                    <div class="slide-overlay">
+                        <h4>Top NEET & JEE Batches 2026</h4>
+                        <p>Master concepts with AI-powered mentorship</p>
+                    </div>
                 </a>
-                <!-- Slide 2 (Links to Study) -->
+                <!-- Slide 2 -->
                 <a href="study.html" class="slide">
-                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000&auto=format&fit=crop" alt="Mock Tests">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000&auto=format&fit=crop" alt="Slide 2">
+                    <div class="slide-overlay">
+                        <h4>Daily Practice Papers (DPPs)</h4>
+                        <p>Solve curated questions and track progress</p>
+                    </div>
+                </a>
+                <!-- Slide 3 -->
+                <a href="batches.html" class="slide">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1000&auto=format&fit=crop" alt="Slide 3">
+                    <div class="slide-overlay">
+                        <h4>Expert Doubt Solving Sessions</h4>
+                        <p>Get instant AI answers 24/7 anytime</p>
+                    </div>
                 </a>
             </div>
             <div class="slide-dots" id="slideDots">
                 <div class="dot active"></div>
+                <div class="dot"></div>
                 <div class="dot"></div>
             </div>
         </div>
@@ -224,7 +255,7 @@
             <i class="fa-solid fa-microphone"></i>
         </a>
 
-        <!-- 3. SMART BATCH CARD (Resume or Buy) -->
+        <!-- 3. SMART BATCH CARD -->
         <div class="batch-card">
             <div class="batch-header">
                 <div class="target-box">
@@ -237,7 +268,6 @@
                 </div>
             </div>
 
-            <!-- Button logic handled via JS based on premium status -->
             <a href="payment.html" id="homeBatchBtn" class="batch-status-btn btn-update">
                 Unlock Premium Batches
             </a>
@@ -249,8 +279,8 @@
         <div class="update-card">
             <div class="update-icon"><i class="fa-solid fa-bullhorn"></i></div>
             <div class="update-text">
-                <h4>Kiyo AI Launched!</h4>
-                <p>Welcome to the most intelligent learning platform. Explore batches to begin.</p>
+                <h4>Kiyo AI Platform Live!</h4>
+                <p>Explore our latest study modules and boost your board exam preparation.</p>
             </div>
         </div>
     </div>
@@ -298,12 +328,11 @@
             <span>Dark Mode</span>
             <label class="switch">
                 <input type="checkbox" id="themeToggle" onchange="switchTheme()">
-                <span class="slider"></span>
+                <span class="slider-toggle"></span>
             </label>
         </div>
 
         <div class="menu-list">
-            <!-- TICBULL WEBSITE LINK -->
             <a href="https://ticbull-academy.vercel.app/" target="_blank" class="menu-item highlight-item">
                 <i class="fa-solid fa-rocket"></i> Visit TicBull Website
             </a>
@@ -311,7 +340,6 @@
             <a href="javascript:void(0)" class="menu-item" onclick="openFullModal('settingsModal')"><i class="fa-solid fa-gear"></i> Settings & Security</a>
             <div style="height: 1px; background: var(--border-color); margin: 10px 20px;"></div>
             
-            <!-- NATIVE LINKS -->
             <a href="terms.html" class="menu-item"><i class="fa-solid fa-file-contract"></i> Terms & Conditions</a>
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
@@ -330,41 +358,57 @@
         </div>
     </div>
 
-    <!-- SETTINGS FULL MODAL -->
+    <!-- PROFESSIONAL SETTINGS FULL MODAL (Telegram/WhatsApp Vibe) -->
     <div class="full-modal" id="settingsModal">
         <div class="fm-header">
             <i class="fa-solid fa-arrow-left" onclick="closeFullModal('settingsModal')"></i>
             <h2>Settings & Security</h2>
         </div>
         <div class="fm-content">
-            <div class="action-banner" style="margin-bottom: 20px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.02);" onclick="openCenterModal('passModal')">
-                <div class="banner-content">
-                    <div style="width: 45px; height: 45px; background: var(--primary-light); color: var(--primary); border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 18px;"><i class="fa-solid fa-lock"></i></div>
-                    <span style="font-weight: 800; font-size: 16px; color: var(--text-main);">Change Password</span>
-                </div>
-                <i class="fa-solid fa-chevron-right arrow-icon"></i>
-            </div>
             
-            <button onclick="logout()" style="width: 100%; padding: 16px; background: transparent; border: 2px solid var(--border-color); color: var(--danger); border-radius: 16px; font-weight: 800; cursor: pointer; font-size: 15px;">
-                <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </button>
-
-            <div class="danger-card">
-                <i class="fa-solid fa-triangle-exclamation" style="font-size: 34px; color: var(--danger); margin-bottom: 10px;"></i>
-                <h3 style="margin: 0 0 10px 0; color: var(--danger);">Danger Zone</h3>
-                <p style="font-size: 13px; margin-bottom: 15px; font-weight: 600; color: var(--text-muted);">Permanent deletion will erase all your history and batches.</p>
-                <button onclick="openCenterModal('deleteWarnModal')" style="width: 100%; padding: 14px; background: var(--danger); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer;">Delete Account</button>
+            <div class="settings-section-title">Account Settings</div>
+            <div class="settings-card-group">
+                <div class="setting-item" onclick="openCenterModal('passModal')">
+                    <div class="setting-item-left">
+                        <i class="fa-solid fa-lock"></i>
+                        <span>Change Password</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size: 13px;"></i>
+                </div>
             </div>
+
+            <div class="settings-section-title">Session</div>
+            <div class="settings-card-group">
+                <div class="setting-item" onclick="logout()">
+                    <div class="setting-item-left">
+                        <i class="fa-solid fa-right-from-bracket" style="color:var(--primary);"></i>
+                        <span style="color:var(--primary);">Logout Account</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size: 13px;"></i>
+                </div>
+            </div>
+
+            <div class="settings-section-title">Danger Zone</div>
+            <div class="settings-card-group" style="border-color: rgba(239, 68, 68, 0.3);">
+                <div class="setting-item danger" onclick="openCenterModal('deleteWarnModal')">
+                    <div class="setting-item-left">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Delete Account Permanently</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right" style="color:var(--danger); font-size: 13px;"></i>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <!-- Edit Profile Modal WITH REAL GPS AUTO-DETECT -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
-            <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text-main);">Edit Profile</h3>
+            <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main);">Edit Profile</h3>
             
             <button class="btn-gps" onclick="autoDetectLocation()" id="gpsBtn">
-                <i class="fa-solid fa-location-crosshairs"></i> Detect My Location
+                <i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS
             </button>
             
             <span class="input-label">Full Name</span>
@@ -374,10 +418,10 @@
             <input type="date" id="editDob" class="input-field">
             
             <span class="input-label">State</span>
-            <input type="text" id="editState" class="input-field" placeholder="E.g., Bihar">
+            <input type="text" id="editState" class="input-field" placeholder="State">
             
             <span class="input-label">City / Village</span>
-            <input type="text" id="editCity" class="input-field" placeholder="E.g., Patna">
+            <input type="text" id="editCity" class="input-field" placeholder="City or Village">
             
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
@@ -416,7 +460,7 @@
             <input type="text" id="passOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('passOtpModal')">Cancel</button>
-                <button class="btn-confirm" onclick="verifyPassOTP()">Update</button>
+                <button class="btn-confirm" onclick="verifyPassOTP()">Verify & Update</button>
             </div>
         </div>
     </div>
@@ -425,7 +469,7 @@
     <div class="center-modal-overlay" id="deleteWarnModal">
         <div class="center-box" style="border: 1px solid var(--danger);">
             <h3 style="margin-top: 0; color: var(--danger);">Confirm Deletion</h3>
-            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">An OTP will be sent to verify deletion.</p>
+            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">An OTP will be sent to your email to verify account deletion.</p>
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteWarnModal')">Cancel</button>
                 <button class="btn-confirm btn-danger" onclick="sendDeleteOTP()">Send OTP</button>
@@ -440,30 +484,54 @@
             <input type="text" id="deleteOtp" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="text-align: center; letter-spacing: 5px; margin-top:0;">
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('deleteOtpModal')">Cancel</button>
-                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete</button>
+                <button class="btn-confirm btn-danger" onclick="verifyDeleteOTP()">Delete Forever</button>
             </div>
         </div>
     </div>
 
     <script>
-        // INIT DATA & LOGIC
+        // INIT DATA, REAL STREAK & SLIDER
         window.onload = function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.getElementById('themeToggle').checked = true;
 
             const savedPic = localStorage.getItem('kiyo_profile_pic');
             if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
 
+            checkRealStreak();
             updateProfileDOM();
             startSlider();
         };
 
+        // REAL STREAK LOGIC (Resets to 0 if 1 day missed)
+        function checkRealStreak() {
+            const lastLogin = localStorage.getItem('kiyo_last_login_date');
+            const today = new Date().toDateString();
+            let streak = parseInt(localStorage.getItem('kiyo_streak_count') || '0');
+
+            if (!lastLogin) {
+                streak = 1;
+            } else if (lastLogin !== today) {
+                const lastDate = new Date(lastLogin);
+                const currentDate = new Date(today);
+                const diffTime = Math.abs(currentDate - lastDate);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays === 1) {
+                    streak += 1; // Consecutive login
+                } else if (diffDays > 1) {
+                    streak = 0; // Streak broken! Missed 1+ days
+                }
+            }
+
+            localStorage.setItem('kiyo_last_login_date', today);
+            localStorage.setItem('kiyo_streak_count', streak);
+            document.getElementById('streakCount').innerText = streak;
+        }
+
         function updateProfileDOM() {
             const userName = localStorage.getItem('kiyo_user_name') || 'Student';
             
-            // Sleek Greeting in Topbar
             document.getElementById('topGreeting').innerText = `Hi, ${userName.split(' ')[0]} 👋`;
-
-            // Menu Profile Details
             document.getElementById('menuUserName').innerHTML = `${userName} <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i>`;
             
             const savedState = localStorage.getItem('kiyo_user_state') || 'State';
@@ -478,24 +546,22 @@
                 document.getElementById('menuUserAge').innerText = '18';
             }
 
-            // Home Card Details
             document.getElementById('homeClass').innerText = localStorage.getItem('kiyo_class') || 'N/A';
             document.getElementById('homeGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || 'N/A';
 
-            // Check Payment Status to update Smart Batch Card
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
             if(isPaid) {
                 const btn = document.getElementById('homeBatchBtn');
                 btn.innerHTML = `Resume Your Batch <i class="fa-solid fa-play"></i>`;
                 btn.className = "batch-status-btn btn-active";
-                btn.href = "study.html"; // Routes to study page if paid
+                btn.href = "study.html";
             }
         }
 
         // REAL GPS LOCATION AUTO-DETECT API
         function autoDetectLocation() {
             const btn = document.getElementById('gpsBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting GPS Location...`;
             
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async function(position) {
@@ -503,13 +569,11 @@
                     const lon = position.coords.longitude;
                     
                     try {
-                        // Free Reverse Geocoding API (OpenStreetMap)
                         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                         const data = await response.json();
                         
                         if(data && data.address) {
                             const state = data.address.state || '';
-                            // Can be city, town, or village depending on the exact location
                             const city = data.address.city || data.address.town || data.address.village || data.address.county || '';
                             
                             document.getElementById('editState').value = state;
@@ -520,18 +584,18 @@
                         }
                     } catch(error) {
                         showToast("Failed to fetch location details.", "danger");
-                        btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location`;
+                        btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
                     }
                 }, function(error) {
                     showToast("Please allow location access in browser.", "danger");
-                    btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location`;
+                    btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
                 });
             } else {
                 showToast("Geolocation is not supported by your browser.", "danger");
             }
         }
 
-        // IMAGE SLIDER LOGIC
+        // MULTI-BANNER SLIDER LOGIC
         let currentSlide = 0;
         function startSlider() {
             const slides = document.getElementById('slides');
@@ -544,7 +608,7 @@
                 slides.style.transform = `translateX(-${currentSlide * 100}%)`;
                 dots.forEach(d => d.classList.remove('active'));
                 dots[currentSlide].classList.add('active');
-            }, 3000); 
+            }, 3500); 
         }
 
         function toggleSidebar() {
@@ -604,7 +668,7 @@
                 document.getElementById('editDob').value = localStorage.getItem('kiyo_user_dob') || '';
                 document.getElementById('editState').value = localStorage.getItem('kiyo_user_state') || '';
                 document.getElementById('editCity').value = localStorage.getItem('kiyo_user_city') || '';
-                document.getElementById('gpsBtn').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location`;
+                document.getElementById('gpsBtn').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
             }
         }
         function closeCenterModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -624,16 +688,17 @@
             
             updateProfileDOM(); 
             closeCenterModal('editProfileModal');
-            showToast('Profile Updated');
+            showToast('Profile Updated Successfully');
         }
 
+        // REAL BACKEND OTP FLOWS
         async function sendPassOTP() {
             const newPass = document.getElementById('newPass').value;
             const confirmPass = document.getElementById('confirmPass').value;
-            if(newPass.length < 6) return showToast('Min 6 chars', 'danger');
+            if(newPass.length < 6) return showToast('Min 6 chars required', 'danger');
             if(newPass !== confirmPass) return showToast('Passwords mismatch', 'danger');
             
-            showToast('Sending OTP...');
+            showToast('Sending OTP to email...');
             const email = localStorage.getItem('kiyo_user_email');
             try {
                 const res = await fetch('/api/send-pass-change-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
@@ -649,13 +714,13 @@
 
             try {
                 const res = await fetch('/api/verify-pass-change', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp, newPassword: newPass}) });
-                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated!'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
+                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated Successfully!'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
                 else showToast('Invalid OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
 
         async function sendDeleteOTP() {
-            showToast('Sending OTP...');
+            showToast('Sending Deletion OTP...');
             const email = localStorage.getItem('kiyo_user_email');
             try {
                 const res = await fetch('/api/send-delete-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
@@ -670,7 +735,7 @@
 
             try {
                 const res = await fetch('/api/delete-account', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp}) });
-                if(res.ok) { showToast('Account Deleted!'); setTimeout(logout, 1500); }
+                if(res.ok) { showToast('Account Deleted'); setTimeout(logout, 1500); }
                 else showToast('Invalid OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
