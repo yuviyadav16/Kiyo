@@ -58,31 +58,21 @@
 
         .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;}
         
-        /* NATIONAL BOARDS GRID */
-        .national-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-        .board-card { padding: 20px 15px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); background: var(--surface-color); cursor: pointer;}
+        /* 2-COLUMN GRID (Matching Screenshot) */
+        .board-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .board-card { padding: 25px 15px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); background: var(--surface-color); cursor: pointer;}
         .board-card:active { transform: scale(0.96); }
         .board-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
         .board-card h4 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.2;}
         .board-card p { margin: 0; font-size: 11px; font-weight: 600; color: var(--text-muted); }
 
-        .icon-cbse { background: #e0f2fe; color: #0284c7; }
-        .icon-icse { background: #fef9c3; color: #ca8a04; }
-        .icon-state { background: #f3e8ff; color: #9333ea; }
-
-        /* STATE BOARDS HORIZONTAL SLIDER */
-        .slider-container { width: 100%; overflow-x: auto; padding-bottom: 15px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; display: flex; gap: 15px;}
-        .slider-container::-webkit-scrollbar { display: none; }
-        .state-card { min-width: 140px; padding: 20px 15px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); background: var(--surface-color); cursor: pointer; flex-shrink: 0;}
-        .state-card:active { transform: scale(0.96); }
-
-        /* ALL STATES VERTICAL LIST (For Search) */
-        .all-states-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; display: none;}
-        .list-item { background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; }
-        .list-item:active { transform: scale(0.98); }
-        .list-item-left { display: flex; align-items: center; gap: 15px; }
-        .list-item-left i { font-size: 20px; color: var(--primary); background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 10px;}
-        .list-item-left span { font-size: 14px; font-weight: 800; color: var(--text-main); }
+        /* Icon Colors */
+        .icon-blue { background: #e0f2fe; color: #0284c7; }
+        .icon-yellow { background: #fef9c3; color: #ca8a04; }
+        .icon-green { background: #dcfce7; color: #16a34a; }
+        .icon-purple { background: #f3e8ff; color: #9333ea; }
+        .icon-orange { background: #ffedd5; color: #ea580c; }
+        .icon-red { background: #ffe4e6; color: #e11d48; }
 
         /* COMING SOON MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
@@ -96,13 +86,7 @@
         .btn-okay { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; }
         .btn-okay:active { transform: scale(0.96); }
 
-        .not-found { display: none; text-align: center; font-weight: 800; color: var(--text-muted); font-size: 14px; margin-top: 30px; }
-
-        /* BOTTOM NAVIGATION */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 700; transition: 0.2s; width: 25%; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--primary); }
+        .not-found { display: none; text-align: center; font-weight: 800; color: var(--text-muted); font-size: 14px; margin-top: 30px; grid-column: 1 / -1;}
     </style>
 </head>
 <body>
@@ -120,92 +104,131 @@
             <input type="text" class="search-input" placeholder="Search your Board or State..." onkeyup="filterBoards(this.value)">
         </div>
 
-        <div id="mainView">
-            <div class="section-title">National Boards</div>
-            <!-- NATIONAL BOARDS -->
-            <div class="national-grid">
-                <div class="board-card" onclick="openComingSoon('CBSE Board')">
-                    <div class="board-icon icon-cbse"><i class="fa-solid fa-book-open"></i></div>
-                    <h4>CBSE</h4>
-                    <p>Classes 9 to 12</p>
-                </div>
-                <div class="board-card" onclick="openComingSoon('ICSE / ISC Board')">
-                    <div class="board-icon icon-icse"><i class="fa-solid fa-school"></i></div>
-                    <h4>ICSE</h4>
-                    <p>Classes 9 to 12</p>
-                </div>
+        <div class="section-title">National Boards</div>
+        <div class="board-grid">
+            <div class="board-card" onclick="smartNavigate('cbse-board.html', 'CBSE Board')" data-search="cbse national board delhi">
+                <div class="board-icon icon-blue"><i class="fa-solid fa-book-open"></i></div>
+                <h4>CBSE</h4>
+                <p>Classes 9 to 12</p>
             </div>
+            <div class="board-card" onclick="smartNavigate('icse-board.html', 'ICSE Board')" data-search="icse isc cisce national board">
+                <div class="board-icon icon-yellow"><i class="fa-solid fa-school"></i></div>
+                <h4>ICSE</h4>
+                <p>Classes 9 to 12</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('nios-board.html', 'NIOS Board')" data-search="nios open school national board">
+                <div class="board-icon icon-green"><i class="fa-solid fa-globe"></i></div>
+                <h4>NIOS</h4>
+                <p>Open Schooling</p>
+            </div>
+        </div>
 
-            <div class="section-title">Top State Boards <i class="fa-solid fa-arrow-right-long"></i></div>
+        <div class="section-title">Top State Boards</div>
+        <div class="board-grid">
+            <div class="board-card" onclick="smartNavigate('bihar-board.html', 'Bihar Board (BSEB)')" data-search="bihar bseb state board patna">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>Bihar</h4>
+                <p>BSEB Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('up-board.html', 'Uttar Pradesh Board')" data-search="uttar pradesh up upmsp state board lucknow">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>Uttar Pradesh</h4>
+                <p>UPMSP Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('maharashtra-board.html', 'Maharashtra Board')" data-search="maharashtra msbshse state board mumbai">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>Maharashtra</h4>
+                <p>MSBSHSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('rajasthan-board.html', 'Rajasthan Board (RBSE)')" data-search="rajasthan rbse state board jaipur">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>Rajasthan</h4>
+                <p>RBSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('mp-board.html', 'MP Board (MPBSE)')" data-search="madhya pradesh mp mpbse state board bhopal">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>Madhya Pradesh</h4>
+                <p>MPBSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('west-bengal-board.html', 'West Bengal Board')" data-search="west bengal wb wbchse state board kolkata">
+                <div class="board-icon icon-purple"><i class="fa-solid fa-map-location-dot"></i></div>
+                <h4>West Bengal</h4>
+                <p>WBCHSE Board</p>
+            </div>
+        </div>
+
+        <div class="section-title">All Other State Boards</div>
+        <div class="board-grid">
+            <div class="board-card" onclick="smartNavigate('andhra-board.html', 'Andhra Pradesh Board')" data-search="andhra pradesh ap state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Andhra Pradesh</h4><p>BIEAP Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('assam-board.html', 'Assam Board (SEBA)')" data-search="assam seba state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Assam</h4><p>SEBA Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('chhattisgarh-board.html', 'Chhattisgarh Board')" data-search="chhattisgarh cgbse state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Chhattisgarh</h4><p>CGBSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('gujarat-board.html', 'Gujarat Board (GSEB)')" data-search="gujarat gseb state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Gujarat</h4><p>GSEB Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('haryana-board.html', 'Haryana Board (BSEH)')" data-search="haryana bseh state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Haryana</h4><p>BSEH Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('jharkhand-board.html', 'Jharkhand Board (JAC)')" data-search="jharkhand jac state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Jharkhand</h4><p>JAC Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('karnataka-board.html', 'Karnataka Board')" data-search="karnataka kseab state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Karnataka</h4><p>KSEAB Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('kerala-board.html', 'Kerala Board')" data-search="kerala dhse state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Kerala</h4><p>DHSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('odisha-board.html', 'Odisha Board')" data-search="odisha bse chse state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Odisha</h4><p>CHSE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('punjab-board.html', 'Punjab Board (PSEB)')" data-search="punjab pseb state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Punjab</h4><p>PSEB Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('tamil-nadu-board.html', 'Tamil Nadu Board')" data-search="tamil nadu tn state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Tamil Nadu</h4><p>TNDGE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('telangana-board.html', 'Telangana Board')" data-search="telangana ts state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Telangana</h4><p>TSBIE Board</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('uttarakhand-board.html', 'Uttarakhand Board')" data-search="uttarakhand ubse state board">
+                <div class="board-icon icon-orange"><i class="fa-solid fa-map"></i></div>
+                <h4>Uttarakhand</h4><p>UBSE Board</p>
+            </div>
             
-            <!-- HORIZONTAL SWIPE SLIDER -->
-            <div class="slider-container">
-                <div class="state-card" onclick="openComingSoon('Bihar Board (BSEB)')">
-                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h4>Bihar</h4>
-                    <p>BSEB Board</p>
-                </div>
-                <div class="state-card" onclick="openComingSoon('UP Board')">
-                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h4>Uttar Pradesh</h4>
-                    <p>UPMSP Board</p>
-                </div>
-                <div class="state-card" onclick="openComingSoon('Maharashtra Board')">
-                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h4>Maharashtra</h4>
-                    <p>MSBSHSE Board</p>
-                </div>
-                <div class="state-card" onclick="openComingSoon('Rajasthan Board (RBSE)')">
-                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h4>Rajasthan</h4>
-                    <p>RBSE Board</p>
-                </div>
-                <div class="state-card" onclick="openComingSoon('MP Board')">
-                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
-                    <h4>Madhya Pradesh</h4>
-                    <p>MPBSE Board</p>
-                </div>
+            <div class="not-found" id="notFoundMsg">No Board Found. Please check spelling.</div>
+        </div>
+
+        <div class="section-title">International Boards</div>
+        <div class="board-grid">
+            <div class="board-card" onclick="smartNavigate('ib-board.html', 'IB Board')" data-search="ib international baccalaureate">
+                <div class="board-icon icon-red"><i class="fa-solid fa-earth-americas"></i></div>
+                <h4>IB Board</h4>
+                <p>International</p>
+            </div>
+            <div class="board-card" onclick="smartNavigate('cambridge-board.html', 'Cambridge Board')" data-search="cambridge igcse international">
+                <div class="board-icon icon-red"><i class="fa-solid fa-building-columns"></i></div>
+                <h4>Cambridge</h4>
+                <p>IGCSE</p>
             </div>
         </div>
 
-        <!-- HIDDEN LIST FOR SEARCH FILTERING (All 29 States) -->
-        <div class="section-title" id="searchTitle" style="display:none; margin-top:10px;">Search Results</div>
-        <div class="all-states-list" id="searchList">
-            <!-- National -->
-            <div class="list-item" data-name="cbse national board" onclick="openComingSoon('CBSE Board')"><div class="list-item-left"><i class="fa-solid fa-book"></i><span>CBSE Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="icse isc national board" onclick="openComingSoon('ICSE Board')"><div class="list-item-left"><i class="fa-solid fa-book"></i><span>ICSE Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <!-- All 28 States -->
-            <div class="list-item" data-name="andhra pradesh ap state board" onclick="openComingSoon('Andhra Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Andhra Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="arunachal pradesh state board" onclick="openComingSoon('Arunachal Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Arunachal Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="assam state board seba" onclick="openComingSoon('Assam Board (SEBA)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Assam Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="bihar bseb state board" onclick="openComingSoon('Bihar Board (BSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Bihar Board (BSEB)</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="chhattisgarh state board" onclick="openComingSoon('Chhattisgarh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Chhattisgarh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="goa state board" onclick="openComingSoon('Goa Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Goa Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="gujarat gseb state board" onclick="openComingSoon('Gujarat Board (GSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Gujarat Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="haryana state board" onclick="openComingSoon('Haryana Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Haryana Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="himachal pradesh hpbose state board" onclick="openComingSoon('Himachal Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Himachal Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="jharkhand jac state board" onclick="openComingSoon('Jharkhand Board (JAC)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Jharkhand Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="karnataka state board" onclick="openComingSoon('Karnataka Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Karnataka Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="kerala state board" onclick="openComingSoon('Kerala Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Kerala Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="madhya pradesh mpbse state board" onclick="openComingSoon('MP Board (MPBSE)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Madhya Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="maharashtra msbshse state board" onclick="openComingSoon('Maharashtra Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Maharashtra Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="manipur state board" onclick="openComingSoon('Manipur Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Manipur Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="meghalaya state board" onclick="openComingSoon('Meghalaya Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Meghalaya Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="mizoram state board" onclick="openComingSoon('Mizoram Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Mizoram Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="nagaland state board" onclick="openComingSoon('Nagaland Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Nagaland Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="odisha state board" onclick="openComingSoon('Odisha Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Odisha Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="punjab pseb state board" onclick="openComingSoon('Punjab Board (PSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Punjab Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="rajasthan rbse state board" onclick="openComingSoon('Rajasthan Board (RBSE)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Rajasthan Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="sikkim state board" onclick="openComingSoon('Sikkim Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Sikkim Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="tamil nadu state board" onclick="openComingSoon('Tamil Nadu Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Tamil Nadu Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="telangana state board" onclick="openComingSoon('Telangana Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Telangana Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="tripura state board" onclick="openComingSoon('Tripura Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Tripura Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="uttar pradesh upmsp up board state board" onclick="openComingSoon('UP Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Uttar Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="uttarakhand state board" onclick="openComingSoon('Uttarakhand Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Uttarakhand Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-            <div class="list-item" data-name="west bengal state board" onclick="openComingSoon('West Bengal Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>West Bengal Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
-        </div>
-
-        <div class="not-found" id="notFoundMsg">No Board Found. Please check spelling.</div>
     </div>
 
     <!-- COMING SOON CUTE MODAL -->
@@ -218,60 +241,55 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION -->
-    <div class="bottom-nav">
-        <a href="dashboard.html" class="nav-item">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
-        </a>
-        <a href="batches.html" class="nav-item active">
-            <i class="fa-solid fa-box-open"></i>
-            <span>Batches</span>
-        </a>
-        <a href="study.html" class="nav-item">
-            <i class="fa-solid fa-book-open"></i>
-            <span>Study</span>
-        </a>
-        <a href="coming-soon.html" class="nav-item">
-            <i class="fa-solid fa-layer-group"></i>
-            <span>Other</span>
-        </a>
-    </div>
-
     <script>
+        // SMART ANTI-404 SYSTEM
+        async function smartNavigate(targetUrl, boardName) {
+            const btn = event.currentTarget;
+            const originalHTML = btn.innerHTML;
+            
+            // Add a small loading state to the button clicked
+            const titleElement = btn.querySelector('h4');
+            const originalTitle = titleElement.innerText;
+            titleElement.innerText = "Checking...";
+
+            try {
+                // Background check if the HTML file exists
+                const response = await fetch(targetUrl, { method: 'HEAD' });
+                
+                if (response.ok) {
+                    // If file exists (status 200), redirect instantly
+                    window.location.href = targetUrl;
+                } else {
+                    // If file missing (404), show Coming Soon modal
+                    titleElement.innerText = originalTitle;
+                    openComingSoon(boardName);
+                }
+            } catch (error) {
+                // If fetch fails (CORS/Network error), be safe and show modal
+                titleElement.innerText = originalTitle;
+                openComingSoon(boardName);
+            }
+        }
+
         // Search & Filter Logic
         function filterBoards(query) {
             const q = query.toLowerCase().trim();
-            const mainView = document.getElementById('mainView');
-            const searchList = document.getElementById('searchList');
-            const searchTitle = document.getElementById('searchTitle');
-            const notFoundMsg = document.getElementById('notFoundMsg');
-            const items = document.querySelectorAll('.list-item');
-            
-            if (q === '') {
-                mainView.style.display = 'block';
-                searchList.style.display = 'none';
-                searchTitle.style.display = 'none';
-                notFoundMsg.style.display = 'none';
-                return;
-            }
-
-            mainView.style.display = 'none';
-            searchList.style.display = 'flex';
-            searchTitle.style.display = 'block';
-
+            const cards = document.querySelectorAll('.board-card');
             let foundCount = 0;
-            items.forEach(item => {
-                const searchTags = item.getAttribute('data-name') || '';
-                if (searchTags.includes(q)) {
-                    item.style.display = 'flex';
+
+            cards.forEach(card => {
+                const searchTags = card.getAttribute('data-search') || '';
+                const titleText = card.innerText.toLowerCase();
+                
+                if (searchTags.includes(q) || titleText.includes(q) || q === '') {
+                    card.style.display = 'flex';
                     foundCount++;
                 } else {
-                    item.style.display = 'none';
+                    card.style.display = 'none';
                 }
             });
 
-            notFoundMsg.style.display = foundCount === 0 ? 'block' : 'none';
+            document.getElementById('notFoundMsg').style.display = foundCount === 0 ? 'block' : 'none';
         }
 
         // Modal Logic
@@ -286,4 +304,3 @@
     </script>
 </body>
 </html>
-
