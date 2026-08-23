@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CBSE Batches - Kiyo AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        if(!localStorage.getItem('kiyo_user_email')) window.location.replace("login.html");
+        if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
+    </script>
+
+    <style>
+        :root {
+            --primary: #8b5cf6; 
+            --accent-green: #10b981; 
+            --gold: #f59e0b;
+            --bg-top: #f3e8ff; 
+            --bg-bottom: #ffffff;
+            --surface-color: #ffffff;
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+            --nav-bg: #ffffff;
+            --card-gradient: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%);
+        }
+
+        html.dark-theme {
+            --bg-top: #0f111a; 
+            --bg-bottom: #0B101E;
+            --surface-color: #121826;
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border-color: rgba(255,255,255,0.05);
+            --nav-bg: #121826;
+            --card-gradient: linear-gradient(135deg, #7e22ce, #4c1d95);
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100dvh; 
+            background: linear-gradient(180deg, var(--bg-top) 0%, #f8fafc 45%, var(--bg-bottom) 100%);
+            background-attachment: fixed;
+            color: var(--text-main); font-family: system-ui, sans-serif; 
+            overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* TOPBAR */
+        .topbar { display: flex; align-items: center; gap: 15px; padding: 15px 20px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);}
+        html.dark-theme .topbar { background: rgba(18,24,38,0.8); }
+        .back-btn { font-size: 20px; cursor: pointer; color: var(--text-main); text-decoration: none; transition: 0.2s;}
+        .back-btn:active { transform: scale(0.9); }
+        .greeting { margin: 0; font-size: 18px; font-weight: 900; color: var(--text-main); letter-spacing: -0.5px;}
+
+        .main-content { padding: 15px 20px; padding-bottom: 90px; }
+
+        /* SEARCH BAR */
+        .search-bar { background: var(--surface-color); border-radius: 14px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color); }
+        .search-bar i { color: var(--text-muted); font-size: 15px; }
+        .search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit;}
+
+        /* FILTER CHIPS SLIDER */
+        .chip-slider { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .chip-slider::-webkit-scrollbar { display: none; }
+        .chip { padding: 8px 16px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 20px; font-size: 13px; font-weight: 700; color: var(--text-muted); white-space: nowrap; cursor: pointer; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+        .chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);}
+        .chip:active { transform: scale(0.95); }
+
+        /* BATCH CARDS (16:9 Posters) */
+        .batch-list { display: flex; flex-direction: column; gap: 20px; }
+        .batch-card { background: var(--surface-color); border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 8px 25px rgba(0,0,0,0.03); transition: 0.2s; display: flex; flex-direction: column;}
+        
+        .batch-poster { width: 100%; aspect-ratio: 16 / 9; background: var(--card-gradient); position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; box-sizing: border-box;}
+        .batch-poster h3 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px;}
+        .batch-poster p { margin: 5px 0 0 0; font-size: 12px; font-weight: 700; opacity: 0.9; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px;}
+        .batch-tag { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); color: white; font-size: 10px; font-weight: 800; padding: 4px 8px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
+
+        .batch-details { padding: 15px 20px; }
+        .batch-title { margin: 0 0 8px 0; font-size: 16px; font-weight: 900; color: var(--text-main); }
+        .ai-features { list-style: none; padding: 0; margin: 0 0 15px 0; display: flex; flex-direction: column; gap: 6px; }
+        .ai-features li { font-size: 12px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+        .ai-features i { color: var(--primary); font-size: 14px; width: 15px;}
+
+        .price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 15px; }
+        .price-now { font-size: 20px; font-weight: 900; color: var(--text-main); }
+        .price-old { font-size: 13px; font-weight: 600; color: var(--text-muted); text-decoration: line-through; }
+        .discount-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); font-size: 10px; font-weight: 900; padding: 3px 8px; border-radius: 6px; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn-view { flex: 1; padding: 12px; background: transparent; border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main); font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s;}
+        .btn-buy { flex: 1; padding: 12px; background: var(--primary); border: none; border-radius: 12px; color: white; font-weight: 800; font-size: 13px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);}
+        .btn-view:active, .btn-buy:active { transform: scale(0.96); }
+
+        .not-found { display: none; text-align: center; font-weight: 800; color: var(--text-muted); font-size: 14px; margin-top: 30px; }
+
+        /* MODAL FOR VIEW DETAILS */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-box { background: var(--surface-color); padding: 25px 20px; border-radius: 24px 24px 0 0; width: 100%; max-height: 80vh; overflow-y: auto; transform: translateY(100%); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.1); }
+        .modal-overlay.active .modal-box { transform: translateY(0); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px;}
+        .modal-title { margin: 0; font-size: 18px; font-weight: 900; color: var(--text-main); }
+        .close-modal { font-size: 24px; color: var(--text-muted); cursor: pointer; }
+        .syllabus-list { padding-left: 20px; color: var(--text-muted); font-weight: 600; font-size: 13px; margin-bottom: 20px; line-height: 1.6;}
+        
+        .modal-buy-btn { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 14px; color: white; font-weight: 900; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);}
+        .modal-buy-btn:active { transform: scale(0.96); }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="school-boards.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="greeting">CBSE Board Batches</h2>
+    </div>
+
+    <div class="main-content">
+        
+        <!-- SEARCH BAR -->
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search Class, Stream or Batch..." onkeyup="filterBatches()">
+        </div>
+
+        <!-- SMART FILTER CHIPS -->
+        <div class="chip-slider" id="chipContainer">
+            <div class="chip active" onclick="setFilter('All', this)">All Batches</div>
+            <div class="chip" onclick="setFilter('Class 9', this)">Class 9</div>
+            <div class="chip" onclick="setFilter('Class 10', this)">Class 10</div>
+            <div class="chip" onclick="setFilter('Class 11 PCM', this)">11 PCM</div>
+            <div class="chip" onclick="setFilter('Class 11 PCB', this)">11 PCB</div>
+            <div class="chip" onclick="setFilter('Class 11 Commerce', this)">11 Commerce</div>
+            <div class="chip" onclick="setFilter('Class 11 Arts', this)">11 Arts</div>
+            <div class="chip" onclick="setFilter('Class 12 PCM', this)">12 PCM</div>
+            <div class="chip" onclick="setFilter('Class 12 PCB', this)">12 PCB</div>
+            <div class="chip" onclick="setFilter('Class 12 Commerce', this)">12 Commerce</div>
+            <div class="chip" onclick="setFilter('Class 12 Arts', this)">12 Arts</div>
+        </div>
+
+        <!-- BATCHES LIST CONTAINER -->
+        <div class="batch-list" id="batchList">
+            <!-- Dynamic Content will load here -->
+        </div>
+
+        <div class="not-found" id="notFoundMsg">No batches found for this category.</div>
+    </div>
+
+    <!-- VIEW DETAILS MODAL -->
+    <div class="modal-overlay" id="detailsModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalBatchName">Batch Details</h3>
+                <i class="fa-solid fa-xmark close-modal" onclick="closeDetails()"></i>
+            </div>
+            
+            <h4 style="margin:0 0 10px 0; color:var(--text-main); font-weight:800; font-size:14px;">Why choose Kiyo AI for this?</h4>
+            <ul style="list-style: none; padding: 0; margin: 0 0 20px 0; display: flex; flex-direction: column; gap: 8px;">
+                <li style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-robot" style="color:var(--primary);"></i> 100% Self-Paced Learning</li>
+                <li style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-bolt" style="color:var(--primary);"></i> Instant 24/7 AI Doubt Solver</li>
+                <li style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-file-pdf" style="color:var(--primary);"></i> Smart Generated Notes & DPPs</li>
+                <li style="font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-bullseye" style="color:var(--primary);"></i> AI Weakness Tracker & Mock Tests</li>
+            </ul>
+
+            <h4 style="margin:0 0 10px 0; color:var(--text-main); font-weight:800; font-size:14px;">Target Subjects</h4>
+            <ul class="syllabus-list" id="modalSyllabus">
+                <!-- Syllabus injected via JS -->
+            </ul>
+
+            <button class="modal-buy-btn" id="modalBuyBtn" onclick="">Enroll Now - ₹<span id="modalPrice"></span></button>
+        </div>
+    </div>
+
+    <script>
+        // BATCH DATA SYSTEM (100% AI Centric, Original Names)
+        const batches = [
+            {
+                id: "b1", name: "Kiyo Spark 2026", class: "Class 9", stream: "Foundation", 
+                category: "Class 9", tags: "class 9 cbse spark foundation math science",
+                price: "999", oldPrice: "2999", discount: "66%",
+                gradient: "linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)", // Blue
+                subjects: ["Mathematics", "Science (Phy, Chem, Bio)", "Social Science", "English & Hindi Grammar"]
+            },
+            {
+                id: "b2", name: "Kiyo Pinnacle 2026", class: "Class 10", stream: "Board Booster", 
+                category: "Class 10", tags: "class 10 cbse pinnacle boards math science",
+                price: "1299", oldPrice: "3999", discount: "67%",
+                gradient: "linear-gradient(135deg, #10b981 0%, #047857 100%)", // Green
+                subjects: ["Mathematics (Standard/Basic)", "Science Full Syllabus", "Social Science (SST)", "English (Lit & Grammar)"]
+            },
+            {
+                id: "b3", name: "Kiyo Apex (PCM)", class: "Class 11", stream: "Science (PCM)", 
+                category: "Class 11 PCM", tags: "class 11 pcm science physics chemistry math apex",
+                price: "1999", oldPrice: "4999", discount: "60%",
+                gradient: "linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)", // Purple
+                subjects: ["Physics (Core Concepts)", "Chemistry (Physical, Organic, Inorganic)", "Mathematics", "English Core"]
+            },
+            {
+                id: "b4", name: "Kiyo Apex (PCB)", class: "Class 11", stream: "Science (PCB)", 
+                category: "Class 11 PCB", tags: "class 11 pcb science physics chemistry biology apex",
+                price: "1999", oldPrice: "4999", discount: "60%",
+                gradient: "linear-gradient(135deg, #f43f5e 0%, #be123c 100%)", // Rose/Red
+                subjects: ["Physics (Core Concepts)", "Chemistry (Physical, Organic, Inorganic)", "Biology (Botany & Zoology)", "English Core"]
+            },
+            {
+                id: "b5", name: "Kiyo Apex (Commerce)", class: "Class 11", stream: "Commerce", 
+                category: "Class 11 Commerce", tags: "class 11 commerce accounts economics bst apex",
+                price: "1799", oldPrice: "3999", discount: "55%",
+                gradient: "linear-gradient(135deg, #f59e0b 0%, #b45309 100%)", // Amber/Gold
+                subjects: ["Accountancy", "Economics (Micro & Stats)", "Business Studies", "Applied Math / English"]
+            },
+            {
+                id: "b6", name: "Kiyo Apex (Arts)", class: "Class 11", stream: "Humanities / Arts", 
+                category: "Class 11 Arts", tags: "class 11 arts humanities history geography polity apex",
+                price: "1499", oldPrice: "3499", discount: "57%",
+                gradient: "linear-gradient(135deg, #ec4899 0%, #be185d 100%)", // Pink
+                subjects: ["History", "Political Science", "Geography", "Sociology & English"]
+            },
+            {
+                id: "b7", name: "Kiyo Zenith (PCM)", class: "Class 12", stream: "Science (PCM)", 
+                category: "Class 12 PCM", tags: "class 12 pcm science physics chemistry math boards zenith",
+                price: "2499", oldPrice: "5999", discount: "58%",
+                gradient: "linear-gradient(135deg, #6366f1 0%, #4338ca 100%)", // Indigo
+                subjects: ["Physics (Board Level)", "Chemistry (Board Level)", "Mathematics (Calculus focused)", "English Core"]
+            },
+            {
+                id: "b8", name: "Kiyo Zenith (PCB)", class: "Class 12", stream: "Science (PCB)", 
+                category: "Class 12 PCB", tags: "class 12 pcb science physics chemistry biology boards zenith",
+                price: "2499", oldPrice: "5999", discount: "58%",
+                gradient: "linear-gradient(135deg, #14b8a6 0%, #0f766e 100%)", // Teal
+                subjects: ["Physics (Board Level)", "Chemistry (Board Level)", "Biology (Genetics, Biotech)", "English Core"]
+            }
+        ];
+
+        let currentFilter = 'All';
+
+        function renderBatches(filterText = '', chipFilter = 'All') {
+            const listContainer = document.getElementById('batchList');
+            const notFound = document.getElementById('notFoundMsg');
+            listContainer.innerHTML = '';
+            
+            let count = 0;
+            const query = filterText.toLowerCase().trim();
+
+            batches.forEach((b, index) => {
+                // Filter Logic
+                const matchesChip = (chipFilter === 'All' || b.category === chipFilter);
+                const matchesSearch = (b.tags.includes(query) || b.name.toLowerCase().includes(query) || b.category.toLowerCase().includes(query));
+
+                if (matchesChip && matchesSearch) {
+                    count++;
+                    const cardHTML = `
+                        <div class="batch-card">
+                            <div class="batch-poster" style="background: ${b.gradient};">
+                                <div class="batch-tag">CBSE ${b.class}</div>
+                                <h3>${b.name.split(' (')[0]}</h3>
+                                <p>${b.class} ${b.stream}</p>
+                            </div>
+                            <div class="batch-details">
+                                <h4 class="batch-title">${b.name} - Complete AI Masterclass</h4>
+                                <ul class="ai-features">
+                                    <li><i class="fa-solid fa-robot"></i> 24/7 AI Doubt Solver included</li>
+                                    <li><i class="fa-solid fa-file-pdf"></i> Smart AI Generated Notes & DPPs</li>
+                                    <li><i class="fa-solid fa-bullseye"></i> AI Weakness Tracker</li>
+                                </ul>
+                                <div class="price-row">
+                                    <span class="price-now">₹${b.price}</span>
+                                    <span class="price-old">${b.oldPrice}</span>
+                                    <span class="discount-badge">${b.discount} OFF</span>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn-view" onclick="openDetails(${index})">View Details</button>
+                                    <button class="btn-buy" onclick="buyBatch('${b.name}', '${b.price}', '${b.category}')">Buy Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listContainer.insertAdjacentHTML('beforeend', cardHTML);
+                }
+            });
+
+            notFound.style.display = (count === 0) ? 'block' : 'none';
+        }
+
+        function filterBatches() {
+            const query = document.getElementById('searchInput').value;
+            renderBatches(query, currentFilter);
+        }
+
+        function setFilter(category, element) {
+            currentFilter = category;
+            
+            // UI Update for chips
+            const chips = document.querySelectorAll('.chip');
+            chips.forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Clear Search input when switching tabs
+            document.getElementById('searchInput').value = '';
+
+            renderBatches('', category);
+        }
+
+        function openDetails(index) {
+            const batch = batches[index];
+            document.getElementById('modalBatchName').innerText = batch.name;
+            document.getElementById('modalPrice').innerText = batch.price;
+            
+            const syllabusList = document.getElementById('modalSyllabus');
+            syllabusList.innerHTML = '';
+            batch.subjects.forEach(sub => {
+                syllabusList.innerHTML += `<li>${sub}</li>`;
+            });
+
+            // Attach Buy function to modal button
+            document.getElementById('modalBuyBtn').onclick = () => buyBatch(batch.name, batch.price, batch.category);
+
+            document.getElementById('detailsModal').classList.add('active');
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsModal').classList.remove('active');
+        }
+
+        function buyBatch(name, price, category) {
+            // Save context for Payment Page
+            localStorage.setItem('kiyo_checkout_batch_name', name);
+            localStorage.setItem('kiyo_checkout_batch_price', price);
+            localStorage.setItem('kiyo_checkout_batch_category', category);
+            localStorage.setItem('kiyo_board', 'CBSE'); // Master context
+            
+            // Redirect to payment
+            window.location.href = 'payment.html';
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderBatches(); // Load all initially
+        }
+    </script>
+</body>
+</html>
+
