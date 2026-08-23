@@ -16,7 +16,7 @@
             --primary: #6366f1; 
             --accent-green: #10b981; 
             --gold: #f59e0b;
-            --bg-top: #f5f7ff; 
+            --bg-top: #ede9fe; 
             --bg-bottom: #ffffff;
             --surface-color: #ffffff;
             --text-main: #0f172a; 
@@ -40,7 +40,7 @@
 
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100dvh; 
-            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 40%, var(--bg-bottom) 100%);
+            background: linear-gradient(180deg, var(--bg-top) 0%, #f8fafc 40%, var(--bg-bottom) 100%);
             background-attachment: fixed;
             color: var(--text-main); font-family: system-ui, sans-serif; 
             overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
@@ -66,7 +66,7 @@
         .settings-search-bar { background: var(--surface-color); border-radius: 100px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer;}
         .settings-search-content { display: flex; align-items: center; gap: 12px; width: 100%; }
         .settings-search-icon { color: var(--text-muted); font-size: 16px; }
-        .settings-search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit;}
+        .settings-search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit; pointer-events: none;}
 
         .external-frame { width: 100%; border: none; border-radius: 20px; overflow: hidden; margin-bottom: 25px; background: transparent; }
 
@@ -121,11 +121,13 @@
         input:checked + .slider-toggle { background-color: var(--primary); }
         input:checked + .slider-toggle:before { transform: translateX(20px); }
 
-        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); text-align: center; }
-        .socials { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
-        .socials a { color: var(--text-muted); font-size: 18px; }
-        .powered { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;}
-        .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
+        /* FOOTER WITH 5 SOCIAL ICONS */
+        .sidebar-footer { padding: 15px 20px; border-top: 1px solid var(--border-color); text-align: center; background: rgba(99, 102, 241, 0.02); }
+        .socials { display: flex; justify-content: center; gap: 15px; margin-bottom: 12px; }
+        .socials a { color: var(--text-muted); font-size: 16px; transition: 0.2s; }
+        .socials a:hover { color: var(--primary); }
+        .powered { font-size: 10px; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; margin-bottom: 4px;}
+        .made-in { font-size: 12px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
         /* FULL SCREEN MODALS */
         .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-bottom); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
@@ -141,6 +143,12 @@
         .setting-item-left { display: flex; align-items: center; gap: 15px; font-size: 15px; font-weight: 700; }
         .setting-item-left i { font-size: 18px; color: var(--primary); width: 24px; text-align: center; }
         .setting-item.danger .setting-item-left i, .setting-item.danger span { color: var(--danger); }
+
+        /* GLOBAL SEARCH MODAL */
+        .search-results-list { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .search-result-card { background: var(--surface-color); padding: 15px 20px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text-main); font-weight: 700; font-size: 14px; transition: 0.2s;}
+        .search-result-card:active { background: rgba(99, 102, 241, 0.05); }
+        .not-found-msg { text-align: center; color: var(--text-muted); font-weight: 700; margin-top: 40px; font-size: 15px; display: none; }
 
         /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
@@ -193,11 +201,11 @@
         <!-- EXTERNAL SLIDER FRAME -->
         <iframe src="slider-data.html" class="external-frame" id="sliderFrame" scrolling="no"></iframe>
 
-        <!-- APP SETTINGS SEARCH BAR -->
-        <div class="settings-search-bar" onclick="focusSettingsSearch()">
+        <!-- GLOBAL APP SEARCH BAR -->
+        <div class="settings-search-bar" onclick="openGlobalSearch()">
             <div class="settings-search-content">
                 <i class="fa-solid fa-magnifying-glass settings-search-icon"></i>
-                <input type="text" class="settings-search-input" id="appSearchInput" placeholder="Search app settings or features..." readonly>
+                <input type="text" class="settings-search-input" placeholder="Search app features, settings, policies..." readonly>
             </div>
         </div>
 
@@ -206,11 +214,11 @@
             <div class="batch-header">
                 <div class="target-box">
                     <span>Your Target</span>
-                    <strong id="homeGoal">Loading...</strong>
+                    <strong id="homeGoal">Not Set</strong>
                 </div>
                 <div class="target-box" style="text-align: right;">
                     <span>Class</span>
-                    <strong id="homeClass">Loading...</strong>
+                    <strong id="homeClass">Not Set</strong>
                 </div>
             </div>
             <a href="payment.html" id="homeBatchBtn" class="batch-status-btn btn-update">
@@ -278,18 +286,51 @@
             <a href="privacy.html" class="menu-item"><i class="fa-solid fa-shield-halved"></i> Privacy Policy</a>
             <a href="support.html" class="menu-item"><i class="fa-solid fa-circle-question"></i> Help & Support</a>
         </div>
+
+        <!-- SIDEBAR FOOTER WITH 5 SOCIAL ICONS -->
+        <div class="sidebar-footer">
+            <div class="socials">
+                <a href="https://youtube.com/@mryuviyadav" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://x.com/mryuviyadav" target="_blank"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="https://t.me/mryuviyadav" target="_blank"><i class="fa-brands fa-telegram"></i></a>
+            </div>
+            <div class="powered">POWERED BY TICBULL</div>
+            <div class="made-in">Made in India 🇮🇳</div>
+        </div>
+    </div>
+
+    <!-- GLOBAL SEARCH FULL MODAL -->
+    <div class="full-modal" id="globalSearchModal">
+        <div class="fm-header">
+            <i class="fa-solid fa-arrow-left" onclick="closeFullModal('globalSearchModal')"></i>
+            <input type="text" id="globalSearchInput" placeholder="Search app features, settings, policies..." style="border:none; outline:none; background:transparent; font-size:16px; font-weight:700; color:var(--text-main); width:100%; font-family:inherit;" onkeyup="performGlobalSearch()" autofocus>
+        </div>
+        <div class="fm-content">
+            <div class="search-results-list" id="searchResultsList">
+                <a href="batches.html" class="search-result-card" data-keywords="batches premium class study"><span>Batches & Courses</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="study.html" class="search-result-card" data-keywords="study material notes pdf"><span>Study Material</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="javascript:void(0)" class="search-result-card" onclick="openCenterModal('editProfileModal'); closeFullModal('globalSearchModal');" data-keywords="profile edit name age address location"><span>Edit Profile & Address</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="javascript:void(0)" class="search-result-card" onclick="openFullModal('settingsModal'); closeFullModal('globalSearchModal');" data-keywords="settings security password delete logout"><span>Settings & Security</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="terms.html" class="search-result-card" data-keywords="terms conditions rules"><span>Terms & Conditions</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="privacy.html" class="search-result-card" data-keywords="privacy policy data secure"><span>Privacy Policy</span> <i class="fa-solid fa-chevron-right"></i></a>
+                <a href="support.html" class="search-result-card" data-keywords="help support contact email"><span>Help & Support</span> <i class="fa-solid fa-chevron-right"></i></a>
+            </div>
+            <div class="not-found-msg" id="notFoundMsg">Not Found</div>
+        </div>
     </div>
 
     <!-- SETTINGS MODAL -->
     <div class="full-modal" id="settingsModal">
         <div class="fm-header">
             <i class="fa-solid fa-arrow-left" onclick="closeFullModal('settingsModal')"></i>
-            <input type="text" id="activeSearchInput" placeholder="Search settings..." style="border:none; outline:none; background:transparent; font-size:16px; font-weight:700; color:var(--text-main); width:100%; font-family:inherit;" onkeyup="searchAppSettings()">
+            <h2>Settings & Security</h2>
         </div>
-        <div class="fm-content" id="settingsContentList">
+        <div class="fm-content">
             <div class="settings-section-title">Account Settings</div>
             <div class="settings-card-group">
-                <div class="setting-item" onclick="openCenterModal('passModal')" data-search="change password security z+">
+                <div class="setting-item" onclick="openCenterModal('passModal')">
                     <div class="setting-item-left">
                         <i class="fa-solid fa-lock"></i>
                         <span>Change Password</span>
@@ -300,7 +341,7 @@
 
             <div class="settings-section-title">Session</div>
             <div class="settings-card-group">
-                <div class="setting-item" onclick="logout()" data-search="logout sign out exit">
+                <div class="setting-item" onclick="logout()">
                     <div class="setting-item-left">
                         <i class="fa-solid fa-right-from-bracket" style="color:var(--primary);"></i>
                         <span style="color:var(--primary);">Logout Account</span>
@@ -311,7 +352,7 @@
 
             <div class="settings-section-title">Danger Zone</div>
             <div class="settings-card-group" style="border-color: rgba(239, 68, 68, 0.3);">
-                <div class="setting-item danger" onclick="openCenterModal('deleteWarnModal')" data-search="delete account remove permanent">
+                <div class="setting-item danger" onclick="openCenterModal('deleteWarnModal')">
                     <div class="setting-item-left">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         <span>Delete Account Permanently</span>
@@ -322,7 +363,7 @@
         </div>
     </div>
 
-    <!-- EDIT PROFILE MODAL (Same as Login Format) -->
+    <!-- EDIT PROFILE MODAL -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main);">Edit Profile</h3>
@@ -419,7 +460,6 @@
     </div>
 
     <script>
-        // ECOSYSTEM SYNC SYSTEM (Direct localStorage connection)
         window.onload = async function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
             
@@ -452,8 +492,6 @@
 
                         if(data.user.isPremium) localStorage.setItem('kiyo_is_premium', data.user.isPremium);
                         if(data.user.activeBatch) localStorage.setItem('kiyo_active_batch', data.user.activeBatch);
-                        if(data.user.board) localStorage.setItem('kiyo_board', data.user.board);
-                        if(data.user.dream) localStorage.setItem('kiyo_dream', data.user.dream);
                     }
                 }
             } catch(e) {
@@ -484,7 +522,6 @@
             if(!name) return showToast('Name is required', 'danger');
             if(!pincode || !state || !city || !area) return showToast('Address details are mandatory', 'danger');
 
-            // DIRECT SAVE TO LOCALSTORAGE FOR SYNC
             localStorage.setItem('kiyo_user_name', name);
             localStorage.setItem('kiyo_user_dob', dob);
             localStorage.setItem('kiyo_pincode', pincode);
@@ -495,7 +532,6 @@
             updateProfileDOM();
             closeCenterModal('editProfileModal');
 
-            // Save to Firebase
             try {
                 showToast('Syncing to Cloud...', 'success');
                 await fetch('/api/save-user-data', {
@@ -532,7 +568,6 @@
         }
 
         function updateProfileDOM() {
-            // DIRECT READ FROM LOCALSTORAGE
             const userName = localStorage.getItem('kiyo_user_name') || 'Student';
             
             document.getElementById('topGreeting').innerText = `Hi, ${userName.split(' ')[0]} 👋`;
@@ -552,12 +587,12 @@
             if(dob) {
                 const birthYear = new Date(dob).getFullYear();
                 if(!isNaN(birthYear)) {
-                    document.getElementById('menuUserAge').innerText = new Date().getFullYear() - birthYear;
+                    document.getElementById('menuUserAge').innerText = (new Date().getFullYear() - birthYear) + ' Years Old';
                 } else {
-                    document.getElementById('menuUserAge').innerText = '18';
+                    document.getElementById('menuUserAge').innerText = '18 Years Old';
                 }
             } else {
-                document.getElementById('menuUserAge').innerText = '18';
+                document.getElementById('menuUserAge').innerText = '18 Years Old';
             }
 
             const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
@@ -573,23 +608,34 @@
                 btn.className = "batch-status-btn btn-active";
                 btn.href = "study.html";
             } else {
-                document.getElementById('homeClass').innerText = localStorage.getItem('kiyo_class') || 'Not Set';
-                document.getElementById('homeGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || 'Not Set';
+                document.getElementById('homeClass').innerText = 'Not Set';
+                document.getElementById('homeGoal').innerText = 'Not Set';
             }
         }
 
-        function focusSettingsSearch() {
-            openFullModal('settingsModal');
-            setTimeout(() => { document.getElementById('activeSearchInput').focus(); }, 300);
+        // GLOBAL APP SEARCH LOGIC
+        function openGlobalSearch() {
+            document.getElementById('globalSearchModal').classList.add('active');
+            setTimeout(() => { document.getElementById('globalSearchInput').focus(); }, 300);
         }
 
-        function searchAppSettings() {
-            const query = document.getElementById('activeSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.setting-item');
-            items.forEach(item => {
-                const keywords = item.getAttribute('data-search') || '';
-                item.style.display = keywords.includes(query) ? 'flex' : 'none';
+        function performGlobalSearch() {
+            const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.search-result-card');
+            let foundCount = 0;
+
+            cards.forEach(card => {
+                const keywords = card.getAttribute('data-keywords') || '';
+                const text = card.innerText.toLowerCase();
+                if(keywords.includes(query) || text.includes(query) || query === '') {
+                    card.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    card.style.display = 'none';
+                }
             });
+
+            document.getElementById('notFoundMsg').style.display = foundCount === 0 ? 'block' : 'none';
         }
 
         // COMPACT GPS LOCATION
@@ -676,7 +722,6 @@
         }
 
         function logout() { 
-            // PREVENT DATA LOSS: Only remove the login flag, keep user details safe in localStorage
             localStorage.removeItem('kiyo_user_email');
             window.location.replace("login.html"); 
         }
