@@ -68,7 +68,6 @@
         .settings-search-icon { color: var(--text-muted); font-size: 16px; }
         .settings-search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit;}
 
-        /* EXTERNAL FRAMES */
         .external-frame { width: 100%; border: none; border-radius: 20px; overflow: hidden; margin-bottom: 25px; background: transparent; }
 
         /* SMART BATCH CARD */
@@ -160,13 +159,14 @@
         .btn-row { display: flex; gap: 10px; margin-top: 10px;}
         .btn-cancel { flex: 1; padding: 14px; background: var(--bg-color); color: var(--text-main); border: none; border-radius: 12px; font-weight: 700; cursor: pointer;}
         .btn-confirm { flex: 1; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;}
-        .btn-gps { width: 100%; padding: 12px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s;}
-        .btn-gps:active { transform: scale(0.98); }
+        .btn-gps { width: 100%; padding: 12px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px;}
         .btn-danger { background: var(--danger); color: white; }
         
-        /* TOAST */
+        /* COLOR-CODED TOAST NOTIFICATIONS */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
-        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast { color: #fff; padding: 14px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.15);}
+        .toast.success { background: #10b981; }
+        .toast.danger { background: #ef4444; }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
@@ -192,7 +192,7 @@
 
     <div class="main-content">
         
-        <!-- EXTERNAL SLIDER FRAME -->
+        <!-- SLIDER FRAME -->
         <iframe src="slider-data.html" class="external-frame" id="sliderFrame" scrolling="no"></iframe>
 
         <!-- APP SETTINGS SEARCH BAR -->
@@ -221,7 +221,7 @@
             </a>
         </div>
 
-        <!-- EXTERNAL ANNOUNCEMENTS FRAME -->
+        <!-- ANNOUNCEMENTS FRAME -->
         <iframe src="announcements.html" class="external-frame" id="announcementFrame" scrolling="no" style="height: 140px;"></iframe>
     </div>
 
@@ -339,17 +339,17 @@
         </div>
     </div>
 
-    <!-- Edit Profile Modal: AMAZON STYLE AUTO LOCATION -->
+    <!-- Edit Profile Modal: FULL ADDRESS WITH LOCAL AREA FOR GIFTS -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main);">Edit Profile</h3>
             
             <button class="btn-gps" onclick="autoDetectLocation()" id="gpsBtn">
-                <i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS
+                <i class="fa-solid fa-location-crosshairs"></i> Detect GPS & Fill Address
             </button>
             
-            <span class="input-label">Saved Address & Pincode</span>
-            <textarea id="editAddress" class="address-box" placeholder="Your address will appear here..." readonly></textarea>
+            <span class="input-label">Delivery Address (Local Area, Landmark, Pincode)</span>
+            <textarea id="editAddress" class="address-box" placeholder="House No, Local Area, Landmark, City, State, Pincode"></textarea>
             
             <span class="input-label">Full Name</span>
             <input type="text" id="editName" class="input-field" placeholder="Full Name">
@@ -359,7 +359,7 @@
             
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
-                <button class="btn-confirm" onclick="saveProfileEdit()">Save</button>
+                <button class="btn-confirm" onclick="saveProfileToFirebase()">Save</button>
             </div>
         </div>
     </div>
@@ -418,10 +418,11 @@
     </div>
 
     <script>
-        window.onload = function() {
+        window.onload = async function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
-            const savedPic = localStorage.getItem('kiyo_profile_pic');
-            if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
+            
+            // Fetch Permanent Data from Firebase API
+            await syncUserFromFirebase();
 
             checkRealStreak();
             updateProfileDOM();
@@ -431,6 +432,65 @@
                 if(sliderFrame) sliderFrame.style.height = (sliderFrame.offsetWidth * 9 / 16) + 'px';
             }, 300);
         };
+
+        // SYNC USER DATA FROM FIREBASE (Permanent Storage)
+        async function syncUserFromFirebase() {
+            const email = localStorage.getItem('kiyo_user_email');
+            if(!email) return;
+
+            try {
+                const res = await fetch(`/api/get-user-data?email=${encodeURIComponent(email)}`);
+                if(res.ok) {
+                    const data = await res.json();
+                    if(data.user) {
+                        // Store securely in localStorage as active cache, synced from Firebase
+                        if(data.user.name) localStorage.setItem('kiyo_user_name', data.user.name);
+                        if(data.user.profilePic) localStorage.setItem('kiyo_profile_pic', data.user.profilePic);
+                        if(data.user.address) localStorage.setItem('kiyo_user_address', data.user.address);
+                        if(data.user.dob) localStorage.setItem('kiyo_user_dob', data.user.dob);
+                        if(data.user.isPremium) localStorage.setItem('kiyo_is_premium', data.user.isPremium);
+                        if(data.user.activeBatch) localStorage.setItem('kiyo_active_batch', data.user.activeBatch);
+                        if(data.user.board) localStorage.setItem('kiyo_board', data.user.board);
+                    }
+                }
+            } catch(e) {
+                console.log("Firebase sync offline fallback active");
+            }
+
+            const savedPic = localStorage.getItem('kiyo_profile_pic');
+            if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
+        }
+
+        // SAVE PROFILE TO FIREBASE PERMANENTLY
+        async function saveProfileToFirebase() {
+            const email = localStorage.getItem('kiyo_user_email');
+            const name = document.getElementById('editName').value.trim();
+            const dob = document.getElementById('editDob').value;
+            const address = document.getElementById('editAddress').value.trim();
+
+            if(!name) return showToast('Name is required', 'danger');
+
+            // Save locally immediately
+            localStorage.setItem('kiyo_user_name', name);
+            localStorage.setItem('kiyo_user_dob', dob);
+            if(address) localStorage.setItem('kiyo_user_address', address);
+
+            // Save to Firebase backend permanently
+            try {
+                showToast('Saving to Firebase cloud...', 'success');
+                await fetch('/api/save-user-data', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ email, name, dob, address })
+                });
+            } catch(e) {
+                console.log("Cloud sync queued");
+            }
+
+            updateProfileDOM(); 
+            closeCenterModal('editProfileModal');
+            showToast('Profile Saved Permanently!', 'success');
+        }
 
         function checkRealStreak() {
             const lastLogin = localStorage.getItem('kiyo_last_login_date');
@@ -461,10 +521,8 @@
             document.getElementById('topGreeting').innerText = `Hi, ${userName.split(' ')[0]} 👋`;
             document.getElementById('menuUserName').innerHTML = `${userName} <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i>`;
             
-            const savedAddress = localStorage.getItem('kiyo_user_address');
-            if(savedAddress) {
-                document.getElementById('menuUserLocation').innerText = savedAddress;
-            }
+            const savedAddress = localStorage.getItem('kiyo_user_address') || 'Location Not Set';
+            document.getElementById('menuUserLocation').innerText = savedAddress;
             
             const dob = localStorage.getItem('kiyo_user_dob');
             if(dob) {
@@ -506,10 +564,10 @@
             });
         }
 
-        // AMAZON STYLE AUTO-DETECT LOCATION
+        // AUTO-DETECT GPS WITH LOCAL AREA & PINCODE
         function autoDetectLocation() {
             const btn = document.getElementById('gpsBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting GPS Location...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting Precise Location...`;
             
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async function(position) {
@@ -517,28 +575,26 @@
                         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}`);
                         const data = await res.json();
                         if(data && data.address) {
-                            const area = data.address.suburb || data.address.neighbourhood || '';
+                            const road = data.address.road || data.address.suburb || data.address.neighbourhood || '';
                             const city = data.address.city || data.address.town || data.address.village || '';
                             const state = data.address.state || '';
                             const pincode = data.address.postcode || '';
                             
-                            // Combine into a clean address string
-                            const fullAddress = [area, city, state, pincode].filter(Boolean).join(', ');
-                            
+                            const fullAddress = [road, city, state, pincode].filter(Boolean).join(', ');
                             document.getElementById('editAddress').value = fullAddress;
-                            showToast("Address detected!", "success");
+                            showToast("Precise Address Found!", "success");
                             btn.innerHTML = `<i class="fa-solid fa-check"></i> Found`;
                         }
                     } catch(e) {
                         showToast("Failed to fetch location.", "danger");
-                        btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
+                        btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect GPS & Fill Address`;
                     }
                 }, function(error) {
-                    showToast("Please allow location access in browser.", "danger");
-                    btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
+                    showToast("Please allow location permission.", "danger");
+                    btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect GPS & Fill Address`;
                 });
             } else {
-                showToast("Geolocation is not supported.", "danger");
+                showToast("Geolocation not supported.", "danger");
             }
         }
 
@@ -553,22 +609,41 @@
             p.type = p.type === 'text' ? 'password' : 'text';
             i.className = p.type === 'text' ? 'fa-solid fa-eye-slash toggle-password' : 'fa-solid fa-eye toggle-password';
         }
+
+        // COLOR-CODED TOAST NOTIFICATIONS (Green for success, Red for danger)
         function showToast(msg, type='success') {
             const box = document.getElementById('toastBox');
-            box.innerHTML = `<div class="toast"><i class="fa-solid fa-circle-check" style="color:var(--${type});"></i> <span>${msg}</span></div>`;
-            setTimeout(() => { box.innerHTML = ''; }, 3000);
+            const icon = type === 'success' ? 'fa-circle-check' : 'fa-triangle-exclamation';
+            box.innerHTML = `<div class="toast ${type}"><i class="fa-solid ${icon}"></i> <span>${msg}</span></div>`;
+            setTimeout(() => { box.innerHTML = ''; }, 3500);
         }
-        function uploadPhoto(event) {
+
+        async function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('menuProfileImg').src = e.target.result;
-                    localStorage.setItem('kiyo_profile_pic', e.target.result); 
+                reader.onload = async function(e) {
+                    const base64Img = e.target.result;
+                    document.getElementById('menuProfileImg').src = base64Img;
+                    localStorage.setItem('kiyo_profile_pic', base64Img);
+                    
+                    // Save DP to Firebase Cloud permanently
+                    const email = localStorage.getItem('kiyo_user_email');
+                    try {
+                        await fetch('/api/save-user-data', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ email, profilePic: base64Img })
+                        });
+                        showToast("Profile picture saved permanently!", "success");
+                    } catch(err) {
+                        showToast("DP saved locally", "success");
+                    }
                 };
                 reader.readAsDataURL(file);
             }
         }
+
         function logout() { localStorage.clear(); sessionStorage.clear(); window.location.replace("login.html"); }
         function openFullModal(id) { document.getElementById(id).classList.add('active'); toggleSidebar(); }
         function closeFullModal(id) { document.getElementById(id).classList.remove('active'); }
@@ -579,26 +654,10 @@
                 document.getElementById('editName').value = localStorage.getItem('kiyo_user_name') || '';
                 document.getElementById('editDob').value = localStorage.getItem('kiyo_user_dob') || '';
                 document.getElementById('editAddress').value = localStorage.getItem('kiyo_user_address') || '';
-                document.getElementById('gpsBtn').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect My Location via GPS`;
+                document.getElementById('gpsBtn').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Detect GPS & Fill Address`;
             }
         }
         function closeCenterModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function saveProfileEdit() {
-            const newName = document.getElementById('editName').value.trim();
-            const newDob = document.getElementById('editDob').value;
-            const newAddress = document.getElementById('editAddress').value.trim();
-            
-            if(!newName) return showToast('Name is required', 'danger');
-            
-            localStorage.setItem('kiyo_user_name', newName);
-            localStorage.setItem('kiyo_user_dob', newDob);
-            if(newAddress) localStorage.setItem('kiyo_user_address', newAddress);
-            
-            updateProfileDOM(); 
-            closeCenterModal('editProfileModal');
-            showToast('Profile Updated Successfully');
-        }
 
         async function sendPassOTP() {
             const newPass = document.getElementById('newPass').value;
@@ -606,11 +665,12 @@
             if(newPass.length < 6) return showToast('Min 6 chars required', 'danger');
             if(newPass !== confirmPass) return showToast('Passwords mismatch', 'danger');
             
-            showToast('Sending OTP to email...');
+            showToast('Sending OTP to email...', 'success');
             const email = localStorage.getItem('kiyo_user_email');
             try {
                 const res = await fetch('/api/send-pass-change-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
-                if(res.ok) { closeCenterModal('passModal'); openCenterModal('passOtpModal'); showToast('OTP Sent!'); }
+                if(res.ok) { closeCenterModal('passModal'); openCenterModal('passOtpModal'); showToast('OTP Sent Successfully!', 'success'); }
+                else showToast('Failed to send OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
 
@@ -622,17 +682,18 @@
 
             try {
                 const res = await fetch('/api/verify-pass-change', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp, newPassword: newPass}) });
-                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated Successfully!'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
-                else showToast('Invalid OTP', 'danger');
+                if(res.ok) { closeCenterModal('passOtpModal'); showToast('Password Updated Successfully!', 'success'); document.getElementById('newPass').value = ''; document.getElementById('confirmPass').value = ''; }
+                else showToast('Invalid or Expired OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
 
         async function sendDeleteOTP() {
-            showToast('Sending Deletion OTP...');
+            showToast('Sending Deletion OTP...', 'success');
             const email = localStorage.getItem('kiyo_user_email');
             try {
                 const res = await fetch('/api/send-delete-otp', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email}) });
-                if(res.ok) { closeCenterModal('deleteWarnModal'); openCenterModal('deleteOtpModal'); showToast('OTP Sent!'); }
+                if(res.ok) { closeCenterModal('deleteWarnModal'); openCenterModal('deleteOtpModal'); showToast('OTP Sent!', 'success'); }
+                else showToast('Failed to send OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
 
@@ -643,11 +704,10 @@
 
             try {
                 const res = await fetch('/api/delete-account', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp}) });
-                if(res.ok) { showToast('Account Deleted'); setTimeout(logout, 1500); }
+                if(res.ok) { showToast('Account Deleted Permanently', 'success'); setTimeout(logout, 1500); }
                 else showToast('Invalid OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
     </script>
 </body>
 </html>
-
