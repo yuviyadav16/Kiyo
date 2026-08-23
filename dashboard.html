@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script>
-        if(!localStorage.getItem('kiyo_user_email')) window.location.replace("login.html");
+        // Check if user is logged in
+        const currentUserEmail = localStorage.getItem('kiyo_user_email');
+        if(!currentUserEmail) window.location.replace("login.html");
+        
+        // Theme initialization
         if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
     </script>
 
@@ -46,6 +50,7 @@
             overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
         }
 
+        /* PREMIUM TOPBAR */
         .topbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);}
         html.dark-theme .topbar { background: rgba(18,24,38,0.8); }
         
@@ -61,6 +66,7 @@
 
         .main-content { padding: 15px 20px; padding-bottom: 90px; }
 
+        /* SETTINGS SEARCH BAR */
         .settings-search-bar { background: var(--surface-color); border-radius: 100px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer;}
         .settings-search-content { display: flex; align-items: center; gap: 12px; width: 100%; }
         .settings-search-icon { color: var(--text-muted); font-size: 16px; }
@@ -68,6 +74,7 @@
 
         .external-frame { width: 100%; border: none; border-radius: 20px; overflow: hidden; margin-bottom: 25px; background: transparent; }
 
+        /* SMART BATCH CARD */
         .batch-card { background: var(--surface-color); border-radius: 20px; padding: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); border: 1px solid var(--border-color); margin-bottom: 25px;}
         .batch-header { display: flex; justify-content: space-between; margin-bottom: 15px;}
         .target-box span { display: block; font-size: 10px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 3px;}
@@ -77,12 +84,14 @@
         .btn-update { background: linear-gradient(45deg, #f59e0b, #d97706); color: white; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3); }
         .btn-active { background: var(--card-gradient); color: white; box-shadow: 0 4px 15px rgba(92, 100, 244, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px;}
 
+        /* BOTTOM NAVIGATION */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 700; transition: 0.2s; width: 25%; }
         .nav-item i { font-size: 20px; }
         .nav-item.active { color: var(--primary); }
         .nav-item:active { transform: scale(0.9); }
 
+        /* SIDEBAR MENU */
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; opacity: 0; pointer-events: none; transition: 0.3s; }
         .sidebar-overlay.active { opacity: 1; pointer-events: all; }
         .sidebar { position: fixed; top: 0; left: -300px; width: 290px; height: 100%; background: var(--surface-color); z-index: 201; transition: 0.3s ease; display: flex; flex-direction: column; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
@@ -122,6 +131,7 @@
         .powered { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 5px;}
         .made-in { font-size: 13px; font-weight: 900; color: var(--accent-green); letter-spacing: 0.5px;}
 
+        /* FULL SCREEN MODALS */
         .full-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg-bottom); z-index: 99999; transform: translateX(100%); transition: 0.3s ease; display: flex; flex-direction: column; overflow-y: auto;}
         .full-modal.active { transform: translateX(0); }
         .fm-header { padding: 20px; display: flex; align-items: center; gap: 15px; background: var(--surface-color); border-bottom: 1px solid var(--border-color); position: sticky; top:0; z-index: 2;}
@@ -136,6 +146,7 @@
         .setting-item-left i { font-size: 18px; color: var(--primary); width: 24px; text-align: center; }
         .setting-item.danger .setting-item-left i, .setting-item.danger span { color: var(--danger); }
 
+        /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
         .center-modal-overlay.active { opacity: 1; pointer-events: all; }
         .center-box { background: var(--surface-color); padding: 25px 20px; border-radius: 24px; width: 90%; max-width: 340px; max-height: 90vh; overflow-y: auto; text-align: center; transform: scale(0.9); transition: 0.3s; }
@@ -155,10 +166,11 @@
         .btn-gps:active { transform: scale(0.98); }
         .btn-danger { background: var(--danger); color: white; }
         
+        /* GREEN & RED COLOR-CODED TOASTS */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
         .toast { color: #fff; padding: 16px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; box-shadow: 0 10px 25px rgba(0,0,0,0.2);}
-        .toast.success { background: #10b981; }
-        .toast.danger { background: #ef4444; }
+        .toast.success { background: #10b981; } /* Green */
+        .toast.danger { background: #ef4444; }  /* Red */
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
@@ -181,8 +193,11 @@
     </div>
 
     <div class="main-content">
+        
+        <!-- EXTERNAL SLIDER FRAME -->
         <iframe src="slider-data.html" class="external-frame" id="sliderFrame" scrolling="no"></iframe>
 
+        <!-- APP SETTINGS SEARCH BAR -->
         <div class="settings-search-bar" onclick="focusSettingsSearch()">
             <div class="settings-search-content">
                 <i class="fa-solid fa-magnifying-glass settings-search-icon"></i>
@@ -190,6 +205,7 @@
             </div>
         </div>
 
+        <!-- REAL DYNAMIC BATCH CARD -->
         <div class="batch-card">
             <div class="batch-header">
                 <div class="target-box">
@@ -206,9 +222,11 @@
             </a>
         </div>
 
+        <!-- EXTERNAL ANNOUNCEMENTS FRAME -->
         <iframe src="announcements.html" class="external-frame" id="announcementFrame" scrolling="no" style="height: 140px;"></iframe>
     </div>
 
+    <!-- FIXED BOTTOM NAVIGATION BAR -->
     <div class="bottom-nav">
         <a href="dashboard.html" class="nav-item active">
             <i class="fa-solid fa-house"></i>
@@ -228,6 +246,7 @@
         </a>
     </div>
 
+    <!-- SIDEBAR MENU -->
     <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -265,12 +284,14 @@
         </div>
     </div>
 
+    <!-- SETTINGS FULL MODAL -->
     <div class="full-modal" id="settingsModal">
         <div class="fm-header">
             <i class="fa-solid fa-arrow-left" onclick="closeFullModal('settingsModal')"></i>
             <input type="text" id="activeSearchInput" placeholder="Search settings..." style="border:none; outline:none; background:transparent; font-size:16px; font-weight:700; color:var(--text-main); width:100%; font-family:inherit;" onkeyup="searchAppSettings()">
         </div>
         <div class="fm-content" id="settingsContentList">
+            
             <div class="settings-section-title">Account Settings</div>
             <div class="settings-card-group">
                 <div class="setting-item" onclick="openCenterModal('passModal')" data-search="change password security z+">
@@ -306,6 +327,7 @@
         </div>
     </div>
 
+    <!-- AMAZON STYLE EDIT PROFILE MODAL -->
     <div class="center-modal-overlay" id="editProfileModal">
         <div class="center-box">
             <h3 style="margin-top: 0; margin-bottom: 15px; color: var(--text-main);">Edit Profile</h3>
@@ -316,7 +338,7 @@
             
             <div style="text-align: left; padding: 0 5px;">
                 <span class="input-label">Pincode</span>
-                <input type="text" id="editPincode" class="input-field" placeholder="6-digit Pincode">
+                <input type="number" id="editPincode" class="input-field" placeholder="6-digit Pincode">
                 
                 <div class="input-grid-2">
                     <div>
@@ -324,36 +346,37 @@
                         <input type="text" id="editState" class="input-field" placeholder="State">
                     </div>
                     <div>
-                        <span class="input-label">City / Town</span>
+                        <span class="input-label">City</span>
                         <input type="text" id="editCity" class="input-field" placeholder="City">
                     </div>
                 </div>
 
-                <span class="input-label">House / Flat / Building</span>
+                <span class="input-label">House No. / Building Name</span>
                 <input type="text" id="editHouse" class="input-field" placeholder="E.g. Flat 101, Om Tower">
                 
                 <span class="input-label">Area / Sector / Locality / Village</span>
                 <input type="text" id="editArea" class="input-field" placeholder="E.g. Sector 62 or Village Name">
                 
                 <span class="input-label">Landmark (Optional)</span>
-                <input type="text" id="editLandmark" class="input-field" placeholder="Near Temple / Hospital">
+                <input type="text" id="editLandmark" class="input-field" placeholder="Near Hospital">
 
                 <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
 
                 <span class="input-label">Full Name</span>
                 <input type="text" id="editName" class="input-field" placeholder="Full Name">
                 
-                <span class="input-label">Date of Birth</span>
+                <span class="input-label">Date of Birth (Must be 13+)</span>
                 <input type="date" id="editDob" class="input-field">
             </div>
             
             <div class="btn-row">
                 <button class="btn-cancel" onclick="closeCenterModal('editProfileModal')">Cancel</button>
-                <button class="btn-confirm" onclick="saveProfileToFirebase()">Save</button>
+                <button class="btn-confirm" onclick="saveProfileToDatabase()">Save</button>
             </div>
         </div>
     </div>
 
+    <!-- Modals for Password / Delete -->
     <div class="center-modal-overlay" id="passModal">
         <div class="center-box">
             <h3 style="margin-top: 0; color: var(--text-main);">Change Password</h3>
@@ -407,6 +430,19 @@
     </div>
 
     <script>
+        // VAULT SYSTEM (To prevent data loss on logout)
+        function getUserVaultData(email, key) {
+            const vault = JSON.parse(localStorage.getItem('kiyo_accounts_vault') || '{}');
+            return vault[email] ? vault[email][key] : null;
+        }
+
+        function setUserVaultData(email, key, value) {
+            const vault = JSON.parse(localStorage.getItem('kiyo_accounts_vault') || '{}');
+            if(!vault[email]) vault[email] = {};
+            vault[email][key] = value;
+            localStorage.setItem('kiyo_accounts_vault', JSON.stringify(vault));
+        }
+
         window.onload = async function() {
             if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
             
@@ -420,6 +456,7 @@
             }, 300);
         };
 
+        // FIREBASE CLOUD SYNC & VAULT FALLBACK
         async function syncUserFromFirebase() {
             const email = localStorage.getItem('kiyo_user_email');
             if(!email) return;
@@ -429,33 +466,34 @@
                 if(res.ok) {
                     const data = await res.json();
                     if(data.user) {
-                        if(data.user.name) localStorage.setItem('kiyo_user_name', data.user.name);
-                        if(data.user.profilePic) localStorage.setItem('kiyo_profile_pic', data.user.profilePic);
-                        if(data.user.dob) localStorage.setItem('kiyo_user_dob', data.user.dob);
-                        
-                        if(data.user.pincode) localStorage.setItem('kiyo_pincode', data.user.pincode);
-                        if(data.user.state) localStorage.setItem('kiyo_state', data.user.state);
-                        if(data.user.city) localStorage.setItem('kiyo_city', data.user.city);
-                        if(data.user.house) localStorage.setItem('kiyo_house', data.user.house);
-                        if(data.user.area) localStorage.setItem('kiyo_area', data.user.area);
-                        if(data.user.landmark) localStorage.setItem('kiyo_landmark', data.user.landmark);
-
-                        if(data.user.isPremium) localStorage.setItem('kiyo_is_premium', data.user.isPremium);
-                        if(data.user.activeBatch) localStorage.setItem('kiyo_active_batch', data.user.activeBatch);
-                        if(data.user.board) localStorage.setItem('kiyo_board', data.user.board);
-                        if(data.user.dream) localStorage.setItem('kiyo_dream', data.user.dream);
+                        const keys = ['name', 'profilePic', 'dob', 'pincode', 'state', 'city', 'house', 'area', 'landmark', 'isPremium', 'activeBatch', 'board', 'dream'];
+                        keys.forEach(k => {
+                            if(data.user[k]) setUserVaultData(email, k, data.user[k]);
+                        });
                     }
                 }
             } catch(e) {
-                console.log("Firebase sync offline fallback active");
+                console.log("Firebase offline, loading from local vault");
             }
         }
 
-        async function saveProfileToFirebase() {
+        // SAVE PROFILE (WITH 13+ AGE CHECK)
+        async function saveProfileToDatabase() {
             const email = localStorage.getItem('kiyo_user_email');
             const name = document.getElementById('editName').value.trim();
             const dob = document.getElementById('editDob').value;
             
+            // Age Restriction Check (13+)
+            if(dob) {
+                const birthYear = new Date(dob).getFullYear();
+                const currentYear = new Date().getFullYear();
+                if ((currentYear - birthYear) < 13) {
+                    return showToast('You must be 13 or older to use Kiyo AI', 'danger');
+                }
+            } else {
+                return showToast('Date of Birth is required', 'danger');
+            }
+
             const pincode = document.getElementById('editPincode').value.trim();
             const state = document.getElementById('editState').value.trim();
             const city = document.getElementById('editCity').value.trim();
@@ -464,40 +502,40 @@
             const landmark = document.getElementById('editLandmark').value.trim();
 
             if(!name) return showToast('Name is required', 'danger');
+            if(!pincode || !state || !city || !area) return showToast('Address details are mandatory', 'danger');
 
-            localStorage.setItem('kiyo_user_name', name);
-            localStorage.setItem('kiyo_user_dob', dob);
-            localStorage.setItem('kiyo_pincode', pincode);
-            localStorage.setItem('kiyo_state', state);
-            localStorage.setItem('kiyo_city', city);
-            localStorage.setItem('kiyo_house', house);
-            localStorage.setItem('kiyo_area', area);
-            localStorage.setItem('kiyo_landmark', landmark);
+            // Save to Vault
+            setUserVaultData(email, 'name', name);
+            setUserVaultData(email, 'dob', dob);
+            setUserVaultData(email, 'pincode', pincode);
+            setUserVaultData(email, 'state', state);
+            setUserVaultData(email, 'city', city);
+            setUserVaultData(email, 'house', house);
+            setUserVaultData(email, 'area', area);
+            setUserVaultData(email, 'landmark', landmark);
 
             updateProfileDOM();
             closeCenterModal('editProfileModal');
 
+            // Save to Firebase
             try {
-                showToast('Saving to cloud...', 'success');
-                const res = await fetch('/api/save-user-data', {
+                showToast('Syncing to Cloud...', 'success');
+                await fetch('/api/save-user-data', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ email, name, dob, pincode, state, city, house, area, landmark })
                 });
-                if(res.ok) {
-                    showToast('Profile Saved Permanently!', 'success');
-                } else {
-                    showToast('Saved Locally. Server sync pending.', 'success');
-                }
+                showToast('Profile Saved Permanently!', 'success');
             } catch(e) {
-                showToast('Saved Locally', 'success');
+                showToast('Saved Locally. Cloud sync queued.', 'success');
             }
         }
 
         function checkRealStreak() {
-            const lastLogin = localStorage.getItem('kiyo_last_login_date');
+            const email = localStorage.getItem('kiyo_user_email');
+            const lastLogin = getUserVaultData(email, 'last_login_date');
             const today = new Date().toDateString();
-            let streak = parseInt(localStorage.getItem('kiyo_streak_count') || '0');
+            let streak = parseInt(getUserVaultData(email, 'streak_count') || '0');
 
             if (!lastLogin) {
                 streak = 1;
@@ -510,27 +548,30 @@
                 if (diffDays === 1) streak += 1;
                 else if (diffDays > 1) streak = 0;
             }
-            localStorage.setItem('kiyo_last_login_date', today);
-            localStorage.setItem('kiyo_streak_count', streak);
+            
+            setUserVaultData(email, 'last_login_date', today);
+            setUserVaultData(email, 'streak_count', streak);
             document.getElementById('streakCount').innerText = streak;
         }
 
         function updateProfileDOM() {
-            const userName = localStorage.getItem('kiyo_user_name') || 'Student';
+            const email = localStorage.getItem('kiyo_user_email');
+            const userName = getUserVaultData(email, 'name') || 'Student';
+            
             document.getElementById('topGreeting').innerText = `Hi, ${userName.split(' ')[0]} 👋`;
             document.getElementById('menuUserName').innerHTML = `${userName} <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i>`;
             
-            const savedPic = localStorage.getItem('kiyo_profile_pic');
+            const savedPic = getUserVaultData(email, 'profilePic');
             if(savedPic) document.getElementById('menuProfileImg').src = savedPic;
             
-            const area = localStorage.getItem('kiyo_area') || '';
-            const city = localStorage.getItem('kiyo_city') || '';
-            const state = localStorage.getItem('kiyo_state') || '';
+            const area = getUserVaultData(email, 'area') || '';
+            const city = getUserVaultData(email, 'city') || '';
+            const state = getUserVaultData(email, 'state') || '';
             
             const locationParts = [area, city, state].filter(Boolean);
             document.getElementById('menuUserLocation').innerText = locationParts.length > 0 ? locationParts.join(', ') : 'Location Not Set';
             
-            const dob = localStorage.getItem('kiyo_user_dob');
+            const dob = getUserVaultData(email, 'dob');
             if(dob) {
                 const birthYear = new Date(dob).getFullYear();
                 if(!isNaN(birthYear)) {
@@ -542,10 +583,10 @@
                 document.getElementById('menuUserAge').innerText = '18';
             }
 
-            const isPaid = localStorage.getItem('kiyo_is_premium') === 'true';
+            const isPaid = getUserVaultData(email, 'isPremium') === 'true';
             if(isPaid) {
-                const activeBatch = localStorage.getItem('kiyo_active_batch') || "Premium AI Batch";
-                const activeBoard = localStorage.getItem('kiyo_board') || "CBSE";
+                const activeBatch = getUserVaultData(email, 'activeBatch') || "Premium AI Batch";
+                const activeBoard = getUserVaultData(email, 'board') || "CBSE";
                 
                 document.getElementById('homeGoal').innerText = activeBatch;
                 document.getElementById('homeClass').innerText = activeBoard + " Board";
@@ -555,8 +596,8 @@
                 btn.className = "batch-status-btn btn-active";
                 btn.href = "study.html";
             } else {
-                document.getElementById('homeClass').innerText = localStorage.getItem('kiyo_class') || 'Class 11';
-                document.getElementById('homeGoal').innerText = localStorage.getItem('kiyo_dream') || localStorage.getItem('kiyo_exam') || 'Foundation';
+                document.getElementById('homeClass').innerText = getUserVaultData(email, 'class') || 'Class 11';
+                document.getElementById('homeGoal').innerText = getUserVaultData(email, 'dream') || 'Foundation';
             }
         }
 
@@ -574,9 +615,10 @@
             });
         }
 
+        // AMAZON STYLE ADVANCED GPS
         function autoDetectLocation() {
             const btn = document.getElementById('gpsBtn');
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting GPS Location...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting Accurate Location...`;
             
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async function(position) {
@@ -593,11 +635,12 @@
                             document.getElementById('editState').value = addr.state || '';
                             document.getElementById('editCity').value = addr.city || addr.town || addr.district || addr.county || '';
                             
+                            // Advanced Area Detection (catches Suburb, Village, Locality etc.)
                             const detectedArea = addr.suburb || addr.neighbourhood || addr.residential || addr.village || addr.hamlet || addr.road || addr.locality || '';
                             document.getElementById('editArea').value = detectedArea;
                             document.getElementById('editHouse').value = addr.building || addr.house_number || '';
 
-                            showToast("Address & Area Auto-Filled!", "success");
+                            showToast("Location Details Auto-Filled!", "success");
                             btn.innerHTML = `<i class="fa-solid fa-check"></i> Location Detected`;
                         }
                     } catch(e) {
@@ -609,7 +652,7 @@
                     btn.innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Location`;
                 });
             } else {
-                showToast("Geolocation is not supported by your browser.", "danger");
+                showToast("Geolocation is not supported.", "danger");
             }
         }
 
@@ -625,6 +668,7 @@
             i.className = p.type === 'text' ? 'fa-solid fa-eye-slash toggle-password' : 'fa-solid fa-eye toggle-password';
         }
 
+        // RED & GREEN NOTIFICATIONS
         function showToast(msg, type='success') {
             const box = document.getElementById('toastBox');
             const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark';
@@ -635,13 +679,13 @@
         async function uploadPhoto(event) {
             const file = event.target.files[0];
             if (file) {
+                const email = localStorage.getItem('kiyo_user_email');
                 const reader = new FileReader();
                 reader.onload = async function(e) {
                     const base64Img = e.target.result;
                     document.getElementById('menuProfileImg').src = base64Img;
-                    localStorage.setItem('kiyo_profile_pic', base64Img);
+                    setUserVaultData(email, 'profilePic', base64Img);
                     
-                    const email = localStorage.getItem('kiyo_user_email');
                     try {
                         await fetch('/api/save-user-data', {
                             method: 'POST',
@@ -658,10 +702,8 @@
         }
 
         function logout() { 
-            const savedTheme = localStorage.getItem('kiyo_theme');
-            localStorage.clear(); 
-            sessionStorage.clear(); 
-            if(savedTheme) localStorage.setItem('kiyo_theme', savedTheme);
+            // DO NOT clear entire localStorage. Only remove the active session email to trigger login page.
+            localStorage.removeItem('kiyo_user_email');
             window.location.replace("login.html"); 
         }
 
@@ -670,15 +712,16 @@
         
         function openCenterModal(id) { 
             document.getElementById(id).classList.add('active'); 
+            const email = localStorage.getItem('kiyo_user_email');
             if(id === 'editProfileModal') {
-                document.getElementById('editName').value = localStorage.getItem('kiyo_user_name') || '';
-                document.getElementById('editDob').value = localStorage.getItem('kiyo_user_dob') || '';
-                document.getElementById('editPincode').value = localStorage.getItem('kiyo_pincode') || '';
-                document.getElementById('editState').value = localStorage.getItem('kiyo_state') || '';
-                document.getElementById('editCity').value = localStorage.getItem('kiyo_city') || '';
-                document.getElementById('editHouse').value = localStorage.getItem('kiyo_house') || '';
-                document.getElementById('editArea').value = localStorage.getItem('kiyo_area') || '';
-                document.getElementById('editLandmark').value = localStorage.getItem('kiyo_landmark') || '';
+                document.getElementById('editName').value = getUserVaultData(email, 'name') || '';
+                document.getElementById('editDob').value = getUserVaultData(email, 'dob') || '';
+                document.getElementById('editPincode').value = getUserVaultData(email, 'pincode') || '';
+                document.getElementById('editState').value = getUserVaultData(email, 'state') || '';
+                document.getElementById('editCity').value = getUserVaultData(email, 'city') || '';
+                document.getElementById('editHouse').value = getUserVaultData(email, 'house') || '';
+                document.getElementById('editArea').value = getUserVaultData(email, 'area') || '';
+                document.getElementById('editLandmark').value = getUserVaultData(email, 'landmark') || '';
                 
                 document.getElementById('gpsBtn').innerHTML = `<i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Location`;
             }
@@ -730,7 +773,15 @@
 
             try {
                 const res = await fetch('/api/delete-account', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email, otp}) });
-                if(res.ok) { showToast('Account Deleted Permanently', 'success'); setTimeout(logout, 1500); }
+                if(res.ok) { 
+                    // Wipe vault data on permanent delete
+                    const vault = JSON.parse(localStorage.getItem('kiyo_accounts_vault') || '{}');
+                    delete vault[email];
+                    localStorage.setItem('kiyo_accounts_vault', JSON.stringify(vault));
+                    
+                    showToast('Account Deleted Permanently', 'success'); 
+                    setTimeout(logout, 1500); 
+                }
                 else showToast('Invalid OTP', 'danger');
             } catch(e) { showToast('Network Error', 'danger'); }
         }
