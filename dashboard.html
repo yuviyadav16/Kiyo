@@ -62,12 +62,6 @@
 
         .main-content { padding: 15px 20px; padding-bottom: 90px; }
 
-        /* SEARCH BAR */
-        .settings-search-bar { background: var(--surface-color); border-radius: 100px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 5px 15px rgba(0,0,0,0.04); border: 1px solid var(--border-color); cursor: pointer;}
-        .settings-search-content { display: flex; align-items: center; gap: 12px; width: 100%; }
-        .settings-search-icon { color: var(--text-muted); font-size: 16px; }
-        .settings-search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit; pointer-events: none;}
-
         .external-frame { width: 100%; border: none; border-radius: 20px; overflow: hidden; margin-bottom: 25px; background: transparent; }
 
         /* SMART BATCH CARD */
@@ -144,12 +138,6 @@
         .setting-item-left i { font-size: 18px; color: var(--primary); width: 24px; text-align: center; }
         .setting-item.danger .setting-item-left i, .setting-item.danger span { color: var(--danger); }
 
-        /* GLOBAL SEARCH MODAL */
-        .search-results-list { margin-top: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .search-result-card { background: var(--surface-color); padding: 15px 20px; border-radius: 14px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--text-main); font-weight: 700; font-size: 14px; transition: 0.2s;}
-        .search-result-card:active { background: rgba(99, 102, 241, 0.05); }
-        .not-found-msg { text-align: center; color: var(--text-muted); font-weight: 700; margin-top: 40px; font-size: 15px; display: none; }
-
         /* CENTER MODALS */
         .center-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
         .center-modal-overlay.active { opacity: 1; pointer-events: all; }
@@ -200,14 +188,6 @@
         
         <!-- EXTERNAL SLIDER FRAME -->
         <iframe src="slider-data.html" class="external-frame" id="sliderFrame" scrolling="no"></iframe>
-
-        <!-- GLOBAL APP SEARCH BAR -->
-        <div class="settings-search-bar" onclick="openGlobalSearch()">
-            <div class="settings-search-content">
-                <i class="fa-solid fa-magnifying-glass settings-search-icon"></i>
-                <input type="text" class="settings-search-input" placeholder="Search app features, settings, policies..." readonly>
-            </div>
-        </div>
 
         <!-- REAL DYNAMIC BATCH CARD -->
         <div class="batch-card">
@@ -265,7 +245,7 @@
                 <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto(event)">
             </div>
             <h4 id="menuUserName">Student Name <i class="fa-solid fa-pen edit-icon-menu" onclick="openCenterModal('editProfileModal')"></i></h4>
-            <p><span id="menuUserAge">18</span> Years Old • <span id="menuUserLocation">Location Not Set</span></p>
+            <p><span id="menuUserAge">18 Years Old</span> • <span id="menuUserLocation">Location Not Set</span></p>
         </div>
         
         <div class="theme-box">
@@ -298,26 +278,6 @@
             </div>
             <div class="powered">POWERED BY TICBULL</div>
             <div class="made-in">Made in India 🇮🇳</div>
-        </div>
-    </div>
-
-    <!-- GLOBAL SEARCH FULL MODAL -->
-    <div class="full-modal" id="globalSearchModal">
-        <div class="fm-header">
-            <i class="fa-solid fa-arrow-left" onclick="closeFullModal('globalSearchModal')"></i>
-            <input type="text" id="globalSearchInput" placeholder="Search app features, settings, policies..." style="border:none; outline:none; background:transparent; font-size:16px; font-weight:700; color:var(--text-main); width:100%; font-family:inherit;" onkeyup="performGlobalSearch()" autofocus>
-        </div>
-        <div class="fm-content">
-            <div class="search-results-list" id="searchResultsList">
-                <a href="batches.html" class="search-result-card" data-keywords="batches premium class study"><span>Batches & Courses</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="study.html" class="search-result-card" data-keywords="study material notes pdf"><span>Study Material</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="javascript:void(0)" class="search-result-card" onclick="openCenterModal('editProfileModal'); closeFullModal('globalSearchModal');" data-keywords="profile edit name age address location"><span>Edit Profile & Address</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="javascript:void(0)" class="search-result-card" onclick="openFullModal('settingsModal'); closeFullModal('globalSearchModal');" data-keywords="settings security password delete logout"><span>Settings & Security</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="terms.html" class="search-result-card" data-keywords="terms conditions rules"><span>Terms & Conditions</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="privacy.html" class="search-result-card" data-keywords="privacy policy data secure"><span>Privacy Policy</span> <i class="fa-solid fa-chevron-right"></i></a>
-                <a href="support.html" class="search-result-card" data-keywords="help support contact email"><span>Help & Support</span> <i class="fa-solid fa-chevron-right"></i></a>
-            </div>
-            <div class="not-found-msg" id="notFoundMsg">Not Found</div>
         </div>
     </div>
 
@@ -585,9 +545,14 @@
             
             const dob = localStorage.getItem('kiyo_user_dob');
             if(dob) {
-                const birthYear = new Date(dob).getFullYear();
-                if(!isNaN(birthYear)) {
-                    document.getElementById('menuUserAge').innerText = (new Date().getFullYear() - birthYear) + ' Years Old';
+                const birthDate = new Date(dob);
+                const today = new Date();
+                let age = today.getFullYear() - birthDate.getFullYear();
+                const m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) { age--; }
+                
+                if(!isNaN(age) && age > 0) {
+                    document.getElementById('menuUserAge').innerText = age + ' Years Old';
                 } else {
                     document.getElementById('menuUserAge').innerText = '18 Years Old';
                 }
@@ -613,32 +578,7 @@
             }
         }
 
-        // GLOBAL APP SEARCH LOGIC
-        function openGlobalSearch() {
-            document.getElementById('globalSearchModal').classList.add('active');
-            setTimeout(() => { document.getElementById('globalSearchInput').focus(); }, 300);
-        }
-
-        function performGlobalSearch() {
-            const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.search-result-card');
-            let foundCount = 0;
-
-            cards.forEach(card => {
-                const keywords = card.getAttribute('data-keywords') || '';
-                const text = card.innerText.toLowerCase();
-                if(keywords.includes(query) || text.includes(query) || query === '') {
-                    card.style.display = 'flex';
-                    foundCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            document.getElementById('notFoundMsg').style.display = foundCount === 0 ? 'block' : 'none';
-        }
-
-        // COMPACT GPS LOCATION
+        // CORRECT GPS LOCATION MAPPING
         function autoDetectLocation() {
             const btn = document.getElementById('gpsBtn');
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Detecting Accurate Location...`;
