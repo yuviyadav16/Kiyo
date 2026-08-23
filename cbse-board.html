@@ -65,16 +65,16 @@
         .chip.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);}
         .chip:active { transform: scale(0.95); }
 
-        /* BATCH CARDS (16:9 Posters) */
+        /* BATCH CARDS (16:9 HD Posters) */
         .batch-list { display: flex; flex-direction: column; gap: 20px; }
         .batch-card { background: var(--surface-color); border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 8px 25px rgba(0,0,0,0.03); transition: 0.2s; display: flex; flex-direction: column;}
         
         .batch-poster { width: 100%; aspect-ratio: 16 / 9; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; box-sizing: border-box; background-size: cover; background-position: center;}
-        .batch-poster-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%); z-index: 1;}
+        .batch-poster-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 100%); z-index: 1;}
         .batch-poster-content { position: relative; z-index: 2; width: 100%; }
         
-        .batch-poster h3 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5);}
-        .batch-poster p { margin: 8px auto 0 auto; font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.3);}
+        .batch-poster h3 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 4px 10px rgba(0,0,0,0.6);}
+        .batch-poster p { margin: 8px auto 0 auto; font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.25); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.4);}
 
         .batch-details { padding: 15px 20px; }
         .batch-title { margin: 0 0 12px 0; font-size: 16px; font-weight: 900; color: var(--text-main); }
@@ -157,7 +157,7 @@
             <h4 style="margin:0 0 12px 0; color:var(--text-main); font-weight:900; font-size:15px;">Why choose Kiyo AI?</h4>
             <ul class="ai-features" style="margin-bottom: 25px;">
                 <li><i class="fa-solid fa-robot"></i> 24/24 AI Doubt Solver (Powered by Kiyo AI) 🤖</li>
-                <li><i class="fa-solid fa-book-journal-whills"></i> 20 Years Chapter-wise PYQs & Video Solutions</li>
+                <li><i class="fa-solid fa-book-journal-whills"></i> 20 Years Chapter-wise PYQs & Solutions</li>
                 <li><i class="fa-solid fa-file-pdf"></i> Smart AI Generated Notes, DPPs & Mindmaps</li>
                 <li><i class="fa-solid fa-bullseye"></i> Unlimited Mock Tests & Weakness Tracker</li>
             </ul>
@@ -171,14 +171,14 @@
     </div>
 
     <script>
-        // High-Quality Subject Specific Images
-        const imgFoundation = "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=800&auto=format&fit=crop"; // Kids/School
-        const imgBooster = "https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?q=80&w=800&auto=format&fit=crop"; // Exam/Study
-        const imgPCM = "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop"; // Physics/Math
-        const imgPCB = "https://images.unsplash.com/photo-1530213786676-412fdb08d0e2?q=80&w=800&auto=format&fit=crop"; // Biology/Microscope
-        const imgPCBM = "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop"; // Lab/Science
-        const imgCommerce = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"; // Finance/Graph
-        const imgArts = "https://images.unsplash.com/photo-1505664159854-2346edc56176?q=80&w=800&auto=format&fit=crop"; // History/Library
+        // High-Quality Reliable HD Pexels Posters
+        const imgFoundation = "https://images.pexels.com/photos/256455/pexels-photo-256455.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgBooster = "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgPCM = "https://images.pexels.com/photos/3861458/pexels-photo-3861458.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgPCB = "https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgPCBM = "https://images.pexels.com/photos/3762800/pexels-photo-3762800.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgCommerce = "https://images.pexels.com/photos/53621/calculator-calculation-insurance-finance-53621.jpeg?auto=compress&cs=tinysrgb&w=800"; 
+        const imgArts = "https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800"; 
 
         const batches = [
             {
@@ -288,7 +288,7 @@
                             <div class="batch-poster" style="background-image: url('${b.img}');">
                                 <div class="batch-poster-overlay"></div>
                                 <div class="batch-poster-content">
-                                    <h3>${b.name.split(' (')[0]}</h3>
+                                    <h3>${b.name}</h3>
                                     <p>${b.class} ${b.stream}</p>
                                 </div>
                             </div>
@@ -306,7 +306,7 @@
                                 </div>
                                 <div class="btn-group">
                                     <button class="btn-view" onclick="openDetails(${index})">View Details</button>
-                                    <button class="btn-buy" onclick="buyBatch('${b.name}', '${b.price}', '${b.category}')">Buy Now</button>
+                                    <button class="btn-buy" onclick="buyBatch('${b.name} (${b.class})', '${b.price}', '${b.category}')">Buy Now</button>
                                 </div>
                             </div>
                         </div>
@@ -334,7 +334,7 @@
 
         function openDetails(index) {
             const batch = batches[index];
-            document.getElementById('modalBatchName').innerText = batch.name;
+            document.getElementById('modalBatchName').innerText = `${batch.name} (${batch.class})`;
             document.getElementById('modalPrice').innerText = batch.price;
             
             const syllabusList = document.getElementById('modalSyllabus');
@@ -343,7 +343,7 @@
                 syllabusList.innerHTML += `<li>${sub}</li>`;
             });
 
-            document.getElementById('modalBuyBtn').onclick = () => buyBatch(batch.name, batch.price, batch.category);
+            document.getElementById('modalBuyBtn').onclick = () => buyBatch(`${batch.name} (${batch.class})`, batch.price, batch.category);
             document.getElementById('detailsModal').classList.add('active');
         }
 
