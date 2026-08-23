@@ -75,7 +75,6 @@
         
         .batch-poster h3 { margin: 0; font-size: 26px; font-weight: 900; letter-spacing: 1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5);}
         .batch-poster p { margin: 8px auto 0 auto; font-size: 12px; font-weight: 800; background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 5px 12px; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.3);}
-        .batch-tag { position: absolute; top: 12px; left: 12px; background: var(--primary); color: white; font-size: 10px; font-weight: 800; padding: 5px 10px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.5px; z-index: 2; box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
 
         .batch-details { padding: 15px 20px; }
         .batch-title { margin: 0 0 12px 0; font-size: 16px; font-weight: 900; color: var(--text-main); }
@@ -172,89 +171,98 @@
     </div>
 
     <script>
+        // High-Quality Subject Specific Images
+        const imgFoundation = "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=800&auto=format&fit=crop"; // Kids/School
+        const imgBooster = "https://images.unsplash.com/photo-1456406644174-8ddd4cd52a06?q=80&w=800&auto=format&fit=crop"; // Exam/Study
+        const imgPCM = "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop"; // Physics/Math
+        const imgPCB = "https://images.unsplash.com/photo-1530213786676-412fdb08d0e2?q=80&w=800&auto=format&fit=crop"; // Biology/Microscope
+        const imgPCBM = "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop"; // Lab/Science
+        const imgCommerce = "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop"; // Finance/Graph
+        const imgArts = "https://images.unsplash.com/photo-1505664159854-2346edc56176?q=80&w=800&auto=format&fit=crop"; // History/Library
+
         const batches = [
             {
                 id: "b1", name: "Kiyo Spark", class: "Class 9", stream: "Foundation", 
                 category: "Class 9", tags: "class 9 cbse spark foundation math science",
                 price: "499", oldPrice: "1999", discount: "75%",
-                img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=800&auto=format&fit=crop", 
+                img: imgFoundation, 
                 subjects: ["Mathematics", "Science (Phy, Chem, Bio)", "Social Science", "English & Hindi"]
             },
             {
                 id: "b2", name: "Kiyo Pinnacle", class: "Class 10", stream: "Board Booster", 
                 category: "Class 10", tags: "class 10 cbse pinnacle boards math science",
                 price: "599", oldPrice: "2499", discount: "76%",
-                img: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?q=80&w=800&auto=format&fit=crop", 
+                img: imgBooster, 
                 subjects: ["Mathematics (Standard/Basic)", "Science Full Syllabus", "Social Science (SST)", "English"]
             },
             {
                 id: "b3", name: "Kiyo Apex (PCM)", class: "Class 11", stream: "Science (PCM)", 
                 category: "Class 11 PCM", tags: "class 11 pcm science physics chemistry math apex",
                 price: "699", oldPrice: "2999", discount: "76%",
-                img: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCM, 
                 subjects: ["Physics", "Chemistry", "Mathematics", "English Core"]
             },
             {
                 id: "b4", name: "Kiyo Apex (PCB)", class: "Class 11", stream: "Science (PCB)", 
                 category: "Class 11 PCB", tags: "class 11 pcb science physics chemistry biology apex",
                 price: "699", oldPrice: "2999", discount: "76%",
-                img: "https://images.unsplash.com/photo-1530213786676-412fdb08d0e2?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCB, 
                 subjects: ["Physics", "Chemistry", "Biology", "English Core"]
             },
             {
                 id: "b5", name: "Kiyo Apex (PCBM)", class: "Class 11", stream: "Science (PCBM)", 
                 category: "Class 11 PCBM", tags: "class 11 pcbm science physics chemistry biology math apex",
                 price: "799", oldPrice: "3499", discount: "77%",
-                img: "https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCBM, 
                 subjects: ["Physics", "Chemistry", "Biology", "Mathematics", "English Core"]
             },
             {
                 id: "b6", name: "Kiyo Apex (Commerce)", class: "Class 11", stream: "Commerce", 
                 category: "Class 11 Commerce", tags: "class 11 commerce accounts economics bst apex",
                 price: "599", oldPrice: "2499", discount: "76%",
-                img: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop", 
+                img: imgCommerce, 
                 subjects: ["Accountancy", "Economics", "Business Studies", "Applied Math / English"]
             },
             {
                 id: "b7", name: "Kiyo Apex (Arts)", class: "Class 11", stream: "Humanities / Arts", 
                 category: "Class 11 Arts", tags: "class 11 arts humanities history geography polity apex",
                 price: "599", oldPrice: "2499", discount: "76%",
-                img: "https://images.unsplash.com/photo-1505664159854-2346edc56176?q=80&w=800&auto=format&fit=crop", 
+                img: imgArts, 
                 subjects: ["History", "Political Science", "Geography", "Sociology & English"]
             },
             {
                 id: "b8", name: "Kiyo Zenith (PCM)", class: "Class 12", stream: "Science (PCM)", 
                 category: "Class 12 PCM", tags: "class 12 pcm science physics chemistry math boards zenith",
                 price: "799", oldPrice: "3499", discount: "77%",
-                img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCM, 
                 subjects: ["Physics (Board Level)", "Chemistry (Board Level)", "Mathematics", "English Core"]
             },
             {
                 id: "b9", name: "Kiyo Zenith (PCB)", class: "Class 12", stream: "Science (PCB)", 
                 category: "Class 12 PCB", tags: "class 12 pcb science physics chemistry biology boards zenith",
                 price: "799", oldPrice: "3499", discount: "77%",
-                img: "https://images.unsplash.com/photo-1574169208507-84376144848b?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCB, 
                 subjects: ["Physics", "Chemistry", "Biology (Genetics, Biotech)", "English Core"]
             },
             {
                 id: "b10", name: "Kiyo Zenith (PCBM)", class: "Class 12", stream: "Science (PCBM)", 
                 category: "Class 12 PCBM", tags: "class 12 pcbm science physics chemistry biology math boards zenith",
                 price: "899", oldPrice: "3999", discount: "77%",
-                img: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=800&auto=format&fit=crop", 
+                img: imgPCBM, 
                 subjects: ["Physics", "Chemistry", "Biology", "Mathematics", "English Core"]
             },
             {
                 id: "b11", name: "Kiyo Zenith (Commerce)", class: "Class 12", stream: "Commerce", 
                 category: "Class 12 Commerce", tags: "class 12 commerce accounts economics bst boards zenith",
                 price: "699", oldPrice: "2999", discount: "76%",
-                img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop", 
+                img: imgCommerce, 
                 subjects: ["Accountancy", "Economics (Macro & Indian Eco)", "Business Studies", "English"]
             },
             {
                 id: "b12", name: "Kiyo Zenith (Arts)", class: "Class 12", stream: "Humanities / Arts", 
                 category: "Class 12 Arts", tags: "class 12 arts humanities history geography polity boards zenith",
                 price: "699", oldPrice: "2999", discount: "76%",
-                img: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=800&auto=format&fit=crop", 
+                img: imgArts, 
                 subjects: ["History", "Political Science", "Geography", "Sociology & English"]
             }
         ];
@@ -280,7 +288,6 @@
                             <div class="batch-poster" style="background-image: url('${b.img}');">
                                 <div class="batch-poster-overlay"></div>
                                 <div class="batch-poster-content">
-                                    <div class="batch-tag">CBSE ${b.class}</div>
                                     <h3>${b.name.split(' (')[0]}</h3>
                                     <p>${b.class} ${b.stream}</p>
                                 </div>
