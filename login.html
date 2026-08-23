@@ -7,16 +7,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            /* PREMIUM EDUCATIONAL LIGHT THEME */
-            --primary: #6366f1; /* Indigo */
+            var(--primary): #6366f1;
             --primary-dark: #4338ca;
             --primary-light: rgba(99, 102, 241, 0.1);
-            --accent-green: #10b981; /* Emerald Green for Action Button */
+            --accent-green: #10b981;
             --accent-green-hover: #059669;
             --bg-gradient: linear-gradient(180deg, #ede9fe 0%, #f8fafc 40%, #ffffff 100%);
             --danger: #ef4444;
             --success: #10b981;
-            --text-main: #0f172a; /* Deep Slate */
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --input-border: #e2e8f0;
             --input-bg: #ffffff;
@@ -25,9 +24,9 @@
         /* STRICTLY 1 SCREEN (100dvh) - NO SCROLLING */
         body, html {
             margin: 0; padding: 0; width: 100%; 
-            height: 100%; height: 100dvh; 
+            height: 100vh; height: 100dvh; 
             background: var(--bg-gradient);
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             color: var(--text-main);
             overflow: hidden; 
             box-sizing: border-box; -webkit-tap-highlight-color: transparent;
@@ -35,91 +34,87 @@
 
         .main-wrapper { 
             width: 100%; max-width: 400px; margin: 0 auto;
-            height: 100%; padding: 25px 20px 15px 20px; box-sizing: border-box;
+            height: 100%; padding: 15px 20px 10px 20px; box-sizing: border-box;
             display: flex; flex-direction: column; 
         }
 
-        /* MODERN HEADER */
+        /* COMPACT HEADER */
         .header-section {
             text-align: center;
-            margin-bottom: 25px;
-            margin-top: 10px;
+            margin-bottom: 15px;
             flex-shrink: 0;
         }
         .header-section h1 {
-            font-size: 32px; font-weight: 900; letter-spacing: -0.5px; 
+            font-size: 28px; font-weight: 900; letter-spacing: -0.5px; 
             margin: 0; color: #1e1b4b; line-height: 1.1;
         }
         .brand-highlight { color: var(--accent-green); }
         .header-section p {
-            font-size: 13px; color: var(--text-muted); font-weight: 600; 
-            letter-spacing: 0.5px; margin: 8px 0 0 0;
+            font-size: 12px; color: var(--text-muted); font-weight: 600; 
+            margin: 5px 0 0 0;
         }
 
-        /* FORM CONTAINER */
-        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1; overflow-y: auto; padding-right: 5px;}
+        .form-container { width: 100%; display: flex; flex-direction: column; flex: 1;}
 
-        /* TAB SWITCHER */
-        .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 14px; padding: 5px; margin-bottom: 20px; flex-shrink: 0;}
-        .tab-btn { flex: 1; padding: 12px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
+        .tab-switcher { display: flex; background: rgba(99, 102, 241, 0.08); border-radius: 12px; padding: 4px; margin-bottom: 15px; flex-shrink: 0;}
+        .tab-btn { flex: 1; padding: 10px 0; text-align: center; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 10px; border: none; background: transparent; transition: 0.3s; }
         .tab-btn.active { background: #ffffff; color: var(--primary-dark); box-shadow: 0px 4px 10px rgba(0,0,0,0.05); }
 
-        /* PREMIUM CLEAN INPUTS */
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; flex-shrink: 0;}
-        .input-row { display: flex; gap: 10px; margin-bottom: 12px; flex-shrink: 0;}
-        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 14px; }
-        .input-field { width: 100%; padding: 14px 15px 14px 42px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 14px; color: var(--text-main); font-size: 14px; font-weight: 600; box-sizing: border-box; outline: none; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        /* COMPACT INPUTS */
+        .input-group { position: relative; width: 100%; margin-bottom: 10px; flex-shrink: 0;}
+        .input-row { display: flex; gap: 8px; margin-bottom: 10px; flex-shrink: 0;}
+        .input-group i.field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #6366f1; font-size: 13px; }
+        .input-field { width: 100%; padding: 12px 15px 12px 40px; background: var(--input-bg); border: 1.5px solid var(--input-border); border-radius: 12px; color: var(--text-main); font-size: 13px; font-weight: 600; box-sizing: border-box; outline: none; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .input-field::placeholder { color: #94a3b8; font-weight: 500; }
-        .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-light); }
-        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 15px; }
+        .input-field:focus { border-color: #6366f1; box-shadow: 0 0 0 3px var(--primary-light); }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; font-size: 14px; }
         .input-no-icon { padding-left: 15px; }
 
-        /* GREEN ACTION BUTTON */
-        .action-btn { width: 100%; padding: 16px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
-        .action-btn:active { transform: scale(0.97); }
-
-        .btn-gps { width: 100%; padding: 12px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 12px; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px;}
+        .btn-gps { width: 100%; padding: 10px; background: rgba(16, 185, 129, 0.1); color: var(--accent-green); border: 1px solid var(--accent-green); border-radius: 12px; font-weight: 800; cursor: pointer; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 6px; font-size: 12px;}
         .btn-gps:active { transform: scale(0.98); }
 
-        .forgot-link { font-size: 12px; color: var(--primary); text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 10px; font-weight: 700; flex-shrink: 0;}
-        
-        /* FOOTER */
-        .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 15px; }
-        
-        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 15px; }
-        .ticbull-trigger .powered { font-size: 9px; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;}
-        .ticbull-badge { background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: 0.3s;}
-        .ticbull-badge img { width: 18px; height: 18px; object-fit: contain; } 
-        .ticbull-badge span { font-size: 13px; font-weight: 900; color: #0f172a; letter-spacing: 1px;}
-        
-        .user-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 12px; }
-        .user-socials a { color: #64748b; font-size: 18px; text-decoration: none; transition: 0.3s; }
-        .user-socials a:hover { color: var(--primary); transform: translateY(-2px); }
+        .action-btn { width: 100%; padding: 14px 0; background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover)); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0px 8px 20px rgba(16, 185, 129, 0.3); transition: transform 0.2s; margin-top: auto; flex-shrink: 0; letter-spacing: 0.5px;}
+        .action-btn:active { transform: scale(0.97); }
 
-        .policy-links { font-size: 11px; color: var(--text-muted); }
-        .policy-links a { color: #64748b; text-decoration: none; margin: 0 8px; transition: 0.2s; font-weight: 600; }
+        .forgot-link { font-size: 11px; color: #6366f1; text-decoration: none; text-align: right; display: block; width: 100%; margin-bottom: 5px; font-weight: 700; flex-shrink: 0;}
+        
+        /* COMPACT FOOTER */
+        .app-footer { width: 100%; text-align: center; flex-shrink: 0; padding-top: 10px; }
+        
+        .ticbull-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; margin-bottom: 10px; }
+        .ticbull-trigger .powered { font-size: 8px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 700;}
+        .ticbull-badge { background: #ffffff; border: 1px solid #e2e8f0; padding: 4px 12px; border-radius: 30px; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .ticbull-badge img { width: 14px; height: 14px; object-fit: contain; } 
+        .ticbull-badge span { font-size: 11px; font-weight: 900; color: #0f172a; letter-spacing: 1px;}
+        
+        .user-socials { display: flex; justify-content: center; gap: 15px; margin-bottom: 8px; }
+        .user-socials a { color: #64748b; font-size: 15px; text-decoration: none; transition: 0.3s; }
+        .user-socials a:hover { color: #6366f1; transform: translateY(-2px); }
+
+        .policy-links { font-size: 10px; color: var(--text-muted); }
+        .policy-links a { color: #64748b; text-decoration: none; margin: 0 6px; transition: 0.2s; font-weight: 600; }
         .policy-links a:hover { color: #0f172a; }
 
         /* Toasts & Modals */
         .toast-container { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 350px;}
-        .toast { background: #0f172a; color: #fff; padding: 14px 20px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
+        .toast { background: #0f172a; color: #fff; padding: 12px 18px; border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.2); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 10px; transform: translateY(-100px); opacity: 0; animation: slideDown 0.4s forwards; }
         .toast.hide { animation: slideUp 0.4s forwards; }
         .toast.success i { color: var(--success); } .toast.error i { color: var(--danger); }
         @keyframes slideDown { to { transform: translateY(0); opacity: 1; } } @keyframes slideUp { to { transform: translateY(-100px); opacity: 0; } }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: flex-end; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: all; }
-        .bottom-sheet { background: #ffffff; width: 100%; max-width: 500px; border-radius: 24px 24px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); transform: translateY(100%); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding-bottom: 20px; display: flex; flex-direction: column; max-height: 80vh; }
+        .bottom-sheet { background: #ffffff; width: 100%; max-width: 500px; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,0.1); transform: translateY(100%); transition: 0.4s; padding-bottom: 20px; display: flex; flex-direction: column; }
         .modal-overlay.active .bottom-sheet { transform: translateY(0); }
-        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid #f1f5f9; }
-        .sheet-header h3 { margin: 0; font-size: 16px; color: #0f172a; font-weight: 800; }
-        .close-sheet { color: #94a3b8; font-size: 20px; cursor: pointer; }
+        .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #f1f5f9; }
+        .sheet-header h3 { margin: 0; font-size: 15px; color: #0f172a; font-weight: 800; }
+        .close-sheet { color: #94a3b8; font-size: 18px; cursor: pointer; }
         
-        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 14px 15px; text-decoration: none; color: #0f172a; border-bottom: 1px solid #f1f5f9; transition: 0.2s;}
-        .ticbull-link-item i { font-size: 20px; color: var(--primary); width: 25px; text-align: center;}
-        .ticbull-link-item span { font-size: 14px; font-weight: 600; }
+        .ticbull-link-item { display: flex; align-items: center; gap: 15px; padding: 12px 15px; text-decoration: none; color: #0f172a; border-bottom: 1px solid #f1f5f9;}
+        .ticbull-link-item i { font-size: 18px; color: #6366f1; width: 25px; text-align: center;}
+        .ticbull-link-item span { font-size: 13px; font-weight: 600; }
 
-        .center-modal { background: #ffffff; padding: 25px; border-radius: 24px; width: 85%; max-width: 320px; text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); }
+        .center-modal { background: #ffffff; padding: 20px; border-radius: 20px; width: 85%; max-width: 300px; text-align: center; position: relative; transform: scale(0.9); transition: 0.3s; box-shadow: 0px 20px 40px rgba(0,0,0,0.15); }
         .modal-overlay.center-align { align-items: center; }
         .modal-overlay.active .center-modal { transform: scale(1); }
     </style>
@@ -153,7 +148,7 @@
                         <input type="text" onfocus="(this.type='date')" id="dob" class="input-field" placeholder="DOB (13+ Required)">
                     </div>
 
-                    <!-- AUTO DETECT GPS LOCATION -->
+                    <!-- COMPACT AUTO DETECT GPS -->
                     <button type="button" class="btn-gps" onclick="autoDetectLocation()" id="gpsBtn">
                         <i class="fa-solid fa-location-crosshairs"></i> Auto-Detect GPS Address
                     </button>
@@ -165,12 +160,6 @@
                     <div class="input-row">
                         <input type="text" id="cityInput" class="input-field input-no-icon" placeholder="City">
                         <input type="text" id="areaInput" class="input-field input-no-icon" placeholder="Area/Village">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="houseInput" class="input-field input-no-icon" placeholder="House No. / Building">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" id="landmarkInput" class="input-field input-no-icon" placeholder="Landmark (Optional)">
                     </div>
                 </div>
 
@@ -240,11 +229,11 @@
     <div class="modal-overlay center-align" id="otpModal">
         <div class="center-modal">
             <span class="close-modal" onclick="closeModal('otpModal')" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
-            <h3 style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
-            <p style="font-size:12px; color:#64748b; margin-bottom:20px;">Enter the 6-digit OTP sent to your email.</p>
+            <h3 style="margin-top:0; color:#0f172a; font-size:16px;"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Verify Email</h3>
+            <p style="font-size:11px; color:#64748b; margin-bottom:15px;">Enter the 6-digit OTP sent to your email.</p>
             <div class="input-group">
                 <i class="fa-solid fa-key field-icon"></i>
-                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:16px;">
+                <input type="text" id="otpInput" class="input-field" placeholder="OTP" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:15px;">
             </div>
             <button type="button" class="action-btn" onclick="verifyOtp()">COMPLETE SIGN UP</button>
         </div>
@@ -254,10 +243,10 @@
     <div class="modal-overlay center-align" id="forgotModal">
         <div class="center-modal">
             <span class="close-modal" onclick="resetForgotFlow()" style="position:absolute; top:12px; right:15px; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</span>
-            <h3 id="resetTitle" style="margin-top:0; color:#0f172a; font-size:18px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
+            <h3 id="resetTitle" style="margin-top:0; color:#0f172a; font-size:16px;"><i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password</h3>
             
             <div id="resetStep1">
-                <div class="input-group" style="margin-top: 20px;">
+                <div class="input-group" style="margin-top: 15px;">
                     <i class="fa-solid fa-envelope field-icon"></i>
                     <input type="email" id="resetEmail" class="input-field" placeholder="Registered Email">
                 </div>
@@ -269,11 +258,11 @@
                 <button type="button" class="action-btn" onclick="sendResetOtp()">SEND OTP</button>
             </div>
 
-            <div id="resetStep2" style="display:none; margin-top: 20px;">
-                <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Enter the 6-digit OTP sent to your email to confirm the reset.</p>
+            <div id="resetStep2" style="display:none; margin-top: 15px;">
+                <p style="font-size:11px; color:#64748b; margin-bottom:15px;">Enter the 6-digit OTP sent to your email to confirm the reset.</p>
                 <div class="input-group">
                     <i class="fa-solid fa-key field-icon"></i>
-                    <input type="text" id="resetOtpInput" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:16px;">
+                    <input type="text" id="resetOtpInput" class="input-field" placeholder="0 0 0 0 0 0" maxlength="6" style="padding-left:40px; text-align:center; letter-spacing:8px; font-weight:800; font-size:15px;">
                 </div>
                 <button type="button" class="action-btn" onclick="verifyAndResetPassword()">VERIFY & RESET</button>
             </div>
@@ -285,8 +274,6 @@
 
         window.onload = function() {
             if(localStorage.getItem('kiyo_user_email')) { window.location.href = "dashboard.html"; }
-
-            // Restore basic details if available
             if(sessionStorage.getItem('temp_email')) document.getElementById('email').value = sessionStorage.getItem('temp_email');
         };
 
@@ -348,7 +335,6 @@
                             document.getElementById('cityInput').value = addr.city || addr.town || addr.district || addr.county || '';
                             const detectedArea = addr.suburb || addr.neighbourhood || addr.residential || addr.village || addr.hamlet || addr.road || addr.locality || '';
                             document.getElementById('areaInput').value = detectedArea;
-                            document.getElementById('houseInput').value = addr.building || addr.house_number || '';
 
                             showToast("Address Auto-Filled!", "success");
                             btn.innerHTML = `<i class="fa-solid fa-check"></i> Location Detected`;
@@ -380,10 +366,10 @@
                 const area = document.getElementById('areaInput').value.trim();
 
                 if(!name || !dob || !pincode || !state || !city || !area || !email || !password) {
-                    return showToast("Please fill all mandatory details.");
+                    return showToast("Please fill all details.");
                 }
                 if(password.length < 6) return showToast("Password min 6 chars.");
-                if(getAge(dob) < 13) return showToast("13+ age required to sign up.");
+                if(getAge(dob) < 13) return showToast("You must be 13 or older to sign up.");
             } else if(password.length < 6) {
                 return showToast("Password min 6 chars");
             }
@@ -437,10 +423,7 @@
                 localStorage.setItem('kiyo_state', document.getElementById('stateInput').value.trim());
                 localStorage.setItem('kiyo_city', document.getElementById('cityInput').value.trim());
                 localStorage.setItem('kiyo_area', document.getElementById('areaInput').value.trim());
-                localStorage.setItem('kiyo_house', document.getElementById('houseInput').value.trim());
-                localStorage.setItem('kiyo_landmark', document.getElementById('landmarkInput').value.trim());
                 
-                // Clear temporary session data
                 sessionStorage.clear();
 
                 showToast("Account Created!", 'success');
@@ -448,12 +431,11 @@
             } else { showToast("Invalid OTP!"); }
         }
 
-        // ================= SECURE FORGOT PASSWORD LOGIC WITH OTP =================
         function resetForgotFlow() {
             closeModal('forgotModal');
             document.getElementById('resetStep1').style.display = 'block';
             document.getElementById('resetStep2').style.display = 'none';
-            document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-key" style="color:var(--primary);"></i> Reset Password';
+            document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-key" style="color:#6366f1;"></i> Reset Password';
             document.getElementById('resetEmail').value = '';
             document.getElementById('newPassword').value = '';
             document.getElementById('resetOtpInput').value = '';
@@ -487,7 +469,7 @@
                 if(res.ok) {
                     document.getElementById('resetStep1').style.display = 'none';
                     document.getElementById('resetStep2').style.display = 'block';
-                    document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Enter OTP';
+                    document.getElementById('resetTitle').innerHTML = '<i class="fa-solid fa-shield-halved" style="color:#6366f1;"></i> Enter OTP';
                     showToast("OTP Sent to Email!", "success");
                 } else {
                     showToast("Failed to send OTP");
@@ -520,4 +502,3 @@
     </script>
 </body>
 </html>
-
