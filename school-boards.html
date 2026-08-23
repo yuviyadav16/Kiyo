@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>School Boards - Kiyo AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        if(!localStorage.getItem('kiyo_user_email')) window.location.replace("login.html");
+        if(localStorage.getItem('kiyo_theme') === 'dark') document.documentElement.classList.add('dark-theme');
+    </script>
+
+    <style>
+        :root {
+            --primary: #8b5cf6; 
+            --accent-green: #10b981; 
+            --bg-top: #f3e8ff; 
+            --bg-bottom: #ffffff;
+            --surface-color: #ffffff;
+            --text-main: #0f172a; 
+            --text-muted: #64748b; 
+            --border-color: #e2e8f0;
+            --nav-bg: #ffffff;
+        }
+
+        html.dark-theme {
+            --bg-top: #0f111a; 
+            --bg-bottom: #0B101E;
+            --surface-color: #121826;
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border-color: rgba(255,255,255,0.05);
+            --nav-bg: #121826;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100dvh; 
+            background: linear-gradient(180deg, var(--bg-top) 0%, #f8fafc 45%, var(--bg-bottom) 100%);
+            background-attachment: fixed;
+            color: var(--text-main); font-family: system-ui, sans-serif; 
+            overflow-x: hidden; -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* TOPBAR */
+        .topbar { display: flex; align-items: center; gap: 15px; padding: 15px 20px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color);}
+        html.dark-theme .topbar { background: rgba(18,24,38,0.8); }
+        .back-btn { font-size: 20px; cursor: pointer; color: var(--text-main); text-decoration: none; transition: 0.2s;}
+        .back-btn:active { transform: scale(0.9); }
+        .greeting { margin: 0; font-size: 18px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px;}
+
+        .main-content { padding: 15px 20px; padding-bottom: 90px; }
+
+        /* SEARCH BAR */
+        .search-bar { background: var(--surface-color); border-radius: 14px; padding: 14px 16px; margin-bottom: 25px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color); }
+        .search-bar i { color: var(--text-muted); font-size: 15px; }
+        .search-input { border: none; outline: none; background: transparent; width: 100%; font-size: 14px; font-weight: 600; color: var(--text-main); font-family: inherit;}
+
+        .section-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center;}
+        
+        /* NATIONAL BOARDS GRID */
+        .national-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .board-card { padding: 20px 15px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); background: var(--surface-color); cursor: pointer;}
+        .board-card:active { transform: scale(0.96); }
+        .board-icon { width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);}
+        .board-card h4 { margin: 0; font-size: 15px; font-weight: 800; color: var(--text-main); line-height: 1.2;}
+        .board-card p { margin: 0; font-size: 11px; font-weight: 600; color: var(--text-muted); }
+
+        .icon-cbse { background: #e0f2fe; color: #0284c7; }
+        .icon-icse { background: #fef9c3; color: #ca8a04; }
+        .icon-state { background: #f3e8ff; color: #9333ea; }
+
+        /* STATE BOARDS HORIZONTAL SLIDER */
+        .slider-container { width: 100%; overflow-x: auto; padding-bottom: 15px; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; display: flex; gap: 15px;}
+        .slider-container::-webkit-scrollbar { display: none; }
+        .state-card { min-width: 140px; padding: 20px 15px; border-radius: 20px; text-decoration: none; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.02); border: 1px solid var(--border-color); background: var(--surface-color); cursor: pointer; flex-shrink: 0;}
+        .state-card:active { transform: scale(0.96); }
+
+        /* ALL STATES VERTICAL LIST (For Search) */
+        .all-states-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; display: none;}
+        .list-item { background: var(--surface-color); padding: 16px; border-radius: 16px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; }
+        .list-item:active { transform: scale(0.98); }
+        .list-item-left { display: flex; align-items: center; gap: 15px; }
+        .list-item-left i { font-size: 20px; color: var(--primary); background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 10px;}
+        .list-item-left span { font-size: 14px; font-weight: 800; color: var(--text-main); }
+
+        /* COMING SOON MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999999; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-box { background: var(--surface-color); padding: 30px 20px; border-radius: 24px; width: 85%; max-width: 320px; text-align: center; transform: scale(0.9); transition: 0.3s; box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-icon { font-size: 40px; color: #ef4444; margin-bottom: 15px; animation: heartbeat 1.5s infinite; }
+        @keyframes heartbeat { 0% { transform: scale(1); } 20% { transform: scale(1.1); } 40% { transform: scale(1); } }
+        .modal-title { margin: 0 0 10px 0; font-size: 18px; font-weight: 900; color: var(--text-main); line-height: 1.3;}
+        .modal-desc { margin: 0 0 20px 0; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+        .btn-okay { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 14px; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .btn-okay:active { transform: scale(0.96); }
+
+        .not-found { display: none; text-align: center; font-weight: 800; color: var(--text-muted); font-size: 14px; margin-top: 30px; }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; padding: 12px 10px; box-sizing: border-box; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.03); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--text-muted); text-decoration: none; font-size: 11px; font-weight: 700; transition: 0.2s; width: 25%; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        <a href="batches.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="greeting">School Boards</h2>
+    </div>
+
+    <div class="main-content">
+        
+        <!-- SEARCH BAR -->
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" class="search-input" placeholder="Search your Board or State..." onkeyup="filterBoards(this.value)">
+        </div>
+
+        <div id="mainView">
+            <div class="section-title">National Boards</div>
+            <!-- NATIONAL BOARDS -->
+            <div class="national-grid">
+                <div class="board-card" onclick="openComingSoon('CBSE Board')">
+                    <div class="board-icon icon-cbse"><i class="fa-solid fa-book-open"></i></div>
+                    <h4>CBSE</h4>
+                    <p>Classes 9 to 12</p>
+                </div>
+                <div class="board-card" onclick="openComingSoon('ICSE / ISC Board')">
+                    <div class="board-icon icon-icse"><i class="fa-solid fa-school"></i></div>
+                    <h4>ICSE</h4>
+                    <p>Classes 9 to 12</p>
+                </div>
+            </div>
+
+            <div class="section-title">Top State Boards <i class="fa-solid fa-arrow-right-long"></i></div>
+            
+            <!-- HORIZONTAL SWIPE SLIDER -->
+            <div class="slider-container">
+                <div class="state-card" onclick="openComingSoon('Bihar Board (BSEB)')">
+                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h4>Bihar</h4>
+                    <p>BSEB Board</p>
+                </div>
+                <div class="state-card" onclick="openComingSoon('UP Board')">
+                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h4>Uttar Pradesh</h4>
+                    <p>UPMSP Board</p>
+                </div>
+                <div class="state-card" onclick="openComingSoon('Maharashtra Board')">
+                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h4>Maharashtra</h4>
+                    <p>MSBSHSE Board</p>
+                </div>
+                <div class="state-card" onclick="openComingSoon('Rajasthan Board (RBSE)')">
+                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h4>Rajasthan</h4>
+                    <p>RBSE Board</p>
+                </div>
+                <div class="state-card" onclick="openComingSoon('MP Board')">
+                    <div class="board-icon icon-state"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h4>Madhya Pradesh</h4>
+                    <p>MPBSE Board</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- HIDDEN LIST FOR SEARCH FILTERING (All 29 States) -->
+        <div class="section-title" id="searchTitle" style="display:none; margin-top:10px;">Search Results</div>
+        <div class="all-states-list" id="searchList">
+            <!-- National -->
+            <div class="list-item" data-name="cbse national board" onclick="openComingSoon('CBSE Board')"><div class="list-item-left"><i class="fa-solid fa-book"></i><span>CBSE Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="icse isc national board" onclick="openComingSoon('ICSE Board')"><div class="list-item-left"><i class="fa-solid fa-book"></i><span>ICSE Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <!-- All 28 States -->
+            <div class="list-item" data-name="andhra pradesh ap state board" onclick="openComingSoon('Andhra Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Andhra Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="arunachal pradesh state board" onclick="openComingSoon('Arunachal Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Arunachal Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="assam state board seba" onclick="openComingSoon('Assam Board (SEBA)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Assam Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="bihar bseb state board" onclick="openComingSoon('Bihar Board (BSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Bihar Board (BSEB)</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="chhattisgarh state board" onclick="openComingSoon('Chhattisgarh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Chhattisgarh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="goa state board" onclick="openComingSoon('Goa Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Goa Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="gujarat gseb state board" onclick="openComingSoon('Gujarat Board (GSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Gujarat Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="haryana state board" onclick="openComingSoon('Haryana Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Haryana Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="himachal pradesh hpbose state board" onclick="openComingSoon('Himachal Pradesh Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Himachal Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="jharkhand jac state board" onclick="openComingSoon('Jharkhand Board (JAC)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Jharkhand Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="karnataka state board" onclick="openComingSoon('Karnataka Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Karnataka Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="kerala state board" onclick="openComingSoon('Kerala Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Kerala Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="madhya pradesh mpbse state board" onclick="openComingSoon('MP Board (MPBSE)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Madhya Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="maharashtra msbshse state board" onclick="openComingSoon('Maharashtra Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Maharashtra Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="manipur state board" onclick="openComingSoon('Manipur Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Manipur Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="meghalaya state board" onclick="openComingSoon('Meghalaya Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Meghalaya Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="mizoram state board" onclick="openComingSoon('Mizoram Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Mizoram Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="nagaland state board" onclick="openComingSoon('Nagaland Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Nagaland Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="odisha state board" onclick="openComingSoon('Odisha Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Odisha Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="punjab pseb state board" onclick="openComingSoon('Punjab Board (PSEB)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Punjab Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="rajasthan rbse state board" onclick="openComingSoon('Rajasthan Board (RBSE)')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Rajasthan Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="sikkim state board" onclick="openComingSoon('Sikkim Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Sikkim Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="tamil nadu state board" onclick="openComingSoon('Tamil Nadu Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Tamil Nadu Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="telangana state board" onclick="openComingSoon('Telangana Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Telangana Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="tripura state board" onclick="openComingSoon('Tripura Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Tripura Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="uttar pradesh upmsp up board state board" onclick="openComingSoon('UP Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Uttar Pradesh Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="uttarakhand state board" onclick="openComingSoon('Uttarakhand Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>Uttarakhand Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+            <div class="list-item" data-name="west bengal state board" onclick="openComingSoon('West Bengal Board')"><div class="list-item-left"><i class="fa-solid fa-map"></i><span>West Bengal Board</span></div><i class="fa-solid fa-chevron-right" style="color:var(--text-muted); font-size:12px;"></i></div>
+        </div>
+
+        <div class="not-found" id="notFoundMsg">No Board Found. Please check spelling.</div>
+    </div>
+
+    <!-- COMING SOON CUTE MODAL -->
+    <div class="modal-overlay" id="comingSoonModal">
+        <div class="modal-box">
+            <i class="fa-solid fa-heart modal-icon"></i>
+            <h3 class="modal-title" id="modalBoardName">CBSE Board</h3>
+            <p class="modal-desc">Our expert educators are preparing the best curriculum for you. Batches will be live very soon! 🚀</p>
+            <button class="btn-okay" onclick="closeComingSoon()">Okay, Got it!</button>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="batches.html" class="nav-item active">
+            <i class="fa-solid fa-box-open"></i>
+            <span>Batches</span>
+        </a>
+        <a href="study.html" class="nav-item">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Study</span>
+        </a>
+        <a href="coming-soon.html" class="nav-item">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Other</span>
+        </a>
+    </div>
+
+    <script>
+        // Search & Filter Logic
+        function filterBoards(query) {
+            const q = query.toLowerCase().trim();
+            const mainView = document.getElementById('mainView');
+            const searchList = document.getElementById('searchList');
+            const searchTitle = document.getElementById('searchTitle');
+            const notFoundMsg = document.getElementById('notFoundMsg');
+            const items = document.querySelectorAll('.list-item');
+            
+            if (q === '') {
+                mainView.style.display = 'block';
+                searchList.style.display = 'none';
+                searchTitle.style.display = 'none';
+                notFoundMsg.style.display = 'none';
+                return;
+            }
+
+            mainView.style.display = 'none';
+            searchList.style.display = 'flex';
+            searchTitle.style.display = 'block';
+
+            let foundCount = 0;
+            items.forEach(item => {
+                const searchTags = item.getAttribute('data-name') || '';
+                if (searchTags.includes(q)) {
+                    item.style.display = 'flex';
+                    foundCount++;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            notFoundMsg.style.display = foundCount === 0 ? 'block' : 'none';
+        }
+
+        // Modal Logic
+        function openComingSoon(boardName) {
+            document.getElementById('modalBoardName').innerText = boardName;
+            document.getElementById('comingSoonModal').classList.add('active');
+        }
+
+        function closeComingSoon() {
+            document.getElementById('comingSoonModal').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
+
