@@ -2,6 +2,14 @@
   "version": 2,
   "builds": [
     {
+      "src": "api/app.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "api/admin_api.py",
+      "use": "@vercel/python"
+    },
+    {
       "src": "api/index.py",
       "use": "@vercel/python"
     },
@@ -24,8 +32,28 @@
   ],
   "routes": [
     {
+      "src": "/api/admin_action",
+      "dest": "/api/admin_api.py"
+    },
+    {
+      "src": "/api/verify_admin_otp",
+      "dest": "/api/admin_api.py"
+    },
+    {
+      "src": "/api/send_admin_otp",
+      "dest": "/api/admin_api.py"
+    },
+    {
+      "src": "/api/send_action_email",
+      "dest": "/api/admin_api.py"
+    },
+    {
+      "src": "/api/send_mass_mail",
+      "dest": "/api/admin_api.py"
+    },
+    {
       "src": "/api/(.*)",
-      "dest": "/api/index.py"
+      "dest": "/api/app.py"
     },
     {
       "headers": {
