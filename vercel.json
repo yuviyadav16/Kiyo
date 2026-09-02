@@ -52,8 +52,28 @@
       "dest": "/api/admin_api.py"
     },
     {
-      "src": "/api/(.*)",
+      "src": "/api/banners",
       "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/send-otp",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/verify-otp",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/create-user",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/delete-user",
+      "dest": "/api/app.py"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
     },
     {
       "headers": {
