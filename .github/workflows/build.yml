@@ -26,6 +26,13 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
+      - name: Generate Missing Android Folder (Ninja Hack)
+        # Ye command tumhara code bachayegi aur missing android folder bana degi
+        run: |
+          mv lib/main.dart temp_main.dart
+          flutter create --project-name private_ig --platforms=android .
+          mv temp_main.dart lib/main.dart
+
       - name: Install Dependencies
         run: flutter pub get
 
