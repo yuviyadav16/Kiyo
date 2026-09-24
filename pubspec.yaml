@@ -1,0 +1,10 @@
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_inappwebview: ^6.0.0 # Ye smooth webview ke liye hai
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/2308.png # Apne logo ko assets folder banakar usme daal dena
+
