@@ -26,12 +26,19 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Generate Missing Android Folder (Ninja Hack)
-        # Ye command tumhara code bachayegi aur missing android folder bana degi
+      - name: Generate Android Folder & Apply Fixes
         run: |
+          # 1. Code safe rakho aur Android folder banao
           mv lib/main.dart temp_main.dart
           flutter create --project-name private_ig --platforms=android .
           mv temp_main.dart lib/main.dart
+          
+          # 2. App ka naam "Instagram" set karo
+          sed -i 's/android:label="private_ig"/android:label="Instagram"/g' android/app/src/main/AndroidManifest.xml
+          
+          # 3. Play Protect (Older version warning) hatane ke liye SDK 34 (Android 14) par upgrade karo
+          sed -i 's/flutter.compileSdkVersion/34/g' android/app/build.gradle
+          sed -i 's/flutter.targetSdkVersion/34/g' android/app/build.gradle
 
       - name: Install Dependencies
         run: flutter pub get
@@ -42,8 +49,9 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Upload APK
+      - name: Upload APK (Auto-delete in 1 Day)
         uses: actions/upload-artifact@v4
         with:
           name: Instagram-Release-APK
           path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 1
