@@ -36,7 +36,10 @@ jobs:
           # 2. App ka naam "Instagram" set karo
           sed -i 's/android:label="private_ig"/android:label="Instagram"/g' android/app/src/main/AndroidManifest.xml
           
-          # 3. Play Protect (Older version warning) hatane ke liye SDK 34 (Android 14) par upgrade karo
+          # 3. INTERNET PERMISSION ADD KARO (Black screen fix)
+          sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+          
+          # 4. Play Protect (Older version warning) fix (SDK 34)
           sed -i 's/flutter.compileSdkVersion/34/g' android/app/build.gradle
           sed -i 's/flutter.targetSdkVersion/34/g' android/app/build.gradle
 
